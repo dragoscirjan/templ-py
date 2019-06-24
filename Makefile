@@ -1,6 +1,16 @@
+PY_VER?=3.5
+
 PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
-PIP_INSTALL=env/bin/pip install $(PIP_FLAGS)
-PYTHON=env/bin/python
+
+GLOBAL_PYTHON=python$(PY_VER)
+GLOBAPL_PIP=pip$(PY_VER)
+GLOBAL_PIP_INSTALL=$(GLOBAPL_PIP) install $(PIP_FLAGS)
+
+LOCAL_PYTHON=env/bin/python
+LOCAL_PIP=env/bin/pip
+LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
+
+VIRTUALENV_ARGS?=--python python$(PY_VER)
 
 .PHONY: clean virtualenv test docker dist dist-upload
 
@@ -8,24 +18,18 @@ clean:
 	find . -name '*.py[co]' -delete
 
 virtualenv:
-ifneq (,$(shell which python3))
-	python3 -m venv env
-	$(PIP_INSTALL) -r requirements.txt || ( \
-		curl https://bootstrap.pypa.io/get-pip.py | $(PYTHON) && $(PIP_INSTALL) -r requirements.txt \
+	$(GLOBAL_PIP_INSTALL) virtualenv
+	virtualenv $(VIRTUALENV_ARGS) --prompt '|> pytempl <| ' env
+	$(LOCAL_PIP_INSTALL) -r requirements-dev.txt || ( \
+		curl https://bootstrap.pypa.io/get-pip.py | $(LOCAL_PYTHON) && $(LOCAL_PIP_INSTALL) -r requirements-dev.txt \
 	)
-else
-	virtualenv --prompt '|> pytempl <| ' env
-endif
-	$(PIP_INSTALL) -r requirements-dev.txt || ( \
-		curl https://bootstrap.pypa.io/get-pip.py | $(PYTHON) && $(PIP_INSTALL) -r requirements-dev.txt \
-	)
-	$(PYTHON) setup.py develop
+	$(LOCAL_PYTHON) setup.py develop
 	@echo
 	@echo "VirtualENV Setup Complete. Now run: source env/bin/activate"
 	@echo
 
 test:
-	$(PYTHON) -m pytest \
+	$(LOCAL_PYTHON) -m pytest \
 		-v \
 		--cov=pytempl \
 		--cov-report=term \
@@ -37,8 +41,8 @@ docker: clean
 
 dist: clean
 	rm -rf dist/*
-	$(PYTHON) setup.py sdist
-	$(PYTHON) setup.py bdist_wheel
+	$(LOCAL_PYTHON) setup.py sdist
+	$(LOCAL_PYTHON) setup.py bdist_wheel
 
 dist-upload:
 	twine upload dist/*
