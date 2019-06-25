@@ -35,7 +35,7 @@ class Base(Controller):
 
 
     @ex(
-        help='example sub command1',
+        help='Use to configure the lint/format tools.',
 
         # sub-command level arguments. ex: 'pytempl command1 --foo bar'
         arguments=[
@@ -46,8 +46,8 @@ class Base(Controller):
                 'dest' : 'foo' } ),
         ],
     )
-    def command1(self):
-        """Example sub-command."""
+    def config(self):
+        """Use to configure the lint/format tools."""
 
         data = {
             'foo' : 'bar',
