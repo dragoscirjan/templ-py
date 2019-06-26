@@ -4,6 +4,7 @@ from cement import App
 from jinja2 import Template
 import os
 import requests
+import sys
 
 
 class Base:
@@ -88,14 +89,17 @@ class Base:
         return os.path.isfile(path)
 
     def copy(self, url: str, file: str):
-        print(url)
         req = requests.get(url)
-        print(req)
-        if req.sratus_code < 200 or req.status_code >= 300:
-            raise Exception(req.text)
-        f = open(file, 'w')
-        f.write(req.text)
-        f.close()
+        try:
+            if req.status_code < 200 or req.status_code >= 300:
+                raise Exception(req.text)
+            f = open(file, 'w')
+            f.write(req.text)
+            f.close()
+        except Exception as e:
+            self._app.log.error('Could not download file {}'.format(url))
+            self._app.log.warn(e)
+            sys.exit(req.status_code)
 
     # def compile(self, url: str, file: str):
     #     req = requests.get(url)
@@ -125,7 +129,7 @@ class Base:
         log.info('')
 
         for file in config.get('files').keys():
-            if self.exists(file) or reconfig:
+            if not self.exists(file) or reconfig:
                 self.copy(url=config.get('files').get(file), file=file)
                 if reconfig:
                     log.warn('reconfiguring...')
