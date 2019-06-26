@@ -1,8 +1,8 @@
 
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
-from .core.exc import TemplError
-from .controllers.base import Base
+from pytempl.core.exc import TemplError
+from pytempl.controllers.base import Base
 
 # configuration defaults
 CONFIG = init_defaults('pytempl')
@@ -14,6 +14,8 @@ class Templ(App):
 
     class Meta:
         label = 'pytempl'
+        extensions = ['colorlog']
+        log_handler = 'colorlog'
 
         # configuration defaults
         config_defaults = CONFIG

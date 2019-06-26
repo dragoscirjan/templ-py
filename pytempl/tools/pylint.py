@@ -8,13 +8,14 @@ class Pylint(Base):
 
     TOKEN = 'pylint'
 
-    def __init__(self):
-    	super().__init__()
+    ORDER = 100
+
+    def __init__(self, app=None):
+        super().__init__(app)
         self._config.update({
             'files': {
-            	'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
+                'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
             },
             'hook': 'pylint',
-            'order': 1000
             'packages': ['pylint']
         })
