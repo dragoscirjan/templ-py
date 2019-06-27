@@ -1,11 +1,16 @@
 from cement import App
 from jinja2 import Template
 
+
 import os
+import re
 import requests
+import time
+import shutil
 import sys
 
 from pytempl.output.output import pcprint, wcolour, GREEN, RED, YELLOW, BLUE
+from pytempl.utils import str2bool
 
 
 class Base:
@@ -32,17 +37,19 @@ class Base:
         """
         return [
             (['--skip-{}'.format(klass.TOKEN)],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'skip_{}'.format(klass.TOKEN),
               'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--reconfig-{}'.format(klass.TOKEN)],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'reconfig_{}'.format(klass.TOKEN),
               'help': 'reconfigure `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--with-{}-extensions'.format(klass.TOKEN)],
              {'default': [],
               'dest': 'with_{}_extensions'.format(klass.TOKEN),
@@ -61,17 +68,19 @@ class Base:
         """
         return [
             (['--with-{}'.format(klass.TOKEN)],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'skip_{}'.format(klass.TOKEN),
               'help': 'also install `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--reconfig-{}'.format(klass.TOKEN)],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'reconfig_{}'.format(klass.TOKEN),
               'help': 'reconfigure `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--with-{}-extensions'.format(klass.TOKEN)],
              {'default': [],
               'dest': 'with_{}_extensions'.format(klass.TOKEN),
@@ -89,7 +98,7 @@ class Base:
         """
         return os.path.isfile(path)
 
-    def copy(self, url: str, file: str):
+    def http_copy(self, url: str, file: str):
         req = requests.get(url)
         try:
             if req.status_code < 200 or req.status_code >= 300:
@@ -102,14 +111,14 @@ class Base:
             self._app.log.warn(e)
             sys.exit(req.status_code)
 
-    # def compile(self, url: str, file: str):
-    #     req = requests.get(url)
-    #     if req.sratus_code < 200 or req.status_code >= 300:
-    #         raise Exception(req.text)
-    #     template = Template(req.text)
-    #     f = open(file, 'w')
-    #     f.write(template.render(**self._app.pargs))
-    #     f.close()
+    def http_compile(self, url: str, file: str):
+        req = requests.get(url)
+        if req.sratus_code < 200 or req.status_code >= 300:
+            raise Exception(req.text)
+        template = Template(req.text)
+        f = open(file, 'w')
+        f.write(template.render(**self._app.pargs))
+        f.close()
 
     def run(self):
         args = self._app.pargs
@@ -123,20 +132,33 @@ class Base:
               getattr(args, 'with_{}'.format(self.TOKEN), False)
 
         if not use:
-            log.warn('not used. skipping.')
+            pcprint('not used. skipping.', colour=YELLOW)
 
         reconfig = getattr(args, 'reconfig', False) or getattr(args, 'reconfig_{}'.format(self.TOKEN))
 
-        log.info('')
+        print('')
 
         for file in config.get('files').keys():
             if not self.exists(file) or reconfig:
-                self.copy(url=config.get('files').get(file), file=file)
+                if self.exists(file):
+                    shutil.copy(file, '{}.bak-{}'.format(file, time.time()))
+                    pcprint('backed up...', colour=YELLOW)
+
+                url = config.get('files').get(file)
+                match = re.compile('\.jinja2$')
+
+                if re.search(match, url) is None:
+                    self.http_copy(url=url, file=file)
+                else:
+                    self.http_compile(url=url, file=file)
+
                 if reconfig:
-                    log.warn('reconfiguring...')
-                log.info('{} written.'.format(file))
+                    pcprint('reconfigured...', colour=YELLOW)
+                pcprint('{} written.'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
             else:
-                log.info('{} exists. moving on...'.format(file))
+                pcprint('{} exists. moving on...'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
+
+        print('')
 
     # const staged = {};
     #

@@ -4,6 +4,7 @@ from functools import reduce
 
 from pytempl.core.version import get_version
 from pytempl.tools import Base as BaseTool, active_tools
+from pytempl.utils import str2bool
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -41,23 +42,26 @@ class Base(Controller):
         arguments= [
             ### add a sample foo option under subcommand namespace
             (['--interactive'],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'interactive',
               'help': 'Run configure with interactive wizzard.',
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--reconfig'],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'reconfig',
               'help': 'Reconfigure all installed tools.',
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--silent'],
-             {'default': False,
+             {'const': True,
+              'default': False,
               'dest': 'silent',
               'help': 'Silent run. Logging is disabled.',
               'nargs': '?',
-              'type': bool}),
+              'type': str2bool}),
             (['--append-pre-commit'],
              {'default': [],
               'dest': 'append_pre_commit',
