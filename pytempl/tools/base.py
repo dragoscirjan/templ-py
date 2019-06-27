@@ -1,10 +1,11 @@
 from cement import App
-
-
 from jinja2 import Template
+
 import os
 import requests
 import sys
+
+from pytempl.output.output import pcprint, wcolour, GREEN, RED, YELLOW, BLUE
 
 
 class Base:
@@ -116,7 +117,7 @@ class Base:
         log = self._app.log
 
 
-        log.info('checking {} config ...'.format(self.TOKEN));
+        pcprint('checking {} config...'.format(wcolour(self.TOKEN, colour=BLUE, ecolour=GREEN)), colour=GREEN);
 
         use = not getattr(args, 'skip_{}'.format(self.TOKEN), False) or \
               getattr(args, 'with_{}'.format(self.TOKEN), False)
