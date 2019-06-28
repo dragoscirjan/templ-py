@@ -1,7 +1,6 @@
 from cement import App
 from jinja2 import Template
 
-
 import os
 import re
 import requests
@@ -9,6 +8,7 @@ import time
 import shutil
 import sys
 
+from pytempl.hooks import Base as BaseHook, Collection, PreCommit
 from pytempl.output.output import pcprint, wcolour, GREEN, RED, YELLOW, BLUE
 from pytempl.utils import str2bool
 
@@ -125,7 +125,6 @@ class Base:
         config = self._config
         log = self._app.log
 
-
         pcprint('checking {} config...'.format(wcolour(self.TOKEN, colour=BLUE, ecolour=GREEN)), colour=GREEN);
 
         use = not getattr(args, 'skip_{}'.format(self.TOKEN), False) or \
@@ -134,10 +133,20 @@ class Base:
         if not use:
             pcprint('not used. skipping.', colour=YELLOW)
 
+        self._write_config_files()
+
+        # hook = self._create_hook(klass=PreCommit)
+        # self._app.hooks.add_hook(hook_type=Collection.TYPE_PRECOMMIT, hook=hook)
+
+        # print(self._app.hooks.to_dict())
+
+    def _write_config_files(self) -> None:
+        args = self._app.pargs
+        config = self._config
+
         reconfig = getattr(args, 'reconfig', False) or getattr(args, 'reconfig_{}'.format(self.TOKEN))
 
         print('')
-
         for file in config.get('files').keys():
             if not self.exists(file) or reconfig:
                 if self.exists(file):
@@ -145,7 +154,7 @@ class Base:
                     pcprint('backed up...', colour=YELLOW)
 
                 url = config.get('files').get(file)
-                match = re.compile('\.jinja2$')
+                match = re.compile('\.jinja2$', re.IGNORECASE)
 
                 if re.search(match, url) is None:
                     self.http_copy(url=url, file=file)
@@ -158,32 +167,24 @@ class Base:
             else:
                 pcprint('{} exists. moving on...'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
 
-        print('')
+    def _create_hook(self, klass: BaseHook) -> BaseHook:
+        args = self._app.pargs
+        config = self._config
+        log = self._app.log
 
-    # const staged = {};
-    #
-    # for (let tool of this.tools) {
-    #   this.log(`checking ${chalk.green(tool.title)} config ...`);
-    #   if (!tool.use) {
-    #     this.log('not used. skipping');
-    #     this.isLoud && super.log('');
-    #     continue;
-    #   }
-    #
-    #   if (tool.files) {
-    #     for (let file in tool.files) {
-    #       if (!exists(file) || tool.reconfig) {
-    #         write(file, await read(tool.files[file]));
-    #         if (tool.reconfig) {
-    #           this.log(chalk.yellow('reconfiguring...'));
-    #         }
-    #         this.log(`${chalk.green(file)} written.`);
-    #       } else {
-    #         this.log(`${chalk.green(file)} exists. moving on...`);
-    #       }
-    #     }
-    #   }
-    #
+        hook = klass()
+        commands = config.get('hook', None)
+        extensions = config.get('ext', None)
+
+        if type(commands) == str:
+            for ext in extensions:
+                hook.add_command(command=commands, ext=ext)
+        if type(commands) == list:
+            for ext in extensions:
+                for command in commands:
+                    hook.add_command(command=command, ext=ext)
+        return hook
+
     #   for (let ext of (tool.ext || []).filter(e => e.trim())) {
     #     if (tool.hook) {
     #       staged[ext] = staged[ext] || [];

@@ -1,10 +1,8 @@
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
-from functools import reduce
 
 from pytempl.core.version import get_version
-from pytempl.tools import Base as BaseTool, active_tools
-from pytempl.utils import str2bool
+from pytempl.templ.resolvers import PreCommit
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -39,48 +37,18 @@ class Base(Controller):
         help='Use to configure the lint/format tools.',
 
         # sub-command level arguments. ex: 'pytempl command1 --foo bar'
-        arguments= [
-            ### add a sample foo option under subcommand namespace
-            (['--interactive'],
-             {'const': True,
-              'default': False,
-              'dest': 'interactive',
-              'help': 'Run configure with interactive wizzard.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--reconfig'],
-             {'const': True,
-              'default': False,
-              'dest': 'reconfig',
-              'help': 'Reconfigure all installed tools.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--silent'],
-             {'const': True,
-              'default': False,
-              'dest': 'silent',
-              'help': 'Silent run. Logging is disabled.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--append-pre-commit'],
-             {'default': [],
-              'dest': 'append_pre_commit',
-              'help': 'Add custom pre-commit command at beggining of list.',
-              'nargs': '+',
-              'type': str}),
-            (['--prepend-pre-commit'],
-             {'default': False,
-              'dest': 'prepend_pre_commit',
-              'help': 'Add custom pre-commit command at end of list.',
-              'nargs': '?',
-              'type': str})
-        ] + reduce((lambda a, b: a + b), [BaseTool.arguments(klass) for klass in active_tools]),
+        arguments= PreCommit.arguments()
     )
     def precommit(self):
         """Use to configure the lint/format tools."""
 
-        for klass in active_tools:
-            klass(app=self.app).run()
+        PreCommit(app=self._app)
+
+
+        # self.app.hooks = Collection()
+        #
+        # for klass in active_tools:
+        #     klass(app=self.app).run()
 
         # data = {
         #     'foo': 'bar',
