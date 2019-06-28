@@ -9,10 +9,10 @@ def __get_order(klass):
     return getattr(klass, 'ORDER', -1)
 
 
-active_tools = [
+active_precommit_tools = [
     Editorconfig,
     Isort,
     Pylint
 ]
 
-active_tools.sort(key=__get_order)
+active_precommit_tools.sort(key=__get_order)

@@ -1,4 +1,4 @@
-from pytempl.tools import Base
+from pytempl.templ.tools import Base
 
 
 class Pylint(Base):

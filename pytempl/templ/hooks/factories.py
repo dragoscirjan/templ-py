@@ -1,5 +1,5 @@
-from pytempl.hooks import Base, PreCommit
-from pytempl.hooks import Collection
+from pytempl.templ.hooks import Base, PreCommit
+from pytempl.templ.hooks import Collection
 
 
 class HookFactory:

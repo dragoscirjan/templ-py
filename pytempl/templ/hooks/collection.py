@@ -1,4 +1,4 @@
-from pytempl.hooks import Base
+from pytempl.templ.hooks import Base
 
 
 class Collection:

@@ -8,9 +8,9 @@ import time
 import shutil
 import sys
 
-from pytempl.hooks import Base as BaseHook, Collection, PreCommit
-from pytempl.output.output import pcprint, wcolour, GREEN, RED, YELLOW, BLUE
-from pytempl.utils import str2bool
+from pytempl.templ.hooks import Base as BaseHook
+from pytempl.output.output import pcprint, wcolour, GREEN, YELLOW, BLUE
+from pytempl.templ.utils import str2bool
 
 
 class Base:

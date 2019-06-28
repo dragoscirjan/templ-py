@@ -37,25 +37,14 @@ class Base(Controller):
         help='Use to configure the lint/format tools.',
 
         # sub-command level arguments. ex: 'pytempl command1 --foo bar'
-        arguments= PreCommit.arguments()
+        arguments=PreCommit.arguments()
     )
     def precommit(self):
         """Use to configure the lint/format tools."""
 
-        PreCommit(app=self._app)
-
-
-        # self.app.hooks = Collection()
-        #
-        # for klass in active_tools:
-        #     klass(app=self.app).run()
+        PreCommit(app=self.app).run()
 
         # data = {
         #     'foo': 'bar',
         # }
-        #
-        # ### do something with arguments
-        # if self.app.pargs.foo is not None:
-        #     data['foo'] = self.app.pargs.foo
-        #
         # self.app.render(data, 'command1.jinja2')

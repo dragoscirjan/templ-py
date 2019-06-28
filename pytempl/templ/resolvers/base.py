@@ -3,14 +3,22 @@ from cement import App
 
 class Base:
 
-    _app = None
+    app = None
 
     def __init__(self, app: App) -> None:
-        self._app = app
+        self.app = app
 
     @staticmethod
     def arguments() -> list:
+        """
+        Return the list of arguments for a certain command
+        :return: list
+        """
         return []
 
     def run(self) -> None:
+        """
+        Command resolve
+        :return:
+        """
         pass

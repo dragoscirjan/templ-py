@@ -1,16 +1,14 @@
 from functools import reduce
 
-from pytempl.templ.resolvers import Base
-# from pytempl.hooks import Collection
-from pytempl.tools import Base as BaseTool, active_tools
-from pytempl.utils import str2bool
+from pytempl.templ.resolvers import Base as BaseResolver
+from pytempl.templ.tools import Base as BaseTool, active_precommit_tools
+from pytempl.templ.utils import str2bool
 
 
-class PreCommit(Base):
+class PreCommit(BaseResolver):
     @staticmethod
     def arguments() -> list:
         return [
-            ### add a sample foo option under subcommand namespace
             (['--interactive'],
              {'const': True,
               'default': False,
@@ -44,7 +42,8 @@ class PreCommit(Base):
               'help': 'Add custom pre-commit command at end of list.',
               'nargs': '?',
               'type': str})
-        ] + reduce((lambda a, b: a + b), [BaseTool.arguments(klass) for klass in active_tools]),
+        ] + reduce((lambda a, b: a + b), [BaseTool.arguments(klass) for klass in active_precommit_tools])
 
     def run(self) -> None:
-        super().run()
+        for klass in active_precommit_tools:
+            klass(app=self.app).run()
