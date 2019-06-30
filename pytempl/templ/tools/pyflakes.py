@@ -6,7 +6,7 @@ class Pylint(Base):
     :see: https://www.pylint.org/
     """
 
-    TOKEN = 'pyflakes'
+    TOKEN = 'pylint'
 
     ORDER = 80
 
@@ -17,5 +17,5 @@ class Pylint(Base):
                 'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
             },
             'hook': 'pylint',
-            'packages': ['pyflakes']
+            'packages': ['pylint']
         })

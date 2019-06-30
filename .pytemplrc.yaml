@@ -1,0 +1,14 @@
+init:
+  precommit: pytempl precommit --silent --silent --prepend-pre-commit "ls -la" "rm -rf" --with-pylint-extensions "*.pyc" --append-pre-commit "pytest"
+pre-commit:
+  commands:
+    '*.py':
+    - isort
+    - pylint
+    '*.pyc':
+    - pylint
+  post-commands:
+  - pytest
+  pre-commands:
+  - ls -la
+  - rm -rf

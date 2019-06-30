@@ -1,5 +1,9 @@
+import json
+import yaml
+
 from pytempl.templ.hooks import Base, PreCommit
 from pytempl.templ.hooks import Collection
+from pytempl.templ.utils import file_exists, file_read
 
 
 class HookFactory:
@@ -32,3 +36,27 @@ class CollectionFactory:
                 raise Exception('`{}` hook is invalid.'.format(hook_type))
             collection.add_hook(hook_type, HookFactory.from_dict(data=data[hook_type], klass=hook_type))
         return collection
+
+    @staticmethod
+    def from_file(path: str = None) -> Collection:
+        found_path = None
+
+        if path is None:
+            for path in Collection.POSSIBLE_FILES:
+                if file_exists(path):
+                    found_path = path
+                    break
+        else:
+            found_path = path
+
+        if found_path is None:
+            return Collection()
+
+        try:
+            data = json.loads(file_read(found_path))
+        except Exception as e:
+            if found_path == Collection.RC_FILE_JSON:
+                raise e
+            data = yaml.load(file_read(found_path))
+
+        return CollectionFactory.from_dict(data=data)

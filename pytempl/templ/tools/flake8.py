@@ -1,12 +1,12 @@
 from pytempl.templ.tools import Base
 
 
-class Pylint(Base):
+class Flake8(Base):
     """
-    :see: https://www.pylint.org/
+    :see: https://github.com/PyCQA/flake8
     """
 
-    TOKEN = 'pyflakes'
+    TOKEN = 'flake8'
 
     ORDER = 80
 
@@ -16,6 +16,6 @@ class Pylint(Base):
             'files': {
                 'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
             },
-            'hook': 'pylint',
-            'packages': ['pyflakes']
+            'hook': 'flake8',
+            'packages': ['flake8']
         })

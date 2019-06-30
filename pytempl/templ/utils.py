@@ -1,4 +1,6 @@
 import argparse
+import os
+
 
 def str2bool(v):
     if isinstance(v, bool):
@@ -9,3 +11,18 @@ def str2bool(v):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
+def file_exists(path: str) -> bool:
+    return os.path.isfile(path)
+
+
+def file_write(content: str, path: str) -> None:
+    f = open(path, 'w')
+    f.write(content)
+    f.close()
+
+
+def file_read(path: str) -> str:
+    f = open(path, 'r')
+    return f.read()
