@@ -6,6 +6,10 @@ class Pylint(Base):
     :see: https://www.pylint.org/
     """
 
+    @staticmethod
+    def arguments(klass):
+        return super().arguments_skip(klass)
+
     TOKEN = 'pyflakes'
 
     ORDER = 80

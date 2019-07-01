@@ -1,6 +1,7 @@
 from .base import Base
 from .black import Black
 from .editorconfig import Editorconfig
+from .flake8 import Flake8
 from .isort import Isort
 from .pylint import Pylint
 

@@ -1,21 +1,19 @@
 from pytempl.templ.tools import Base
 
 
-class Pylint(Base):
+class Pyflakes(Base):
     """
-    :see: https://www.pylint.org/
+    :see: https://github.com/PyCQA/pyflakes
+    TODO: Add message for flake8: If you want a more configurable tool, please used flake8
     """
 
-    TOKEN = 'pylint'
+    TOKEN = 'pyflakes'
 
     ORDER = 80
 
     def __init__(self, app=None):
         super().__init__(app)
         self._config.update({
-            'files': {
-                'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
-            },
-            'hook': 'pylint',
-            'packages': ['pylint']
+            'hook': 'pyflakes',
+            'packages': ['pyflakes']
         })

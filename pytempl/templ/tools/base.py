@@ -36,11 +36,11 @@ class Base:
         :return:
         """
         return [
-            (['--skip-{}'.format(klass.TOKEN)],
+            (['--with-{}'.format(klass.TOKEN)],
              {'const': True,
               'default': False,
               'dest': 'skip_{}'.format(klass.TOKEN),
-              'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
+              'help': 'also install `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
               'type': str2bool}),
             (['--reconfig-{}'.format(klass.TOKEN)],
@@ -60,18 +60,18 @@ class Base:
         ]
 
     @staticmethod
-    def arguments_with(klass):
+    def arguments_skip(klass):
         """
         Obtain list of arguments for tool
         :param klass: class to build arguments for
         :return:
         """
         return [
-            (['--with-{}'.format(klass.TOKEN)],
+            (['--skip-{}'.format(klass.TOKEN)],
              {'const': True,
               'default': False,
               'dest': 'skip_{}'.format(klass.TOKEN),
-              'help': 'also install `{}` tool.'.format(klass.TOKEN),
+              'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
               'type': str2bool}),
             (['--reconfig-{}'.format(klass.TOKEN)],

@@ -14,6 +14,5 @@ class Isort(Base):
         super().__init__(app)
         self._config.update({
             'hook': 'isort',
-            'order': 50,
             'packages': ['isort']
         })
