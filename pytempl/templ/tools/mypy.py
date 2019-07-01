@@ -17,5 +17,6 @@ class Mypy(Base):
                 '.mypy.ini': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.mypy.ini'
             },
             'hook': 'mypy --config-file .mypy.ini',
+            'name': 'MyPy (http://mypy-lang.org/)',
             'packages': ['mypy']
         })

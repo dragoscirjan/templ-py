@@ -18,5 +18,6 @@ class Pydocstyle(Base):
                 '.pydocstylerc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.pydocstylercpydocstylerc'
             },
             'hook': 'pydocstyle --config .pydocstylerc',
+            'name': 'Pydocstyle (http://www.pydocstyle.org)',
             'packages': ['pydocstyle']
         })

@@ -1,7 +1,7 @@
 from pytempl.templ.tools import Base
 
 
-class Pyflakes(Base):
+class Pycodestyle(Base):
     """
     :see: https://github.com/PyCQA/pycodestyle
     :see: http://pycodestyle.pycqa.org
@@ -18,5 +18,6 @@ class Pyflakes(Base):
                 '.pycodestyle': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.pycodestyle'
             },
             'hook': 'pycodestyle --config .pycodestyle',
+            'name': 'PyCodeStyle (http://pycodestyle.pycqa.org)',
             'packages': ['pycodestyle']
         })

@@ -15,8 +15,9 @@ class Black(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.black.toml': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.black.toml'
+                '.black.toml': 'https://github.com/dragoscirjan/templ-py/raw/master/.black.toml'
             },
             'hook': 'black --config .black.toml',
+            'name': 'Black (https://github.com/python/black)',
             'packages': ['black']
         })

@@ -15,5 +15,6 @@ class Editorconfig(Base):
         self._config.update({
             'files': {
                 '.editorconfig': 'https://github.com/dragoscirjan/templ-py/raw/master/.editorconfig'
-            }
+            },
+            'name': 'Editorconfig (https://editorconfig.org/)'
         })

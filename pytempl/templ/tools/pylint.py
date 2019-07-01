@@ -21,5 +21,6 @@ class Pylint(Base):
                 'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
             },
             'hook': 'pylint',
+            'name': 'Pylint (https://www.pylint.org/)',
             'packages': ['pyflakes']
         })

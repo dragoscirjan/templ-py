@@ -22,10 +22,11 @@ class Base:
     def __init__(self, app: App = None):
         self._app = app
         self._config = {
-            'packages': [],
-            'files': {},
             'ext': ['*.py'] + getattr(app.pargs, 'with_{}_extensions'.format(self.TOKEN), []),
-            'hook': None
+            'files': {},
+            'hook': None,
+            'name': '',
+            'packages': []
         }
 
     @staticmethod

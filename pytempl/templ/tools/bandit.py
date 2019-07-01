@@ -14,8 +14,9 @@ class Bandit(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.bandit': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.bandit'
+                '.bandit': 'https://github.com/dragoscirjan/templ-py/raw/master/.bandit'
             },
             'hook': 'bandit -ini .bandit',
+            'name': 'Bandit (https://github.com/PyCQA/bandit)',
             'packages': ['bandit']
         })

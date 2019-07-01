@@ -14,5 +14,6 @@ class Isort(Base):
         super().__init__(app)
         self._config.update({
             'hook': 'isort',
+            'name': 'Isort (https://github.com/timothycrosley/isort)',
             'packages': ['isort']
         })

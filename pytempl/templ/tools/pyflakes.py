@@ -15,5 +15,6 @@ class Pyflakes(Base):
         super().__init__(app)
         self._config.update({
             'hook': 'pyflakes',
+            'name': 'Pyflakes (https://github.com/PyCQA/pyflakes)',
             'packages': ['pyflakes']
         })
