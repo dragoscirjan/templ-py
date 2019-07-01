@@ -6,10 +6,6 @@ class Pytest(Base):
     :see: https://docs.pytest.org/en/latest/
     """
 
-    @staticmethod
-    def arguments(klass):
-        return super().arguments_skip(klass)
-
     TOKEN = 'pytest'
 
     ORDER = 80
@@ -19,5 +15,6 @@ class Pytest(Base):
         self._config.update({
             'hook': 'pytest',
             'name': 'Pytest (https://docs.pytest.org/en/latest/)',
-            'packages': ['pytest']
+            'packages': ['coverage', 'pytest', 'pytest-cov', 'pytest-xdist'],
+            'append-pre-commit': 'pytest --cov=myproj tests/'
         })

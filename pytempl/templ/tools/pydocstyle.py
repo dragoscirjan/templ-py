@@ -15,7 +15,7 @@ class Pydocstyle(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.pydocstylerc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.pydocstylercpydocstylerc'
+                '.pydocstylerc': 'https://github.com/dragoscirjan/templ-py/raw/master/.pydocstylerc'
             },
             'hook': 'pydocstyle --config .pydocstylerc',
             'name': 'Pydocstyle (http://www.pydocstyle.org)',

@@ -1,7 +1,7 @@
-from pytempl.templ.tools import Base
+from pytempl.templ.tools import BaseReq
 
 
-class Editorconfig(Base):
+class Editorconfig(BaseReq):
     """
     :see: https://www.pylint.org/
     """

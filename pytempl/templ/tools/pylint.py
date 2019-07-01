@@ -1,16 +1,12 @@
-from pytempl.templ.tools import Base
+from pytempl.templ.tools import BaseReq
 
 
-class Pylint(Base):
+class Pylint(BaseReq):
     """
     :see: https://www.pylint.org/
     """
 
-    @staticmethod
-    def arguments(klass):
-        return super().arguments_skip(klass)
-
-    TOKEN = 'pyflakes'
+    TOKEN = 'pylint'
 
     ORDER = 80
 
@@ -22,5 +18,5 @@ class Pylint(Base):
             },
             'hook': 'pylint',
             'name': 'Pylint (https://www.pylint.org/)',
-            'packages': ['pyflakes']
+            'packages': ['pylint']
         })

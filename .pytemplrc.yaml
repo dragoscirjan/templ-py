@@ -1,14 +1,21 @@
 init:
-  precommit: pytempl precommit --silent --silent --prepend-pre-commit "ls -la" "rm -rf" --with-pylint-extensions "*.pyc" --append-pre-commit "pytest"
+  precommit: pytempl precommit --silent --with-black
 pre-commit:
   commands:
     '*.py':
+    - black --config .black.toml
     - isort
+    - yamllint -c .yamllint
+    - pycodestyle --config .pydocstylerc
+    - pydocstyle --config .pydocstylerc
+    - bandit -ini .bandit
+    - flake8 --show-source
+    - pytempl jsonlint
+    - python -m mccabe --min 5
+    - mypy --config-file .mypy.ini
     - pylint
-    '*.pyc':
-    - pylint
-  post-commands:
-  - pytest
-  pre-commands:
-  - ls -la
-  - rm -rf
+    - pytest
+    - radon cc --min B --max E
+    - unittest
+  post-commands: []
+  pre-commands: []

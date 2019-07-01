@@ -4,13 +4,10 @@ from jinja2 import Template
 import os
 import re
 import requests
-import time
-import shutil
 import sys
 
-from pytempl.templ.hooks import Base as BaseHook
-from pytempl.output.output import pcprint, wcolour, GREEN, YELLOW, BLUE
-from pytempl.templ.utils import str2bool
+from pytempl.templ.output import pcprint, wcolour, GREEN, YELLOW, BLUE
+from pytempl.templ.utils import str2bool, file_backup
 
 
 class Base:
@@ -29,21 +26,8 @@ class Base:
             'packages': []
         }
 
-    @staticmethod
-    def arguments(klass):
-        """
-        Obtain list of arguments for tool
-        :param klass: class to build arguments for
-        :return:
-        """
+    def _arguments(klass):
         return [
-            (['--with-{}'.format(klass.TOKEN)],
-             {'const': True,
-              'default': False,
-              'dest': 'skip_{}'.format(klass.TOKEN),
-              'help': 'also install `{}` tool.'.format(klass.TOKEN),
-              'nargs': '?',
-              'type': str2bool}),
             (['--reconfig-{}'.format(klass.TOKEN)],
              {'const': True,
               'default': False,
@@ -61,35 +45,21 @@ class Base:
         ]
 
     @staticmethod
-    def arguments_skip(klass):
+    def arguments(klass) -> list:
         """
         Obtain list of arguments for tool
         :param klass: class to build arguments for
         :return:
         """
         return [
-            (['--skip-{}'.format(klass.TOKEN)],
+            (['--with-{}'.format(klass.TOKEN)],
              {'const': True,
               'default': False,
-              'dest': 'skip_{}'.format(klass.TOKEN),
-              'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
+              'dest': 'with_{}'.format(klass.TOKEN),
+              'help': 'also install `{}` tool.'.format(klass.TOKEN),
               'nargs': '?',
-              'type': str2bool}),
-            (['--reconfig-{}'.format(klass.TOKEN)],
-             {'const': True,
-              'default': False,
-              'dest': 'reconfig_{}'.format(klass.TOKEN),
-              'help': 'reconfigure `{}` tool.'.format(klass.TOKEN),
-              'nargs': '?',
-              'type': str2bool}),
-            (['--with-{}-extensions'.format(klass.TOKEN)],
-             {'default': [],
-              'dest': 'with_{}_extensions'.format(klass.TOKEN),
-              'help': 'add file extensions to be processed by the `{}` tool. i.e. "--with-{}-extensions *.js *.jsx"'.format(
-                  klass.TOKEN, klass.TOKEN),
-              'nargs': '+',
-              'type': str})
-        ]
+              'type': str2bool})
+        ] + Base._arguments(klass=klass)
 
     def exists(self, path: str):
         """
@@ -122,17 +92,18 @@ class Base:
         f.close()
 
     def run(self):
-        args = self._app.pargs
+        args = vars(self._app.pargs)
         config = self._config
         log = self._app.log
 
-        pcprint('checking {} config...'.format(wcolour(self.TOKEN, colour=BLUE, ecolour=GREEN)), colour=GREEN);
+        pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)), colour=GREEN)
 
-        use = not getattr(args, 'skip_{}'.format(self.TOKEN), False) or \
-              getattr(args, 'with_{}'.format(self.TOKEN), False)
+        use = args.get('skip_{}'.format(self.TOKEN), None) is False or args.get('with_{}'.format(self.TOKEN), None) is True
 
         if not use:
             pcprint('not used. skipping.', colour=YELLOW)
+            print('')
+            return
 
         self._write_config_files()
 
@@ -141,17 +112,19 @@ class Base:
 
         # print(self._app.hooks.to_dict())
 
+    def validate(self):
+        pass
+
     def _write_config_files(self) -> None:
-        args = self._app.pargs
+        args = vars(self._app.pargs)
         config = self._config
 
-        reconfig = getattr(args, 'reconfig', False) or getattr(args, 'reconfig_{}'.format(self.TOKEN))
+        reconfig = args.get('reconfig', False) or args.get('reconfig_{}'.format(self.TOKEN))
 
-        print('')
         for file in config.get('files').keys():
             if not self.exists(file) or reconfig:
                 if self.exists(file):
-                    shutil.copy(file, '{}.bak-{}'.format(file, time.time()))
+                    file_backup(file)
                     pcprint('backed up...', colour=YELLOW)
 
                 url = config.get('files').get(file)
@@ -167,3 +140,5 @@ class Base:
                 pcprint('{} written.'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
             else:
                 pcprint('{} exists. moving on...'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
+
+        print('')

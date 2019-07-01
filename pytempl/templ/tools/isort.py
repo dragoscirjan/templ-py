@@ -1,7 +1,7 @@
-from pytempl.templ.tools import Base
+from pytempl.templ.tools import BaseReq
 
 
-class Isort(Base):
+class Isort(BaseReq):
     """
     :see: https://github.com/timothycrosley/isort
     """

@@ -15,9 +15,9 @@ class Pycodestyle(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.pycodestyle': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.pycodestyle'
+                '.pydocstylerc': 'https://github.com/dragoscirjan/templ-py/raw/master/.pydocstylerc'
             },
-            'hook': 'pycodestyle --config .pycodestyle',
+            'hook': 'pycodestyle --config .pydocstylerc',
             'name': 'PyCodeStyle (http://pycodestyle.pycqa.org)',
             'packages': ['pycodestyle']
         })

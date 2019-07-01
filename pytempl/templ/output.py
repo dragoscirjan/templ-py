@@ -51,4 +51,5 @@ def cprint(text, colour=WHITE):
 
 
 def pcprint(text, colour=WHITE, prefix='>>'):
-    sys.stdout.write('{} {}'.format(prefix, wcolour(text, colour=colour)))
+    sys.stdout.write(('{} {}'.format(prefix, wcolour(text, colour=colour))))
+    sys.stdout.write("\n")

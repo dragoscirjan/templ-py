@@ -43,14 +43,17 @@ class PreCommit(BaseResolver):
               'help': 'Add custom pre-commit command at end of list.',
               'nargs': '+',
               'type': str})
-        ] + reduce((lambda a, b: a + b), [BaseTool.arguments(klass) for klass in active_precommit_tools])
+        ] + reduce((lambda a, b: a + b), [klass.arguments(klass) for klass in active_precommit_tools])
 
     def run(self) -> None:
         tools = []
         for klass in active_precommit_tools:
             tool = klass(app=self.app)
-            tool.run()
+            tool.validate()
             tools.append(tool)
+
+        for tool in tools:
+            tool.run()
 
         hook = self._create_hook(tools=tools, klass=PreCommitHook)
         collection = self._load_collection()
