@@ -93,8 +93,6 @@ class Base:
 
     def run(self):
         args = vars(self._app.pargs)
-        config = self._config
-        log = self._app.log
 
         pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)), colour=GREEN)
 
@@ -106,11 +104,6 @@ class Base:
             return
 
         self._write_config_files()
-
-        # hook = self._create_hook(klass=PreCommit)
-        # self._app.hooks.add_hook(hook_type=Collection.TYPE_PRECOMMIT, hook=hook)
-
-        # print(self._app.hooks.to_dict())
 
     def validate(self):
         pass

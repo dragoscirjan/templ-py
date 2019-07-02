@@ -1,5 +1,5 @@
 init:
-  precommit: pytempl precommit --silent
+  precommit: pytempl precommit --silent --with-black
 pre-commit:
   commands:
     '*.py':

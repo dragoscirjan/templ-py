@@ -1,7 +1,8 @@
+import inspect
 import json
 import yaml
 
-from pytempl.templ.hooks import Base, PreCommit
+from pytempl.templ.hooks import Base, Init, PreCommit
 from pytempl.templ.hooks import Collection
 from pytempl.templ.utils import file_exists, file_read
 
@@ -10,12 +11,22 @@ class HookFactory:
 
     @staticmethod
     def from_dict(data: dict, klass=None) -> Base:
+        """
+
+        :param data: dict
+        :param klass: class
+        :return: Base
+        """
         hook = None
-        if issubclass(klass, Base):
-            hook = klass()
-            if type(klass) == str:
-                if klass == 'PreCommit' or klass == Collection.TYPE_PRECOMMIT:
-                    hook = PreCommit()
+
+        if type(klass) == str:
+            if klass == 'PreCommit' or klass == Collection.TYPE_PRECOMMIT:
+                hook = PreCommit()
+            if klass == 'Init' or klass == Collection.TYPE_INIT:
+                hook = Init()
+        else:
+            if issubclass(klass, Base):
+                hook = klass()
 
         if hook is None:
             raise Exception('Invalid hook class `{}`'.format(str(klass)))
@@ -30,6 +41,11 @@ class CollectionFactory:
 
     @staticmethod
     def from_dict(data: dict) -> Collection:
+        """
+
+        :param data: dict
+        :return: Collection
+        """
         collection = Collection()
         for hook_type in data.keys():
             if hook_type not in Collection.TYPES:
@@ -39,6 +55,11 @@ class CollectionFactory:
 
     @staticmethod
     def from_file(path: str = None) -> Collection:
+        """
+
+        :param path: str
+        :return: Collection
+        """
         found_path = None
 
         if path is None:

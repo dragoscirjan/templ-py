@@ -30,6 +30,13 @@ class Collection:
     ]
 
     def add_hook(self, hook_type: str, hook: Base, force: bool = False) -> None:
+        """
+
+        :param hook_type: str
+        :param hook: Base
+        :param force: bool
+        :return: None
+        """
         if hook_type in self._hooks.keys() and force is False:
             raise Exception('`{}` hook already exists'.format(hook_type))
         self._hooks[hook_type] = hook

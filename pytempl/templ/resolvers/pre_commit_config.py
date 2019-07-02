@@ -1,14 +1,18 @@
 from functools import reduce
 
 from pytempl.templ.resolvers import Base as BaseResolver
-from pytempl.templ.hooks import Collection, PreCommit as PreCommitHook, Init as InitHook
-from pytempl.templ.tools import Base as BaseTool, active_precommit_tools
+from pytempl.templ.hooks import PreCommit as PreCommitHook
+from pytempl.templ.tools import active_precommit_tools
 from pytempl.templ.utils import str2bool
 
 
-class PreCommit(BaseResolver):
+class PreCommitConfig(BaseResolver):
     @staticmethod
     def arguments() -> list:
+        """
+        Obtain List of Arguments for precommit-config Command
+        :return: list
+        """
         return [
             (['--interactive'],
              {'const': True,
@@ -46,31 +50,42 @@ class PreCommit(BaseResolver):
         ] + reduce((lambda a, b: a + b), [klass.arguments(klass) for klass in active_precommit_tools])
 
     def run(self) -> None:
-        tools = []
-        packages = []
-        for klass in active_precommit_tools:
-            tool = klass(app=self.app)
-            tool.validate()
-            tools.append(tool)
-            packages += tool._config.get('packages', [])
+        """
+        Command Resolver for precommit-config Command
+        :return: None
+        """
+        tools = self._init_tools()
+        required_packages = self._required_packages(tools)
 
         for tool in tools:
             tool.run()
 
-        hook = self._create_hook(tools=tools, klass=PreCommitHook)
-        collection = self._load_collection()
-        collection.add_hook(hook_type=Collection.TYPE_PRECOMMIT, hook=hook, force=True)
+        if self._requires_reconfig():
+            self._reconfig(klass=PreCommitHook, tools=tools, command='precommit')
 
-        init = collection.get_hook(Collection.TYPE_INIT)
-        if init is None:
-            init = InitHook()
-        init.store_command('precommit')
-        collection.add_hook(hook_type=Collection.TYPE_INIT, hook=init, force=True)
-        collection.to_file()
+        # TODO: Should be presented only at config action is taken
+        # self._check_required_packages(packages=required_packages)
 
-        self._check_packages(packages=packages)
+    def _init_tools(self) -> list:
+        """
+        Initialize `pytempl.templ.tools`
+        :return: list
+        """
+        tools = []
+        for klass in active_precommit_tools:
+            tool = klass(app=self.app)
+            tool.validate()
+            tools.append(tool)
+        return tools
 
-
+    def _required_packages(self, tools: list) -> list:
+        """
+        Obtain list of packages requiered
+        :param tools:
+        :return: list
+        """
+        required_packages = list(map(lambda tool: tool._config.get('packages', []), tools))
+        return list(reduce(lambda a, b: a + b, required_packages, []))
 
 
 
