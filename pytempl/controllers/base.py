@@ -1,9 +1,8 @@
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
-from functools import reduce
 
 from pytempl.core.version import get_version
-from pytempl.tools import Base as BaseTool, active_tools
+from pytempl.templ.resolvers import PreCommitConfig
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -34,56 +33,27 @@ class Base(Controller):
 
         self.app.args.print_help()
 
+
+    """
+    pytempl.controller.Controller::command() => 
+        pytempl.templ.resolvers.Base::run() =>
+            pytempl.templ.tool.Base::run() # for each tool
+            pytempl.templ.hook.CollectionFactory::to_file() 
+    """
+
     @ex(
         help='Use to configure the lint/format tools.',
 
+
         # sub-command level arguments. ex: 'pytempl command1 --foo bar'
-        arguments= [
-            ### add a sample foo option under subcommand namespace
-            (['--interactive'],
-             {'default': False,
-              'dest': 'interactive',
-              'help': 'Run configure with interactive wizzard.',
-              'nargs': '?',
-              'type': bool}),
-            (['--reconfig'],
-             {'default': False,
-              'dest': 'reconfig',
-              'help': 'Reconfigure all installed tools.',
-              'nargs': '?',
-              'type': bool}),
-            (['--silent'],
-             {'default': False,
-              'dest': 'silent',
-              'help': 'Silent run. Logging is disabled.',
-              'nargs': '?',
-              'type': bool}),
-            (['--append-pre-commit'],
-             {'default': [],
-              'dest': 'append_pre_commit',
-              'help': 'Add custom pre-commit command at beggining of list.',
-              'nargs': '+',
-              'type': str}),
-            (['--prepend-pre-commit'],
-             {'default': False,
-              'dest': 'prepend_pre_commit',
-              'help': 'Add custom pre-commit command at end of list.',
-              'nargs': '?',
-              'type': str})
-        ] + reduce((lambda a, b: a + b), [BaseTool.arguments(klass) for klass in active_tools]),
+        arguments=PreCommitConfig.arguments()
     )
-    def precommit(self):
+    def precommit_config(self):
         """Use to configure the lint/format tools."""
 
-        for klass in active_tools:
-            klass(app=self.app).run()
+        PreCommitConfig(app=self.app).run()
 
         # data = {
         #     'foo': 'bar',
         # }
-        #
-        # ### do something with arguments
-        # if self.app.pargs.foo is not None:
-        #     data['foo'] = self.app.pargs.foo
-        #
         # self.app.render(data, 'command1.jinja2')

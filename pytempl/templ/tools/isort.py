@@ -1,7 +1,7 @@
-from pytempl.tools import Base
+from pytempl.templ.tools import BaseReq
 
 
-class Isort(Base):
+class Isort(BaseReq):
     """
     :see: https://github.com/timothycrosley/isort
     """
@@ -14,6 +14,6 @@ class Isort(Base):
         super().__init__(app)
         self._config.update({
             'hook': 'isort',
-            'order': 50,
+            'name': 'Isort (https://github.com/timothycrosley/isort)',
             'packages': ['isort']
         })

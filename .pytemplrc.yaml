@@ -1,0 +1,21 @@
+init:
+  precommit: pytempl precommit --silent --with-black
+pre-commit:
+  commands:
+    '*.py':
+    - black --config .black.toml
+    - isort
+    - yamllint -c .yamllint
+    - pycodestyle --config .pydocstylerc
+    - pydocstyle --config .pydocstylerc
+    - bandit -ini .bandit
+    - flake8 --show-source
+    - pytempl jsonlint
+    - python -m mccabe --min 5
+    - mypy --config-file .mypy.ini
+    - pylint
+    - pytest
+    - radon cc --min B --max E
+    - unittest
+  post-commands: []
+  pre-commands: []
