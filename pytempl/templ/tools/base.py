@@ -1,10 +1,10 @@
-from cement import App
-from jinja2 import Template
-
 import os
 import re
-import requests
 import sys
+
+import requests
+from cement import App
+from jinja2 import Template
 
 from pytempl.templ.output import pcprint, wcolour, GREEN, YELLOW, BLUE
 from pytempl.templ.utils import str2bool, file_backup
@@ -52,14 +52,14 @@ class Base:
         :return:
         """
         return [
-            (['--with-{}'.format(klass.TOKEN)],
-             {'const': True,
-              'default': False,
-              'dest': 'with_{}'.format(klass.TOKEN),
-              'help': 'also install `{}` tool.'.format(klass.TOKEN),
-              'nargs': '?',
-              'type': str2bool})
-        ] + Base._arguments(klass=klass)
+                   (['--with-{}'.format(klass.TOKEN)],
+                    {'const': True,
+                     'default': False,
+                     'dest': 'with_{}'.format(klass.TOKEN),
+                     'help': 'also install `{}` tool.'.format(klass.TOKEN),
+                     'nargs': '?',
+                     'type': str2bool})
+               ] + Base._arguments(klass=klass)
 
     def exists(self, path: str):
         """
@@ -94,16 +94,24 @@ class Base:
     def run(self):
         args = vars(self._app.pargs)
 
-        pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)),
+                colour=GREEN)
 
-        use = args.get('skip_{}'.format(self.TOKEN), None) is False or args.get('with_{}'.format(self.TOKEN), None) is True
-
-        if not use:
+        if not self.use():
             pcprint('not used. skipping.', colour=YELLOW)
             print('')
             return
 
         self._write_config_files()
+
+    def use(self) -> bool:
+        """
+        Test whether tool is used or not
+        :return: bool
+        """
+        args = vars(self._app.pargs)
+        return args.get('skip_{}'.format(self.TOKEN), None) is False or \
+               args.get('with_{}'.format(self.TOKEN), None) is True
 
     def validate(self):
         pass
