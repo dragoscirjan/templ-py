@@ -1,7 +1,7 @@
 from cement import App
 
 from pytempl.templ.hooks import Base as BaseHook, Collection
-from pytempl.templ.hooks import CollectionFactory
+from pytempl.templ import file_exists, file_read
 
 
 class Base:
@@ -57,3 +57,12 @@ class Base:
         # collection = CollectionFactory.from_file()
         collection = Collection()
         return collection
+
+    def _check_packages(self, packages: list) -> None:
+        already_in_list = []
+        for file in ['requirements.txt', 'requirements-dev.txt']:
+            if file_exists(file):
+                for line in file_read(file).split("\n"):
+                    package = line.split('=')[0].split('>')[0].split('<')[0].strip()
+                    already_in_list.append(package)
+        print(already_in_list)

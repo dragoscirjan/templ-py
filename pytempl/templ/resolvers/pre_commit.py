@@ -47,10 +47,12 @@ class PreCommit(BaseResolver):
 
     def run(self) -> None:
         tools = []
+        packages = []
         for klass in active_precommit_tools:
             tool = klass(app=self.app)
             tool.validate()
             tools.append(tool)
+            packages += tool._config.get('packages', [])
 
         for tool in tools:
             tool.run()
@@ -64,8 +66,9 @@ class PreCommit(BaseResolver):
             init = InitHook()
         init.store_command('precommit')
         collection.add_hook(hook_type=Collection.TYPE_INIT, hook=init, force=True)
-
         collection.to_file()
+
+        self._check_packages(packages=packages)
 
 
 

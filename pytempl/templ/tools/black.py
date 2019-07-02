@@ -26,7 +26,7 @@ class Black(Base):
         })
 
     def validate(self):
-        if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+        if self._app.pargs.with_black is True and (sys.version_info[0] < 3 or sys.version_info[1] < 6):
             pcprint('Black requires python 3.6 or higher. Please used `Isort` for python 3.5.')
             sys.exit(10)
 
