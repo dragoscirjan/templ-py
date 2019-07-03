@@ -1,6 +1,8 @@
 from cement import App
 
-from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection, CollectionFactory
+import sys
+
+from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection as HookCollection, CollectionFactory as HookCollectionFactory
 from pytempl.templ import file_exists, file_read, pcprint, wcolour, GREEN, BLUE
 
 
@@ -10,6 +12,7 @@ class Base:
 
     def __init__(self, app: App) -> None:
         self.app = app
+        self.hook_collection = HookCollectionFactory.from_file()
 
     @staticmethod
     def arguments() -> list:
@@ -25,6 +28,21 @@ class Base:
         :return:
         """
         pass
+
+    def _check_hook_configured_and_exit(self, hook_type: str = ''):
+        if self._can_reconfig():
+            return
+
+        collection = self.hook_collection.to_dict()
+        if hook_type not in collection.keys():
+            return
+
+        pcprint('`{}` hook is already configured.'.format(wcolour(hook_type, colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('to re-configure, use one of the {} options'.format(wcolour('--reconfigure, --reconfigure-*', colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('check {} command for more help'.format(wcolour('pytempl precommit-config', colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('exiting...')
+        print('')
+        sys.exit(0)
 
     def _check_required_packages(self, packages: list) -> None:
         """
@@ -79,9 +97,6 @@ class Base:
 
         return hook
 
-    def _load_collection(self) -> Collection:
-        return CollectionFactory.from_file()
-
     def _reconfig(self, klass: BaseHook, tools: list = [], command: str = '') -> None:
         """
         Reconfigure a specific git hook and write the entire hook collection to config file.
@@ -91,17 +106,16 @@ class Base:
         :return:
         """
         hook = self._create_hook(tools=tools, klass=klass)
-        collection = self._load_collection()
-        collection.add_hook(hook_type=Collection.TYPE_PRECOMMIT, hook=hook, force=True)
+        self.hook_collection.add_hook(hook_type=HookCollection.TYPE_PRECOMMIT, hook=hook, force=True)
 
-        init = collection.get_hook(Collection.TYPE_INIT)
+        init = self.hook_collection.get_hook(HookCollection.TYPE_INIT)
         if init is None:
             init = InitHook()
         init.store_command(command)
-        # collection.add_hook(hook_type=Collection.TYPE_INIT, hook=init, force=True)
-        collection.to_file()
+        # collection.add_hook(hook_type=HookCollection.TYPE_INIT, hook=init, force=True)
+        self.hook_collection.to_file()
 
-    def _requires_reconfig(self) -> bool:
+    def _can_reconfig(self) -> bool:
         """
         --reconfig --reconfig-*
         :return: bool
