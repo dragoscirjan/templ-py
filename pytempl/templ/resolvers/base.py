@@ -1,6 +1,8 @@
 from cement import App
 
-from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection, CollectionFactory
+import sys
+
+from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection as HookCollection, CollectionFactory as HookCollectionFactory
 from pytempl.templ import file_exists, file_read, pcprint, wcolour, GREEN, BLUE
 
 
@@ -10,6 +12,7 @@ class Base:
 
     def __init__(self, app: App) -> None:
         self.app = app
+        self.hook_collection = HookCollectionFactory.from_file()
 
     @staticmethod
     def arguments() -> list:
@@ -26,35 +29,20 @@ class Base:
         """
         pass
 
-    def _create_hook(self, tools: list, klass: BaseHook) -> BaseHook:
-        args = self.app.pargs
-        hook = klass()
+    def _check_hook_configured_and_exit(self, hook_type: str = ''):
+        if self._can_reconfig():
+            return
 
-        for tool in tools:
-            config = tool._config
-            commands = config.get('hook', None)
-            extensions = config.get('ext', None)
+        collection = self.hook_collection.to_dict()
+        if hook_type not in collection.keys():
+            return
 
-            if type(commands) == str:
-                for ext in extensions:
-                    hook.add_command(command=commands, ext=ext)
-            if type(commands) == list:
-                for ext in extensions:
-                    for command in commands:
-                        hook.add_command(command=command, ext=ext)
-
-        if len(args.prepend_pre_commit) > 0:
-            for command in args.prepend_pre_commit:
-                hook.add_pre_command(command)
-
-        if len(args.append_pre_commit) > 0:
-            for command in args.append_pre_commit:
-                hook.add_post_command(command)
-
-        return hook
-
-    def _load_collection(self) -> Collection:
-        return CollectionFactory.from_file()
+        pcprint('`{}` hook is already configured.'.format(wcolour(hook_type, colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('to re-configure, use one of the {} options'.format(wcolour('--reconfigure, --reconfigure-*', colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('check {} command for more help'.format(wcolour('pytempl precommit-config', colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('exiting...')
+        print('')
+        sys.exit(0)
 
     def _check_required_packages(self, packages: list) -> None:
         """
@@ -79,16 +67,35 @@ class Base:
             pcprint(_add, colour=BLUE)
             pcprint('to {}'.format(wcolour('requirements-dev.txt', colour=BLUE)), colour=GREEN)
 
-    def _requires_reconfig(self) -> bool:
-        """
-        --reconfig --reconfig-*
-        :return: bool
-        """
-        args = vars(self.app.pargs)
-        for key in args.keys():
-            if key.find('reconfig') == 0 and args.get(key, False) is True:
-                return True
-        return False
+    def _create_hook(self, tools: list, klass: BaseHook) -> BaseHook:
+        args = self.app.pargs
+        hook = klass()
+
+        for tool in tools:
+            if tool.use() is False:
+                continue
+
+            config = tool._config
+            commands = config.get('hook', None)
+            extensions = config.get('ext', None)
+
+            if type(commands) == str:
+                for ext in extensions:
+                    hook.add_command(command=commands, ext=ext)
+            if type(commands) == list:
+                for ext in extensions:
+                    for command in commands:
+                        hook.add_command(command=command, ext=ext)
+
+        if len(args.prepend_pre_commit) > 0:
+            for command in args.prepend_pre_commit:
+                hook.add_pre_command(command)
+
+        if len(args.append_pre_commit) > 0:
+            for command in args.append_pre_commit:
+                hook.add_post_command(command)
+
+        return hook
 
     def _reconfig(self, klass: BaseHook, tools: list = [], command: str = '') -> None:
         """
@@ -98,14 +105,23 @@ class Base:
         :param command: str
         :return:
         """
-        print('_reconfig')
-        # hook = self._create_hook(tools=tools, klass=klass)
-        # collection = self._load_collection()
-        # collection.add_hook(hook_type=Collection.TYPE_PRECOMMIT, hook=hook, force=True)
-        #
-        # init = collection.get_hook(Collection.TYPE_INIT)
-        # if init is None:
-        #     init = InitHook()
-        # init.store_command(command)
-        # collection.add_hook(hook_type=Collection.TYPE_INIT, hook=init, force=True)
-        # collection.to_file()
+        hook = self._create_hook(tools=tools, klass=klass)
+        self.hook_collection.add_hook(hook_type=HookCollection.TYPE_PRECOMMIT, hook=hook, force=True)
+
+        init = self.hook_collection.get_hook(HookCollection.TYPE_INIT)
+        if init is None:
+            init = InitHook()
+        init.store_command(command)
+        # collection.add_hook(hook_type=HookCollection.TYPE_INIT, hook=init, force=True)
+        self.hook_collection.to_file()
+
+    def _can_reconfig(self) -> bool:
+        """
+        --reconfig --reconfig-*
+        :return: bool
+        """
+        args = vars(self.app.pargs)
+        for key in args.keys():
+            if key.find('reconfig') == 0 and args.get(key, False) is True:
+                return True
+        return False

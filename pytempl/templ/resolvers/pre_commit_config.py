@@ -1,9 +1,11 @@
 from functools import reduce
+import sys
 
 from pytempl.templ.resolvers import Base as BaseResolver
-from pytempl.templ.hooks import PreCommit as PreCommitHook
+from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
 from pytempl.templ.tools import active_precommit_tools
 from pytempl.templ.utils import str2bool
+from pytempl.templ import pcprint, GREEN
 
 
 class PreCommitConfig(BaseResolver):
@@ -54,13 +56,15 @@ class PreCommitConfig(BaseResolver):
         Command Resolver for precommit-config Command
         :return: None
         """
+        self._check_hook_configured_and_exit(hook_type=HookCollection.TYPE_PRECOMMIT)
+
         tools = self._init_tools()
         required_packages = self._required_packages(tools)
 
         for tool in tools:
             tool.run()
 
-        if self._requires_reconfig():
+        if self._can_reconfig():
             self._reconfig(klass=PreCommitHook, tools=tools, command='precommit')
 
         # TODO: Should be presented only at config action is taken

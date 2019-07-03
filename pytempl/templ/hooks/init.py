@@ -5,7 +5,7 @@ from pytempl.templ.hooks import Base
 
 class Init(Base):
 
-    _commands = {}
+    _init_commands = {}
 
     def store_command(self, command: str):
         argv = sys.argv[2:]
@@ -13,7 +13,7 @@ class Init(Base):
         argv = list(filter(lambda s: s.find('--reconfig') < 0 and s.find('--silent') <= 0, argv))
         argv = ['--silent'] + argv
 
-        self._commands[command] = 'pytempl {} {}'.format(command, ' '.join(argv))
+        self._init_commands[command] = 'pytempl {command} {argv}'.format(command=command, argv=' '.join(argv))
 
     def to_dict(self):
-        return self._commands
+        return self._init_commands

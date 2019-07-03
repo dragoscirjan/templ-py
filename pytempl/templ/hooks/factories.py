@@ -73,11 +73,16 @@ class CollectionFactory:
         if found_path is None:
             return Collection()
 
+        text_data = file_read(found_path)
+
+        if len(text_data) == 0:
+            return CollectionFactory.from_dict(data={})
+
         try:
-            data = json.loads(file_read(found_path))
+            data = json.loads(text_data)
         except Exception as e:
             if found_path == Collection.RC_FILE_JSON:
                 raise e
-            data = yaml.load(file_read(found_path))
+            data = yaml.safe_load(text_data)
 
         return CollectionFactory.from_dict(data=data)
