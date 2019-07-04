@@ -3,7 +3,7 @@ from cement import App
 import sys
 
 from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection as HookCollection, CollectionFactory as HookCollectionFactory
-from pytempl.templ import file_exists, file_read, pcprint, wcolour, GREEN, BLUE
+from pytempl.templ import file_exists, file_read, file_write, pcprint, wcolour, GREEN, BLUE
 
 
 class Base:
@@ -28,6 +28,19 @@ class Base:
         :return:
         """
         pass
+
+
+    def _prepare_git_hook(self, hook_type: str, command: str):
+        hook_file = '.git/hooks/{}'.format(hook_type)
+        if file_exists(path=hook_file):
+            return
+        content = """#! /bin/bash
+
+pytempl {command}        
+""".format(command=command)
+        file_write(content=command, path=hook_file)
+        pcprint('{} created'.format(wcolour('.git/hooks/{}'.format(hook_type), colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        print('')
 
     def _check_hook_configured_and_exit(self, hook_type: str = ''):
         if self._can_reconfig():

@@ -56,6 +56,9 @@ class PreCommitConfig(BaseResolver):
         Command Resolver for precommit-config Command
         :return: None
         """
+
+        self._prepare_git_hook(hook_type=HookCollection.TYPE_PRECOMMIT, command='precommit')
+
         self._check_hook_configured_and_exit(hook_type=HookCollection.TYPE_PRECOMMIT)
 
         tools = self._init_tools()
