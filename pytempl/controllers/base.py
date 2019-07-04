@@ -2,7 +2,7 @@ from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from pytempl.core.version import get_version
-from pytempl.templ.resolvers import PreCommitConfig
+from pytempl.templ.resolvers import PreCommitConfig, PreCommit
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -57,3 +57,10 @@ class Base(Controller):
         #     'foo': 'bar',
         # }
         # self.app.render(data, 'command1.jinja2')
+
+    @ex(
+        help='Use to run configured lint/format tools from pre-commit hook.'
+    )
+    def precommit(self):
+
+        PreCommit(app=self.app).run()

@@ -1,4 +1,5 @@
 from cement import App
+from functools import reduce
 
 import sys
 
@@ -29,18 +30,16 @@ class Base:
         """
         pass
 
-
-    def _prepare_git_hook(self, hook_type: str, command: str):
-        hook_file = '.git/hooks/{}'.format(hook_type)
-        if file_exists(path=hook_file):
-            return
-        content = """#! /bin/bash
-
-pytempl {command}        
-""".format(command=command)
-        file_write(content=command, path=hook_file)
-        pcprint('{} created'.format(wcolour('.git/hooks/{}'.format(hook_type), colour=BLUE, ecolour=GREEN)), colour=GREEN)
-        print('')
+    def _can_reconfig(self) -> bool:
+        """
+        --reconfig --reconfig-*
+        :return: bool
+        """
+        args = vars(self.app.pargs)
+        for key in args.keys():
+            if key.find('reconfig') == 0 and args.get(key, False) is True:
+                return True
+        return False
 
     def _check_hook_configured_and_exit(self, hook_type: str = ''):
         if self._can_reconfig():
@@ -110,6 +109,24 @@ pytempl {command}
 
         return hook
 
+    def _prepare_git_hook(self, hook_type: str, command: str):
+        """
+
+        :param hook_type: str
+        :param command: str
+        :return:
+        """
+        hook_file = '.git/hooks/{}'.format(hook_type)
+        if file_exists(path=hook_file):
+            return
+        content = """#! /bin/bash
+
+pytempl {command}        
+""".format(command=command)
+        file_write(content=command, path=hook_file)
+        pcprint('{} created'.format(wcolour('.git/hooks/{}'.format(hook_type), colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        print('')
+
     def _reconfig(self, klass: BaseHook, tools: list = [], command: str = '') -> None:
         """
         Reconfigure a specific git hook and write the entire hook collection to config file.
@@ -128,13 +145,11 @@ pytempl {command}
         # collection.add_hook(hook_type=HookCollection.TYPE_INIT, hook=init, force=True)
         self.hook_collection.to_file()
 
-    def _can_reconfig(self) -> bool:
+    def _required_packages(self, tools: list) -> list:
         """
-        --reconfig --reconfig-*
-        :return: bool
+        Obtain list of packages requiered
+        :param tools:
+        :return: list
         """
-        args = vars(self.app.pargs)
-        for key in args.keys():
-            if key.find('reconfig') == 0 and args.get(key, False) is True:
-                return True
-        return False
+        required_packages = list(map(lambda tool: tool._config.get('packages', []), tools))
+        return list(reduce(lambda a, b: a + b, required_packages, []))

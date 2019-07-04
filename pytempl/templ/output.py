@@ -1,13 +1,13 @@
 from jinja2 import Template
-import subprocess
 import sys
+
+from .utils import run_shell_command
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 
 def tput_colors():
-    proc = subprocess.Popen(['tput', 'colors'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    stdout, stderr = proc.communicate()
+    stdout, stderr = run_shell_command(['tput', 'colors'])
     if stderr is None:
         return int(stdout) >= 8
     return False

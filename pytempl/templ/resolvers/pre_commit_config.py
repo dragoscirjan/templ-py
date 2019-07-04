@@ -9,6 +9,7 @@ from pytempl.templ import pcprint, GREEN
 
 
 class PreCommitConfig(BaseResolver):
+
     @staticmethod
     def arguments() -> list:
         """
@@ -71,7 +72,7 @@ class PreCommitConfig(BaseResolver):
             self._reconfig(klass=PreCommitHook, tools=tools, command='precommit')
 
         # TODO: Should be presented only at config action is taken
-        # self._check_required_packages(packages=required_packages)
+        self._check_required_packages(packages=required_packages)
 
     def _init_tools(self) -> list:
         """
@@ -84,15 +85,6 @@ class PreCommitConfig(BaseResolver):
             tool.validate()
             tools.append(tool)
         return tools
-
-    def _required_packages(self, tools: list) -> list:
-        """
-        Obtain list of packages requiered
-        :param tools:
-        :return: list
-        """
-        required_packages = list(map(lambda tool: tool._config.get('packages', []), tools))
-        return list(reduce(lambda a, b: a + b, required_packages, []))
 
 
 

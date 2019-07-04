@@ -1,5 +1,5 @@
-import inspect
 import json
+
 import yaml
 
 from pytempl.templ.hooks import Base, Init, PreCommit
@@ -31,9 +31,9 @@ class HookFactory:
         if hook is None:
             raise Exception('Invalid hook class `{}`'.format(str(klass)))
 
-        hook._pre_commands = getattr(data, 'pre-commands', [])
-        hook._commands = getattr(data, 'commands', [])
-        hook._post_commands = getattr(data, 'post-commands', [])
+        hook._pre_commands = data.get('pre-commands', [])
+        hook._commands = data.get('commands', [])
+        hook._post_commands = data.get('post-commands', [])
         return hook
 
 
@@ -50,7 +50,8 @@ class CollectionFactory:
         for hook_type in data.keys():
             if hook_type not in Collection.TYPES:
                 raise Exception('`{}` hook is invalid.'.format(hook_type))
-            collection.add_hook(hook_type, HookFactory.from_dict(data=data[hook_type], klass=hook_type))
+            collection.add_hook(hook_type=hook_type, hook=HookFactory.from_dict(data=data[hook_type], klass=hook_type),
+                                force=True)
         return collection
 
     @staticmethod
