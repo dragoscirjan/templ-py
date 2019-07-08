@@ -63,7 +63,7 @@ class PreCommit(Base):
         :param command:
         :return:
         """
-        pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
+        pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
         stdout, stderr = run_shell_command(command)
         if stderr is not None:
             pcprint('error', colour=RED)
