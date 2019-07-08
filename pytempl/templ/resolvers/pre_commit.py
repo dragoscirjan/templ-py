@@ -21,7 +21,7 @@ class PreCommit(Base):
         hook = self._get_precommit_hook()
         files = self._map_files_by_hook_extensions(files_list=self._get_changed_precommit_files())
 
-        if hook[BaseHook.KEY_PRE_COMMANDS]:
+        if hook[BaseHook.KEY_PRE_COMMANDS] and len(hook[BaseHook.KEY_PRE_COMMANDS]):
             for command in hook[BaseHook.KEY_PRE_COMMANDS]:
                 self._run_hook_command(command)
 
@@ -36,7 +36,7 @@ class PreCommit(Base):
                                 c = 'git add ' + file
                                 self._run_hook_command(c)
 
-        if hook[BaseHook.KEY_POST_COMMANDS]:
+        if hook[BaseHook.KEY_POST_COMMANDS] and len(hook[BaseHook.KEY_POST_COMMANDS]):
             for command in hook[BaseHook.KEY_POST_COMMANDS]:
                 self._run_hook_command(command)
 
