@@ -1,6 +1,7 @@
 import sys
 
 from pytempl.templ import BLUE, GREEN, RED, pcprint, run_shell_command, wcolour
+from pytempl.templ.hooks import Base as BaseHook
 from pytempl.templ.hooks import Collection as HookCollection
 
 from .base import Base
@@ -17,21 +18,27 @@ class PreCommit(Base):
         Command Resolver for precommit Command
         :return: None
         """
-
         hook = self._get_precommit_hook()
-
         files = self._map_files_by_hook_extensions(files_list=self._get_changed_precommit_files())
 
-        for ext1 in hook['commands'].keys():
+        if hook[BaseHook.KEY_PRE_COMMANDS]:
+            for command in hook[BaseHook.KEY_PRE_COMMANDS]:
+                self._run_hook_command(command)
+
+        for ext1 in hook[BaseHook.KEY_COMMANDS].keys():
             for ext2 in files:
                 if ext1 == ext2:
-                    for command in hook['commands'][ext1]:
+                    for command in hook[BaseHook.KEY_COMMANDS][ext1]:
                         for file in files[ext2]:
                             if command and file:
                                 c = command + ' ' + file
                                 self._run_hook_command(c.split(' '))
                                 c = 'git add ' + file
                                 self._run_hook_command(c.split(' '))
+
+        if hook[BaseHook.KEY_POST_COMMANDS]:
+            for command in hook[BaseHook.KEY_POST_COMMANDS]:
+                self._run_hook_command(command)
 
     def _get_precommit_hook(self) -> dict:
         """
