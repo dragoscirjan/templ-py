@@ -30,10 +30,11 @@ class PreCommit(Base):
                 if ext1 == ext2:
                     for command in hook['commands'][ext1]:
                         for file in files[ext2]:
-                            c = command + ' ' + file
-                            self._run_hook_command(c.split(' '))
-                            c = 'git add ' + file
-                            self._run_hook_command(c.split(' '))
+                            if command and file:
+                                c = command + ' ' + file
+                                self._run_hook_command(c.split(' '))
+                                c = 'git add ' + file
+                                self._run_hook_command(c.split(' '))
 
     def _get_precommit_hook(self) -> dict:
         """
