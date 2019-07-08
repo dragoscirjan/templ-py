@@ -32,9 +32,9 @@ class PreCommit(Base):
                         for file in files[ext2]:
                             if command and file:
                                 c = command + ' ' + file
-                                self._run_hook_command(c.split(' '))
+                                self._run_hook_command(c)
                                 c = 'git add ' + file
-                                self._run_hook_command(c.split(' '))
+                                self._run_hook_command(c)
 
         if hook[BaseHook.KEY_POST_COMMANDS]:
             for command in hook[BaseHook.KEY_POST_COMMANDS]:
