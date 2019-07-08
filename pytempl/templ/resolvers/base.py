@@ -103,6 +103,10 @@ class Base:
                 for ext in extensions:
                     for command in commands:
                         hook.add_command(command=command, ext=ext)
+            if 'prepend-pre-commit' in config.keys():
+                hook.add_pre_command(config.get('prepend-pre-commit', ''))
+            if 'append-pre-commit' in config.keys():
+                hook.add_post_command(config.get('append-pre-commit', ''))
 
         if len(args.prepend_pre_commit) > 0:
             for command in args.prepend_pre_commit:

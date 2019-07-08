@@ -7,10 +7,10 @@ pre-commit:
     '*.py':
     - isort
     - pylint
-    - ''
     '*.yaml':
     - yamllint -c .yamllint
     '*.yml':
     - yamllint -c .yamllint
-  post-commands: []
+  post-commands:
+  - python -m unittest discover -s tests -p "*_test.py"
   pre-commands: []
