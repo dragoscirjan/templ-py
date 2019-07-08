@@ -2,11 +2,15 @@ init:
   precommit: pytempl precommit --silent
 pre-commit:
   commands:
+    '*.json':
+    - pytempl jsonlint
     '*.py':
     - isort
-    - yamllint -c .yamllint
-    - pytempl jsonlint
     - pylint
-    - unittest
+    - ''
+    '*.yaml':
+    - yamllint -c .yamllint
+    '*.yml':
+    - yamllint -c .yamllint
   post-commands: []
   pre-commands: []

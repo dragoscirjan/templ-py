@@ -13,7 +13,7 @@ class Unittest(BaseReq):
     def __init__(self, app=None):
         super().__init__(app)
         self._config.update({
-            'hook': 'unittest',
+            'hook': '',
             'name': 'Unittest (https://docs.python.org/3.5/library/unittest.html)',
             'packages': ['coverage'],
             'append-pre-commit': 'python -m unittest discover -s tests -p "*_test.py"'

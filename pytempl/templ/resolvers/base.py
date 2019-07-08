@@ -1,10 +1,15 @@
-from cement import App
+import re
+import sys
 from functools import reduce
 
-import sys
+from cement import App
 
-from pytempl.templ.hooks import Base as BaseHook, Init as InitHook, Collection as HookCollection, CollectionFactory as HookCollectionFactory
-from pytempl.templ import file_exists, file_read, file_write, pcprint, wcolour, GREEN, BLUE
+from pytempl.templ import (BLUE, GREEN, file_exists, file_read, file_write,
+                           pcprint, wcolour)
+from pytempl.templ.hooks import Base as BaseHook
+from pytempl.templ.hooks import Collection as HookCollection
+from pytempl.templ.hooks import CollectionFactory as HookCollectionFactory
+from pytempl.templ.hooks import Init as InitHook
 
 
 class Base:
@@ -109,6 +114,32 @@ class Base:
 
         return hook
 
+    def _get_hook_extensions(self, hook_type: str) -> list:
+        """
+        Obtain list of extensions configured in hook config.
+        :param hook_type: str
+        :return: list
+        """
+        dikt = self.hook_collection.to_dict()
+        if hook_type not in dikt.keys() or 'commands' not in dikt[hook_type].keys():
+            return []
+        return dikt[hook_type]['commands'].keys()
+
+    def _map_files_by_hook_extensions(self, files_list: list) -> dict:
+        """
+        Map files with their extensions
+        :param files_list: list
+        :return: dict
+        """
+        files = {}
+        for ext in self._get_hook_extensions(hook_type=HookCollection.TYPE_PRECOMMIT):
+            test = re.compile('\\.' + ext.split('.')[1] + '$', re.IGNORECASE)
+            files[ext] = []
+            for file in files_list:
+                if test.search(file):
+                    files[ext].append(file)
+        return files
+
     def _prepare_git_hook(self, hook_type: str, command: str):
         """
 
@@ -117,13 +148,15 @@ class Base:
         :return:
         """
         hook_file = '.git/hooks/{}'.format(hook_type)
-        if file_exists(path=hook_file):
+        if file_exists(path=hook_file) and not self.app.pargs.reconfig is True:
             return
         content = """#! /bin/bash
 
-pytempl {command}        
+pytempl {command}
+
+# exit 1        
 """.format(command=command)
-        file_write(content=command, path=hook_file)
+        file_write(content=content, path=hook_file)
         pcprint('{} created'.format(wcolour('.git/hooks/{}'.format(hook_type), colour=BLUE, ecolour=GREEN)), colour=GREEN)
         print('')
 
@@ -151,5 +184,5 @@ pytempl {command}
         :param tools:
         :return: list
         """
-        required_packages = list(map(lambda tool: tool._config.get('packages', []), tools))
+        required_packages = list(map(lambda tool: tool._config.get('packages', []) if tool.use() else [], tools))
         return list(reduce(lambda a, b: a + b, required_packages, []))

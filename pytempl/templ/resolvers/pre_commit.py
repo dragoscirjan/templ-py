@@ -1,7 +1,9 @@
-from .base import Base
+import sys
 
-from pytempl.templ.hooks import CollectionFactory as HookCollectionFactory, Collection as HookCollection
-from pytempl.templ import run_shell_command
+from pytempl.templ import BLUE, GREEN, RED, pcprint, run_shell_command, wcolour
+from pytempl.templ.hooks import Collection as HookCollection
+
+from .base import Base
 
 
 class PreCommit(Base):
@@ -18,24 +20,47 @@ class PreCommit(Base):
 
         hook = self._get_precommit_hook()
 
-        files = self._get_changed_added_files()
+        files = self._map_files_by_hook_extensions(files_list=self._get_changed_precommit_files())
 
-        print(hook, files)
+        print(hook['commands'])
+        return
 
-    def _get_changed_added_files(self) -> list:
-        """
-
-        :return: list
-        """
-        stdout, stderr = run_shell_command(['git', 'diff', '--cached', '--name-only'])
-        if stderr is not None:
-            # TODO: show error message
-            pass
-        return stdout.decode().split("\n")
+        for ext1 in hook['commands'].keys():
+            for ext2 in files:
+                if ext1 == ext2:
+                    for command in hook['commands'][ext1]:
+                        for file in files[ext2]:
+                            c = command + ' ' + file
+                            self._run_hook_command(c.split(' '))
+                            c = 'git add ' + file
+                            self._run_hook_command(c.split(' '))
 
     def _get_precommit_hook(self) -> dict:
         """
 
         :return: dict
         """
-        return self.hook_collection.to_dict()[HookCollection.TYPE_PRECOMMIT]
+        return self.hook_collection.get_hook(hook_type=HookCollection.TYPE_PRECOMMIT).to_dict()
+
+    def _get_changed_precommit_files(self) -> list:
+        """
+        Get list of files de
+        :return: list
+        """
+        stdout, stderr = run_shell_command(['git', 'diff', '--cached', '--name-only'])
+        if stderr is not None:
+            pass
+        return stdout.decode().split("\n")
+
+    def _run_hook_command(self, command: list) -> None:
+        """
+
+        :param command:
+        :return:
+        """
+        pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
+        stdout, stderr = run_shell_command(command)
+        if stderr is not None:
+            pcprint('error', colour=RED)
+            print(stderr.decode())
+            sys.exit()

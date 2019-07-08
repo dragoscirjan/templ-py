@@ -1,11 +1,14 @@
-from functools import reduce
 import sys
+from functools import reduce
 
+from cement import App
+
+from pytempl.templ import GREEN, pcprint
+from pytempl.templ.hooks import Collection as HookCollection
+from pytempl.templ.hooks import PreCommit as PreCommitHook
 from pytempl.templ.resolvers import Base as BaseResolver
-from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
 from pytempl.templ.tools import active_precommit_tools
 from pytempl.templ.utils import str2bool
-from pytempl.templ import pcprint, GREEN
 
 
 class PreCommitConfig(BaseResolver):
@@ -52,6 +55,15 @@ class PreCommitConfig(BaseResolver):
               'type': str})
         ] + reduce((lambda a, b: a + b), [klass.arguments(klass) for klass in active_precommit_tools])
 
+
+    def __init__(self, app: App) -> None:
+        """
+
+        :param app: App
+        """
+        super().__init__(app)
+        self.hook = self.hook_collection.get_hook(hook_type=HookCollection.TYPE_PRECOMMIT)
+
     def run(self) -> None:
         """
         Command Resolver for precommit-config Command
@@ -85,6 +97,3 @@ class PreCommitConfig(BaseResolver):
             tool.validate()
             tools.append(tool)
         return tools
-
-
-
