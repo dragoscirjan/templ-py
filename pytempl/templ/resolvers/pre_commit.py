@@ -22,9 +22,6 @@ class PreCommit(Base):
 
         files = self._map_files_by_hook_extensions(files_list=self._get_changed_precommit_files())
 
-        print(hook['commands'])
-        return
-
         for ext1 in hook['commands'].keys():
             for ext2 in files:
                 if ext1 == ext2:
