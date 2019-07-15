@@ -1,8 +1,10 @@
 from functools import reduce
 import sys
+from pprint import pprint
 
-from pytempl.templ.resolvers import Base as BaseResolver
 from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
+from pytempl.templ.inquire import Inquire
+from pytempl.templ.resolvers import Base as BaseResolver
 from pytempl.templ.tools import active_precommit_tools
 from pytempl.templ.utils import str2bool
 from pytempl.templ import pcprint, GREEN
@@ -57,6 +59,11 @@ class PreCommitConfig(BaseResolver):
         Command Resolver for precommit-config Command
         :return: None
         """
+
+        if (self.app.pargs.interactive):
+            answers = Inquire().query()
+            pprint(answers)
+            return
 
         self._prepare_git_hook(hook_type=HookCollection.TYPE_PRECOMMIT, command='precommit')
 

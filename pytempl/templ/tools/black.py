@@ -7,7 +7,6 @@ from pytempl.templ.tools import Base
 class Black(Base):
     """
     :see: https://github.com/python/black
-    TODO: Min py version is 3.6
     """
 
     ORDER = 10
