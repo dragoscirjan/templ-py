@@ -7,7 +7,7 @@ from pytempl.templ import BLUE, GREEN, pcprint, wcolour
 from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
 from pytempl.templ.resolvers import Base as BaseResolver
 from pytempl.templ.tools import active_precommit_tools, Editorconfig, Base as BaseTool, BaseReq as BaseReqTool
-from pytempl.templ.utils import str2bool
+from pytempl.templ.utils import str2bool, run_shell_command
 
 
 class PreCommitConfig(BaseResolver):
@@ -117,12 +117,7 @@ class PreCommitConfig(BaseResolver):
                 'qmark': '?',
                 'message': 'Select Code Linter Tool',
                 'name': BaseTool.CATEGORY_LINTER,
-                'choices': [
-                               {
-                                   'name': 'Don\'t use formatter',
-                                   'value': None,
-                               },
-                           ] + self.query_anwers(category=BaseTool.CATEGORY_LINTER),
+                'choices': self.query_anwers(category=BaseTool.CATEGORY_LINTER),
                 'validate': lambda answer: 'You must choose at least one code linter.' if len(answer) == 0 else True,
                 'when': lambda answers: answers.get(BaseTool.CATEGORY_AUDIT, None) is None,
             },
@@ -162,6 +157,11 @@ class PreCommitConfig(BaseResolver):
         ])
 
     def query_to_command(self, answers):
+        """
+        Compose command
+        :param answers: dict
+        :return: str
+        """
         command = ''
         answers_keys = answers.keys()
         for category in BaseTool.CATEGORIES:
@@ -170,19 +170,15 @@ class PreCommitConfig(BaseResolver):
             else:
                 answer_values = answers.get(category, [])
                 answer_values = answer_values if type(answer_values) == list else [answer_values]
-                print(category, answer_values)
-                if category in answers_keys:
+                if category in answers_keys and len(answer_values) > 0:
                     for klass in list(filter(lambda item: item.CATEGORY == category, active_precommit_tools)):
-                        print(klass.TOKEN)
-                        if issubclass(klass, BaseTool) and not issubclass(klass,
+                         if issubclass(klass, BaseTool) and not issubclass(klass,
                                                                           BaseReqTool) and klass.TOKEN in answer_values:
                             command = command + ' --with-{}'.format(klass.TOKEN)
                 else:
                     for klass in list(filter(lambda item: item.CATEGORY == category, active_precommit_tools)):
-                        print(klass.TOKEN)
-                        if issubclass(klass, BaseReqTool) and klass.TOKEN not in answer_values:
+                         if issubclass(klass, BaseReqTool) and klass.TOKEN not in answer_values:
                             command = command + ' --skip-{}'.format(klass.TOKEN)
-
         return 'pytempl precommit-config' + command
 
     def run(self) -> None:
@@ -193,11 +189,15 @@ class PreCommitConfig(BaseResolver):
 
         if (self.app.pargs.interactive):
             answers = self.query()
-
             pcprint('Thankyou for stating your options.', colour=GREEN)
-            pcprint('Please run the following command: {}'.format(
+            pcprint('Running compiled command: {}'.format(
                 wcolour(self.query_to_command(answers), colour=BLUE)
             ), colour=GREEN)
+            stdout, stderr = run_shell_command(self.query_to_command(answers))
+            if stderr:
+                print(stderr.decode())
+            else:
+                print(stdout.decode())
             return
 
         self._prepare_git_hook(hook_type=HookCollection.TYPE_PRECOMMIT, command='precommit')
