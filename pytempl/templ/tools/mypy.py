@@ -8,7 +8,9 @@ class Mypy(Base):
 
     TOKEN = 'mypy'
 
-    ORDER = 80
+    ORDER = Base.ORDER_LINTER
+
+    CATEGORY = Base.CATEGORY_LINTER
 
     def __init__(self, app=None):
         super().__init__(app)

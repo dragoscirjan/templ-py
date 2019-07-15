@@ -9,9 +9,11 @@ class Black(Base):
     :see: https://github.com/python/black
     """
 
-    ORDER = 10
+    ORDER = Base.ORDER_FORMATTER
 
     TOKEN = 'black'
+
+    CATEGORY = Base.CATEGORY_FORMATTER
 
     def __init__(self, app=None):
         super().__init__(app)

@@ -8,12 +8,14 @@ class Unittest(BaseReq):
 
     TOKEN = 'unittest'
 
-    ORDER = 80
+    ORDER = BaseReq.ORDER_UNITTEST
+
+    CATEGORY = BaseReq.CATEGORY_UNITTEST
 
     def __init__(self, app=None):
         super().__init__(app)
         self._config.update({
             'name': 'Unittest (https://docs.python.org/3.5/library/unittest.html)',
-            'packages': ['coverage'],
+            'packages': [],
             'append-pre-commit': 'python -m unittest discover -s tests -p "*_test.py"'
         })

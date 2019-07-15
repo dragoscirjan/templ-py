@@ -8,7 +8,9 @@ class Mccabe(Base):
 
     TOKEN = 'mccabe'
 
-    ORDER = 80
+    ORDER = Base.ORDER_ANALYZER
+
+    CATEGORY = Base.CATEGORY_ANALYZER
 
     def __init__(self, app=None):
         super().__init__(app)

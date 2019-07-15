@@ -6,9 +6,11 @@ class Isort(BaseReq):
     :see: https://github.com/timothycrosley/isort
     """
 
-    ORDER = 10
+    ORDER = BaseReq.ORDER_FORMATTER
 
     TOKEN = 'isort'
+
+    CATEGORY = BaseReq.CATEGORY_FORMATTER
 
     def __init__(self, app=None):
         super().__init__(app)

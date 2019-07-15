@@ -9,7 +9,9 @@ class Yamllint(BaseReq):
 
     TOKEN = 'yamllint'
 
-    ORDER = 10
+    ORDER = BaseReq.ORDER_LINTER_OTHER
+
+    CATEGORY = BaseReq.CATEGORY_LINTER_OTHER
 
     def __init__(self, app=None):
         super().__init__(app)

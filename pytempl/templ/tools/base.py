@@ -13,13 +13,41 @@ from pytempl.templ.utils import str2bool, file_backup
 class Base:
     TOKEN = 'base'
 
+    CATEGORY_AUDIT = 'audit'
+    CATEGORY_ANALYZER = 'analyzer'
+    CATEGORY_EDITORCONFIG = 'editorconfig'
+    CATEGORY_FORMATTER = 'formatter'
+    CATEGORY_LINTER = 'linter'
+    CATEGORY_LINTER_OTHER = 'linter_other'
+    CATEGORY_UNITTEST = 'unittest'
+
+    CATEGORIES = [
+        CATEGORY_AUDIT,
+        CATEGORY_ANALYZER,
+        CATEGORY_EDITORCONFIG,
+        CATEGORY_FORMATTER,
+        CATEGORY_LINTER,
+        CATEGORY_LINTER_OTHER,
+        CATEGORY_UNITTEST,
+    ]
+
+    ORDER_AUDIT = 1
+    ORDER_ANALYZER = 50
+    ORDER_EDITORCONFIG = 1
+    ORDER_FORMATTER = 10
+    ORDER_LINTER = 30
+    ORDER_LINTER_OTHER = 31
+    ORDER_UNITTEST = 90
+
+
     _config = {}
     _app = None
 
     def __init__(self, app: App = None):
         self._app = app
+        args = vars(app.pargs)
         self._config = {
-            'ext': ['*.py'] + getattr(app.pargs, 'with_{}_extensions'.format(self.TOKEN), []),
+            'ext': ['*.py'] + args.get('with_{}_extensions'.format(self.TOKEN), []),
             'files': {},
             'hook': None,
             'name': '',

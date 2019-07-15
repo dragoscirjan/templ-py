@@ -1,17 +1,12 @@
-import sys
 from functools import reduce
-import sys
-from pprint import pprint
 
-from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
-from pytempl.templ.inquire import Inquire
+from PyInquirer import prompt
 from cement import App
 
-from pytempl.templ.hooks import Collection as HookCollection
-from pytempl.templ.hooks import PreCommit as PreCommitHook
-from pytempl.templ import GREEN, pcprint
+from pytempl.templ import BLUE, GREEN, pcprint, wcolour
+from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
 from pytempl.templ.resolvers import Base as BaseResolver
-from pytempl.templ.tools import active_precommit_tools
+from pytempl.templ.tools import active_precommit_tools, Editorconfig, Base as BaseTool, BaseReq as BaseReqTool
 from pytempl.templ.utils import str2bool
 
 
@@ -24,41 +19,40 @@ class PreCommitConfig(BaseResolver):
         :return: list
         """
         return [
-            (['--interactive'],
-             {'const': True,
-              'default': False,
-              'dest': 'interactive',
-              'help': 'Run configure with interactive wizzard.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--reconfig'],
-             {'const': True,
-              'default': False,
-              'dest': 'reconfig',
-              'help': 'Reconfigure all installed tools.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--silent'],
-             {'const': True,
-              'default': False,
-              'dest': 'silent',
-              'help': 'Silent run. Logging is disabled.',
-              'nargs': '?',
-              'type': str2bool}),
-            (['--append-pre-commit'],
-             {'default': [],
-              'dest': 'append_pre_commit',
-              'help': 'Add custom pre-commit command at beggining of list.',
-              'nargs': '+',
-              'type': str}),
-            (['--prepend-pre-commit'],
-             {'default': [],
-              'dest': 'prepend_pre_commit',
-              'help': 'Add custom pre-commit command at end of list.',
-              'nargs': '+',
-              'type': str})
-        ] + reduce((lambda a, b: a + b), [klass.arguments(klass) for klass in active_precommit_tools])
-
+                   (['--interactive'],
+                    {'const': True,
+                     'default': False,
+                     'dest': 'interactive',
+                     'help': 'Run configure with interactive wizzard.',
+                     'nargs': '?',
+                     'type': str2bool}),
+                   (['--reconfig'],
+                    {'const': True,
+                     'default': False,
+                     'dest': 'reconfig',
+                     'help': 'Reconfigure all installed tools.',
+                     'nargs': '?',
+                     'type': str2bool}),
+                   (['--silent'],
+                    {'const': True,
+                     'default': False,
+                     'dest': 'silent',
+                     'help': 'Silent run. Logging is disabled.',
+                     'nargs': '?',
+                     'type': str2bool}),
+                   (['--append-pre-commit'],
+                    {'default': [],
+                     'dest': 'append_pre_commit',
+                     'help': 'Add custom pre-commit command at beggining of list.',
+                     'nargs': '+',
+                     'type': str}),
+                   (['--prepend-pre-commit'],
+                    {'default': [],
+                     'dest': 'prepend_pre_commit',
+                     'help': 'Add custom pre-commit command at end of list.',
+                     'nargs': '+',
+                     'type': str})
+               ] + reduce((lambda a, b: a + b), [klass.arguments(klass) for klass in active_precommit_tools])
 
     def __init__(self, app: App) -> None:
         """
@@ -68,6 +62,129 @@ class PreCommitConfig(BaseResolver):
         super().__init__(app)
         self.hook = self.hook_collection.get_hook(hook_type=HookCollection.TYPE_PRECOMMIT)
 
+    def query_anwers(self, category: str = ''):
+        klasses = list(filter(lambda item: item.CATEGORY == category, active_precommit_tools))
+        answers = []
+        for klass in klasses:
+            answers.append({
+                'name': klass(self.app)._config.get('name'),
+                'value': klass.TOKEN
+            })
+        return answers
+
+    def query(self):
+        """
+
+        :return: list
+        """
+        return prompt([
+            {
+                'type': 'confirm',
+                'message': 'Do you wish to use EditorConifg https://editorconfig.org ?',
+                'name': Editorconfig.TOKEN,
+                'default': True,
+                'value': 'abort',
+            },
+            {
+                'type': 'list',
+                'qmark': '?',
+                'message': 'Use built in tools, for code audit?',
+                'name': BaseTool.CATEGORY_AUDIT,
+                'choices': [
+                               {
+                                   'name': 'No, I want to have my own configuration.',
+                                   'value': None,
+                               },
+                           ] + self.query_anwers(category=BaseTool.CATEGORY_AUDIT),
+                'validate': lambda answer: 'You must choose at least one code audit tool.' if len(answer) == 0 else True
+            },
+            {
+                'type': 'list',
+                'qmark': '?',
+                'message': 'Select Code Formatter Tool',
+                'name': BaseTool.CATEGORY_FORMATTER,
+                'choices': [
+                               {
+                                   'name': 'Don\'t use formatter',
+                                   'value': None,
+                               }
+                           ] + self.query_anwers(category=BaseTool.CATEGORY_FORMATTER),
+                'validate': lambda answer: 'You must choose at least one code formatter.' if len(answer) == 0 else True,
+                'when': lambda answers: answers.get(BaseTool.CATEGORY_AUDIT, None) is None,
+            },
+            {
+                'type': 'checkbox',
+                'qmark': '?',
+                'message': 'Select Code Linter Tool',
+                'name': BaseTool.CATEGORY_LINTER,
+                'choices': [
+                               {
+                                   'name': 'Don\'t use formatter',
+                                   'value': None,
+                               },
+                           ] + self.query_anwers(category=BaseTool.CATEGORY_LINTER),
+                'validate': lambda answer: 'You must choose at least one code linter.' if len(answer) == 0 else True,
+                'when': lambda answers: answers.get(BaseTool.CATEGORY_AUDIT, None) is None,
+            },
+            {
+                'type': 'list',
+                'qmark': '?',
+                'message': 'Select Code Analizer Tool',
+                'name': BaseTool.CATEGORY_ANALYZER,
+                'choices': [
+                               {
+                                   'name': 'Don\'t use formatter',
+                                   'value': None,
+                               },
+                           ] + self.query_anwers(category=BaseTool.CATEGORY_ANALYZER),
+                'validate': lambda answer: 'You must choose at least one code analyzer.' if len(answer) == 0 else True,
+                'when': lambda answers: answers.get(BaseTool.CATEGORY_AUDIT, None) is None,
+            },
+            {
+                'type': 'list',
+                'qmark': '?',
+                'message': 'Select Code UnitTest Tool',
+                'name': BaseTool.CATEGORY_UNITTEST,
+                'choices': [
+                               {
+                                   'name': 'Don\'t use unititest',
+                                   'value': None,
+                               },
+                           ] + self.query_anwers(category=BaseTool.CATEGORY_UNITTEST),
+            },
+            {
+                'type': 'checkbox',
+                'qmark': '?',
+                'message': 'Select Additional Lint Tools',
+                'name': BaseTool.CATEGORY_LINTER_OTHER,
+                'choices': self.query_anwers(category=BaseTool.CATEGORY_LINTER_OTHER)
+            },
+        ])
+
+    def query_to_command(self, answers):
+        command = ''
+        answers_keys = answers.keys()
+        for category in BaseTool.CATEGORIES:
+            if category == BaseTool.CATEGORY_EDITORCONFIG and answers.get(category, False) is False:
+                command = command + ' --skip-{}'.format(BaseTool.CATEGORY_EDITORCONFIG)
+            else:
+                answer_values = answers.get(category, [])
+                answer_values = answer_values if type(answer_values) == list else [answer_values]
+                print(category, answer_values)
+                if category in answers_keys:
+                    for klass in list(filter(lambda item: item.CATEGORY == category, active_precommit_tools)):
+                        print(klass.TOKEN)
+                        if issubclass(klass, BaseTool) and not issubclass(klass,
+                                                                          BaseReqTool) and klass.TOKEN in answer_values:
+                            command = command + ' --with-{}'.format(klass.TOKEN)
+                else:
+                    for klass in list(filter(lambda item: item.CATEGORY == category, active_precommit_tools)):
+                        print(klass.TOKEN)
+                        if issubclass(klass, BaseReqTool) and klass.TOKEN not in answer_values:
+                            command = command + ' --skip-{}'.format(klass.TOKEN)
+
+        return 'pytempl precommit-config' + command
+
     def run(self) -> None:
         """
         Command Resolver for precommit-config Command
@@ -75,8 +192,12 @@ class PreCommitConfig(BaseResolver):
         """
 
         if (self.app.pargs.interactive):
-            answers = Inquire().query()
-            pprint(answers)
+            answers = self.query()
+
+            pcprint('Thankyou for stating your options.', colour=GREEN)
+            pcprint('Please run the following command: {}'.format(
+                wcolour(self.query_to_command(answers), colour=BLUE)
+            ), colour=GREEN)
             return
 
         self._prepare_git_hook(hook_type=HookCollection.TYPE_PRECOMMIT, command='precommit')

@@ -11,10 +11,12 @@ from .mccabe import Mccabe
 from .mypy import Mypy
 from .pycodestyle import Pycodestyle
 from .pydocstyle import Pydocstyle
+from .pylama import Pylama
 from .pylint import Pylint
 from .pytest import Pytest
 from .radon import Radon
 from .unittest import Unittest
+from .unittestcov import Unittestcov
 from .yamllint import Yamllint
 
 
@@ -33,10 +35,12 @@ active_precommit_tools = [
     Mypy,
     Pycodestyle,
     Pydocstyle,
+    Pylama,
     Pylint,
     Pytest,
     Radon,
     Unittest,
+    Unittestcov,
     Yamllint
 ]
 

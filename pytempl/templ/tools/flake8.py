@@ -9,7 +9,9 @@ class Flake8(Base):
 
     TOKEN = 'flake8'
 
-    ORDER = 80
+    ORDER = Base.ORDER_AUDIT
+
+    CATEGORY = Base.CATEGORY_AUDIT
 
     def __init__(self, app=None):
         super().__init__(app)

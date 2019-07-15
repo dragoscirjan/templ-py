@@ -8,7 +8,9 @@ class Pytest(Base):
 
     TOKEN = 'pytest'
 
-    ORDER = 80
+    ORDER = Base.ORDER_UNITTEST
+
+    CATEGORY = Base.CATEGORY_UNITTEST
 
     def __init__(self, app=None):
         super().__init__(app)
