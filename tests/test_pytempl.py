@@ -1,6 +1,8 @@
 
 from pytest import raises
+
 from pytempl.main import TemplTest
+
 
 def test_pytempl():
     # test pytempl without any subcommands or arguments

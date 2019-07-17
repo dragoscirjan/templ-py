@@ -1,23 +1,23 @@
 from .base import Base
 from .base_req import BaseReq
-
-from .bandit import Bandit
-from .black import Black
-from .editorconfig import Editorconfig
-from .flake8 import Flake8
-from .isort import Isort
-from .jsonlint import Jsonlint
-from .mccabe import Mccabe
+from .autopep8 import Autopep8
 from .mypy import Mypy
-from .pycodestyle import Pycodestyle
-from .pydocstyle import Pydocstyle
+from .black import Black
+from .isort import Isort
+from .radon import Radon
+from .bandit import Bandit
+from .flake8 import Flake8
+from .mccabe import Mccabe
 from .pylama import Pylama
 from .pylint import Pylint
 from .pytest import Pytest
-from .radon import Radon
+from .jsonlint import Jsonlint
 from .unittest import Unittest
-from .unittestcov import Unittestcov
 from .yamllint import Yamllint
+from .pydocstyle import Pydocstyle
+from .pycodestyle import Pycodestyle
+from .unittestcov import Unittestcov
+from .editorconfig import Editorconfig
 
 
 def __get_order(klass):
@@ -25,6 +25,7 @@ def __get_order(klass):
 
 
 active_precommit_tools = [
+    Autopep8,
     Bandit,
     Black,
     Editorconfig,

@@ -1,5 +1,6 @@
-from jinja2 import Template
 import sys
+
+from jinja2 import Template
 
 from .utils import run_shell_command
 

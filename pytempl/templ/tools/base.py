@@ -6,8 +6,8 @@ import requests
 from cement import App
 from jinja2 import Template
 
-from pytempl.templ.output import pcprint, wcolour, GREEN, YELLOW, BLUE
 from pytempl.templ.utils import str2bool, file_backup
+from pytempl.templ.output import BLUE, GREEN, YELLOW, pcprint, wcolour
 
 
 class Base:

@@ -1,9 +1,8 @@
 import sys
 
-from pytempl.templ import BLUE, GREEN, RED, pcprint, run_shell_command, wcolour
+from pytempl.templ import RED, BLUE, GREEN, pcprint, wcolour, run_shell_command
 from pytempl.templ.hooks import Base as BaseHook
 from pytempl.templ.hooks import Collection as HookCollection
-
 from .base import Base
 
 

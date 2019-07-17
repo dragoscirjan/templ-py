@@ -2,7 +2,7 @@ from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from pytempl.core.version import get_version
-from pytempl.templ.resolvers import PreCommitConfig, PreCommit
+from pytempl.templ.resolvers import PreCommit, PreCommitConfig
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s

@@ -4,12 +4,11 @@ from functools import reduce
 
 from cement import App
 
-from pytempl.templ import (BLUE, GREEN, file_exists, file_read, file_write,
-                           pcprint, wcolour)
+from pytempl.templ import BLUE, GREEN, pcprint, wcolour, file_read, file_write, file_exists
 from pytempl.templ.hooks import Base as BaseHook
+from pytempl.templ.hooks import Init as InitHook
 from pytempl.templ.hooks import Collection as HookCollection
 from pytempl.templ.hooks import CollectionFactory as HookCollectionFactory
-from pytempl.templ.hooks import Init as InitHook
 
 
 class Base:
