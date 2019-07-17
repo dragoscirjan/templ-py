@@ -6,7 +6,7 @@ pre-commit:
             - pytempl jsonlint
         "*.py":
             - isort
-            - pylint
+            - pylint --rcfile=.pylintrc
         "*.yaml":
             - yamllint -c .yamllint
         "*.yml":
