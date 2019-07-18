@@ -1,3 +1,4 @@
+import os
 import sys
 
 from pytempl.templ import RED, BLUE, GREEN, pcprint, wcolour, run_shell_command
@@ -22,7 +23,7 @@ class PreCommit(Base):
 
         if hook[BaseHook.KEY_PRE_COMMANDS] and len(hook[BaseHook.KEY_PRE_COMMANDS]):
             for command in hook[BaseHook.KEY_PRE_COMMANDS]:
-                self._run_hook_command(command)
+                self._run_hook_command(command.split(' '))
 
         for ext1 in hook[BaseHook.KEY_COMMANDS].keys():
             for ext2 in files:
@@ -31,13 +32,13 @@ class PreCommit(Base):
                         for file in files[ext2]:
                             if command and file:
                                 c = command + ' ' + file
-                                self._run_hook_command(c)
+                                self._run_hook_command(c.split(' '))
                                 c = 'git add ' + file
-                                self._run_hook_command(c)
+                                self._run_hook_command(c.split(' '))
 
         if hook[BaseHook.KEY_POST_COMMANDS] and len(hook[BaseHook.KEY_POST_COMMANDS]):
             for command in hook[BaseHook.KEY_POST_COMMANDS]:
-                self._run_hook_command(command)
+                self._run_hook_command(command.split(' '))
 
     def _get_precommit_hook(self) -> dict:
         """
@@ -62,9 +63,8 @@ class PreCommit(Base):
         :param command:
         :return:
         """
-        pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
+        # binary_path = os.path.join(os.path.dirname(sys.executable), command)
+        # pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
         stdout, stderr = run_shell_command(command)
         if stderr is not None:
-            pcprint('error', colour=RED)
-            print(stderr.decode())
-            sys.exit()
+            raise Exception(stderr.decode())
