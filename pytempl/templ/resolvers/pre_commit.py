@@ -72,6 +72,8 @@ class PreCommit(Base):
             if process.stderr:
                 pcprint(process.stderr.read().decode(), colour=RED)
             return []
+        print(process.stdout.read().decode().split("\n"))
+        sys.exit(0)
         return process.stdout.read().decode().split("\n")
 
     def _run_hook_command(self, command: list) -> None:
