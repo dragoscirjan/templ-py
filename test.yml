@@ -7,8 +7,8 @@ pre-commit:
         "*.py":
             - isort
             - pylint --rcfile=.pylintrc
-        "*.yaml":
-            - yamllint -c .yamllint
+            "*.yaml":
+                - yamllint -c .yamllint
             "*.yml":
                 - yamllint -c .yamllint
     post-commands:

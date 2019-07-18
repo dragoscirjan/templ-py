@@ -68,6 +68,8 @@ class PreCommit(Base):
         :return: list
         """
         process = run_shell_command(['git', 'diff', '--cached', '--name-only'])
+        print(process.returncode)
+        sys.exit(0)
         if process.returncode > 0:
             if process.stderr:
                 pcprint(process.stderr.read().decode(), colour=RED)
