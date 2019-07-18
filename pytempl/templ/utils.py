@@ -2,11 +2,12 @@ import os
 import time
 import argparse
 import subprocess
+import sys
 
 
 def str2bool(v):
     if isinstance(v, bool):
-       return v
+        return v
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
     elif v.lower() in ('no', 'false', 'f', 'n', '0'):
@@ -44,4 +45,6 @@ def run_shell_command(command: list) -> tuple:
     :param command: list
     :return: (stdout, stderr)
     """
-    return subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).communicate()
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process.wait()
+    return process

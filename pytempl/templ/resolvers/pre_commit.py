@@ -79,6 +79,9 @@ class PreCommit(Base):
         :return:
         """
         pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
-        stdout, stderr = run_shell_command(command)
-        if stderr is not None:
-            raise Exception(stderr.decode())
+        process = run_shell_command(command)
+        process.wait()
+        print(process)
+        # if process.returncode > 0:
+        #     print(process.returncode)
+        # raise Exception(stdout.decode() + "\n" + stderr.decode())
