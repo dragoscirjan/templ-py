@@ -67,7 +67,7 @@ class PreCommit(Base):
         Get list of files de
         :return: list
         """
-        process = run_shell_command(['git', 'diff', '--cached', '--name-only'])
+        process = run_shell_command(['git diff --cached --name-only'])
         print(process.returncode)
         sys.exit(0)
         if process.returncode > 0:
