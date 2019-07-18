@@ -67,10 +67,13 @@ class PreCommit(Base):
         Get list of files de
         :return: list
         """
-        stdout, stderr = run_shell_command(['git', 'diff', '--cached', '--name-only'])
-        if stderr is not None:
-            pass
-        return stdout.decode().split("\n")
+        process = run_shell_command(['git', 'diff', '--cached', '--name-only'])
+        if process.returncode > 0:
+            print(process.stderr)
+            sys.exit()
+            pcprint(process.stderr.read().decode(), colour=RED)
+            return
+        return process.stdout.read().decode().split("\n")
 
     def _run_hook_command(self, command: list) -> None:
         """
@@ -80,8 +83,10 @@ class PreCommit(Base):
         """
         pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
         process = run_shell_command(command)
-        process.wait()
-        print(process)
-        # if process.returncode > 0:
-        #     print(process.returncode)
-        # raise Exception(stdout.decode() + "\n" + stderr.decode())
+        if process.returncode > 0:
+            print(process.stdout)
+            print(process.stderr)
+            sys.exit(1)
+            # output = ''
+            # if process.stdout
+            # raise Exception(process.stdout.decode() + "\n" + stderr.decode())

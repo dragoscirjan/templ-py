@@ -39,7 +39,7 @@ def file_backup(src: str) -> None:
     file_copy(src, '{}.bak-{}'.format(src, time.time()))
 
 
-def run_shell_command(command: list) -> tuple:
+def run_shell_command(command: list) -> subprocess.Popen:
     """
 
     :param command: list

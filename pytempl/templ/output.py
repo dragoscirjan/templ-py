@@ -8,11 +8,9 @@ BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 
 def tput_colors():
-    process = run_shell_command(['tput', 'colors'])
-    print(process)
-    sys.exit(0)
-    if stderr is None:
-        return int(stdout) >= 8
+    process = run_shell_command(['tput colors'])
+    if 0 == process.returncode:
+        return 8 <= int(process.stdout.read().decode())
     return False
 
 
