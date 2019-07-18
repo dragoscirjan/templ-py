@@ -78,8 +78,7 @@ class PreCommit(Base):
         :param command:
         :return:
         """
-        # binary_path = os.path.join(os.path.dirname(sys.executable), command)
-        # pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
+        pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
         stdout, stderr = run_shell_command(command)
         if stderr is not None:
             raise Exception(stderr.decode())
