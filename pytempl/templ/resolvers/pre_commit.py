@@ -69,6 +69,7 @@ class PreCommit(Base):
         """
         process = run_shell_command(['git', 'diff', '--cached', '--name-only'])
         if process.returncode > 0:
+            print(process.returncode)
             print(process.stderr)
             sys.exit()
             pcprint(process.stderr.read().decode(), colour=RED)
