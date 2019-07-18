@@ -1,5 +1,5 @@
 init:
-    precommit: pytempl precommit --silent
+    precommit: pytempl precommit-config --silent
 pre-commit:
     commands:
         "*.json":

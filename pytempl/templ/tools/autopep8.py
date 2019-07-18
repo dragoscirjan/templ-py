@@ -8,7 +8,7 @@ class Autopep8(Base):
 
     ORDER = Base.ORDER_FORMATTER
 
-    TOKEN = 'isort'
+    TOKEN = 'autopep8'
 
     CATEGORY = Base.CATEGORY_FORMATTER
 
