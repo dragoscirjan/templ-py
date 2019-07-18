@@ -1,7 +1,7 @@
 import os
 import sys
 
-from pytempl.templ import RED, BLUE, GREEN, pcprint, wcolour, run_shell_command
+from pytempl.templ import RED, BLUE, GREEN, YELLOW, pcprint, wcolour, run_shell_command
 from pytempl.templ.hooks import Base as BaseHook
 from pytempl.templ.hooks import Collection as HookCollection
 from .base import Base
@@ -23,7 +23,12 @@ class PreCommit(Base):
 
         if hook[BaseHook.KEY_PRE_COMMANDS] and len(hook[BaseHook.KEY_PRE_COMMANDS]):
             for command in hook[BaseHook.KEY_PRE_COMMANDS]:
-                self._run_hook_command(command.split(' '))
+                try:
+                    self._run_hook_command(command.split(' '))
+                except Exception as e:
+                    pcprint('Error @ precommit:', colour=RED)
+                    pcprint(e)
+                    sys.exit(1)
 
         for ext1 in hook[BaseHook.KEY_COMMANDS].keys():
             for ext2 in files:
@@ -31,14 +36,24 @@ class PreCommit(Base):
                     for command in hook[BaseHook.KEY_COMMANDS][ext1]:
                         for file in files[ext2]:
                             if command and file:
-                                c = command + ' ' + file
-                                self._run_hook_command(c.split(' '))
-                                c = 'git add ' + file
-                                self._run_hook_command(c.split(' '))
+                                try:
+                                    c = command + ' ' + file
+                                    self._run_hook_command(c.split(' '))
+                                    c = 'git add ' + file
+                                    self._run_hook_command(c.split(' '))
+                                except Exception as e:
+                                    pcprint('Error @ precommit of: {}'.format(file, colour=YELLOW), colour=RED)
+                                    pcprint(e)
+                                    sys.exit(1)
 
         if hook[BaseHook.KEY_POST_COMMANDS] and len(hook[BaseHook.KEY_POST_COMMANDS]):
             for command in hook[BaseHook.KEY_POST_COMMANDS]:
-                self._run_hook_command(command.split(' '))
+                try:
+                    self._run_hook_command(command.split(' '))
+                except Exception as e:
+                    pcprint('Error @ precommit:', colour=RED)
+                    pcprint(e)
+                    sys.exit(1)
 
     def _get_precommit_hook(self) -> dict:
         """
