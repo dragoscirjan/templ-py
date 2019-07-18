@@ -13,5 +13,5 @@ def tmp(request):
     for each test function that requires it.
     """
     t = fs.Tmp()
-    yild t
+    yield t
     t.remove()
