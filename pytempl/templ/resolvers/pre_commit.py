@@ -24,10 +24,10 @@ class PreCommit(Base):
         if hook[BaseHook.KEY_PRE_COMMANDS] and len(hook[BaseHook.KEY_PRE_COMMANDS]):
             for command in hook[BaseHook.KEY_PRE_COMMANDS]:
                 try:
-                    self._run_hook_command(command.split(' '))
+                    self._run_hook_command(command)
                 except Exception as e:
                     pcprint('Error @ precommit:', colour=RED)
-                    pcprint(e)
+                    pcprint(e.message)
                     sys.exit(1)
 
         for ext1 in hook[BaseHook.KEY_COMMANDS].keys():
@@ -38,21 +38,21 @@ class PreCommit(Base):
                             if command and file:
                                 try:
                                     c = command + ' ' + file
-                                    self._run_hook_command(c.split(' '))
+                                    self._run_hook_command(c)
                                     c = 'git add ' + file
-                                    self._run_hook_command(c.split(' '))
+                                    self._run_hook_command(c)
                                 except Exception as e:
                                     pcprint('Error @ precommit of: {}'.format(file, colour=YELLOW), colour=RED)
-                                    pcprint(e)
+                                    pcprint(e.message)
                                     sys.exit(1)
 
         if hook[BaseHook.KEY_POST_COMMANDS] and len(hook[BaseHook.KEY_POST_COMMANDS]):
             for command in hook[BaseHook.KEY_POST_COMMANDS]:
                 try:
-                    self._run_hook_command(command.split(' '))
+                    self._run_hook_command(command)
                 except Exception as e:
                     pcprint('Error @ precommit:', colour=RED)
-                    pcprint(e)
+                    pcprint(e.message)
                     sys.exit(1)
 
     def _get_precommit_hook(self) -> dict:
@@ -68,14 +68,10 @@ class PreCommit(Base):
         :return: list
         """
         process = run_shell_command(['git diff --cached --name-only'])
-        print(process.returncode)
-        sys.exit(0)
         if process.returncode > 0:
             if process.stderr:
                 pcprint(process.stderr.read().decode(), colour=RED)
             return []
-        print(process.stdout.read().decode().split("\n"))
-        sys.exit(0)
         return process.stdout.read().decode().split("\n")
 
     def _run_hook_command(self, command: list) -> None:
@@ -84,12 +80,14 @@ class PreCommit(Base):
         :param command:
         :return:
         """
-        pcprint('running ' + wcolour(' '.join(command), colour=BLUE), colour=GREEN)
+        pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
         process = run_shell_command(command)
         if process.returncode > 0:
-            print(process.stdout)
-            print(process.stderr)
-            sys.exit(1)
-            # output = ''
-            # if process.stdout
-            # raise Exception(process.stdout.decode() + "\n" + stderr.decode())
+            output = ''
+            if process.stdout:
+                output += process.stdout.read().decode()
+            if process.stderr:
+                if len(output) > 0:
+                    output += "\n"
+                output += process.stderr.read().decode()
+            raise Exception(output)
