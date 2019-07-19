@@ -12,6 +12,7 @@ class HookCommandException(Exception):
     Exception for PreCommit Hook Errors
     """
     time = None
+
     def __init__(self, *args: object) -> None:
         super().__init__(*args)
         self.time = datetime.datetime.now()
@@ -36,7 +37,7 @@ class PreCommit(Base):
                 self._run_hook_command(command)
             except HookCommandException as e:
                 pcprint('Error @ precommit:', colour=RED)
-                pcprint(e)
+                pcprint(str(e))
                 sys.exit(1)
 
         ext1 = list(files.keys())
@@ -57,7 +58,7 @@ class PreCommit(Base):
                 self._run_hook_command('git add ' + f)
             except HookCommandException as e:
                 pcprint('Error @ precommit of: {}'.format(f, colour=YELLOW), colour=RED)
-                pcprint(e)
+                pcprint(str(e))
                 sys.exit(1)
 
         for command in hook.get(BaseHook.KEY_POST_COMMANDS, []):
@@ -65,10 +66,10 @@ class PreCommit(Base):
                 self._run_hook_command(command)
             except HookCommandException as e:
                 pcprint('Error @ precommit:', colour=RED)
-                pcprint(e)
+                pcprint(str(e))
                 sys.exit(1)
 
-        # sys.exit(1)
+        sys.exit(1)
 
     def _get_precommit_hook(self) -> dict:
         """

@@ -2,7 +2,6 @@ import os
 import time
 import argparse
 import subprocess
-import sys
 
 
 def str2bool(v):
@@ -39,7 +38,7 @@ def file_backup(src: str) -> None:
     file_copy(src, '{}.bak-{}'.format(src, time.time()))
 
 
-def run_shell_command(command: list) -> subprocess.Popen:
+def run_shell_command(command: str) -> subprocess.Popen:
     """
 
     :param command: list
