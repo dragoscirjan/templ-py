@@ -59,7 +59,6 @@ class PreCommitConfig(BaseResolver):
 
     def __init__(self, app: App) -> None:
         """
-
         :param app: App
         """
         super().__init__(app)
