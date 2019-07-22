@@ -27,8 +27,24 @@ class Tools(containers.DeclarativeContainer):
 
     config = providers.Configuration('config')
 
-    autopep8 = providers.Singleton(Autopep8, config.app)
-    black = providers.Singleton(Black, config.app)
+    autopep8 = providers.Singleton(Autopep8, app=config.app)
+    mypy = providers.Singleton(Mypy, app=config.app)
+    black = providers.Singleton(Black, app=config.app)
+    isort = providers.Singleton(Isort, app=config.app)
+    radon = providers.Singleton(Radon, app=config.app)
+    bandit = providers.Singleton(Bandit, app=config.app)
+    flake8 = providers.Singleton(Flake8, app=config.app)
+    mccabe = providers.Singleton(Mccabe, app=config.app)
+    pylama = providers.Singleton(Pylama, app=config.app)
+    pylint = providers.Singleton(Pylint, app=config.app)
+    pytest = providers.Singleton(Pytest, app=config.app)
+    jsonlint = providers.Singleton(Jsonlint, app=config.app)
+    unittest = providers.Singleton(Unittest, app=config.app)
+    yamllint = providers.Singleton(Yamllint, app=config.app)
+    pydocstyle = providers.Singleton(Pydocstyle, app=config.app)
+    pycodestyle = providers.Singleton(Pycodestyle, app=config.app)
+    unittestcov = providers.Singleton(Unittestcov, app=config.app)
+    editorconfig = providers.Singleton(Editorconfig, app=config.app)
 
 
 def __get_order(klass):
