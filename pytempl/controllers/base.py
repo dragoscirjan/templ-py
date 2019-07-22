@@ -46,7 +46,7 @@ class Base(Controller):
     )
     def precommit_config(self):
         """Use to configure the lint/format tools."""
-        PreCommitConfig(app=self.app).run()
+        self.resolvers.pre_commit_config().run()
         # data = {
         #     'foo': 'bar',
         # }
