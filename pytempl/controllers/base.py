@@ -2,7 +2,7 @@ from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from pytempl.core.version import get_version
-from pytempl.templ.resolvers import Jsonlint, PreCommit, Resolvers, PreCommitConfig
+from pytempl.templ.resolvers import Jsonlint, Resolvers, PreCommitConfig
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -57,7 +57,7 @@ class Base(Controller):
         # sub-command level arguments. ex: 'pytempl precommit'
     )
     def precommit(self):
-        PreCommit(app=self.app).run()
+        self.resolvers.pre_commit().run()
 
     @ex(
         help='Use to lint JSON files.',
@@ -66,4 +66,4 @@ class Base(Controller):
     )
     def jsonlint(self):
         """Use to lint JSON files."""
-        Jsonlint(app=self.app).run()
+        self.resolvers.jsonlint()(app=self.app).run()
