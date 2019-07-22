@@ -1,6 +1,6 @@
+from dependency_injector import providers, containers
+
 from .base import Base
-from .base_req import BaseReq
-from .autopep8 import Autopep8
 from .mypy import Mypy
 from .black import Black
 from .isort import Isort
@@ -11,6 +11,8 @@ from .mccabe import Mccabe
 from .pylama import Pylama
 from .pylint import Pylint
 from .pytest import Pytest
+from .autopep8 import Autopep8
+from .base_req import BaseReq
 from .jsonlint import Jsonlint
 from .unittest import Unittest
 from .yamllint import Yamllint
@@ -18,6 +20,15 @@ from .pydocstyle import Pydocstyle
 from .pycodestyle import Pycodestyle
 from .unittestcov import Unittestcov
 from .editorconfig import Editorconfig
+
+
+class Tools(containers.DeclarativeContainer):
+    """Tools Container."""
+
+    config = providers.Configuration('config')
+
+    autopep8 = providers.Singleton(Autopep8, config.app)
+    black = providers.Singleton(Black, config.app)
 
 
 def __get_order(klass):
