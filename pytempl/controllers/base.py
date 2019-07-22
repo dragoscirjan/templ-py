@@ -2,7 +2,7 @@ from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from pytempl.core.version import get_version
-from pytempl.templ.resolvers import Jsonlint, PreCommit, PreCommitConfig
+from pytempl.templ.resolvers import Jsonlint, PreCommit, Resolvers, PreCommitConfig
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -28,30 +28,25 @@ class Base(Controller):
               'version': VERSION_BANNER}),
         ]
 
+    resolvers = None
+
+    def __init__(self, *args, **kw):
+        super().__init__(*args, **kw)
+        self.resolvers = Resolvers(config={'app': self.app})
+
     def _default(self):
         """Default action if no sub-command is passed."""
 
         self.app.args.print_help()
 
-    """
-    pytempl.controller.Controller::command() =>
-        pytempl.templ.resolvers.Base::run() =>
-            pytempl.templ.tool.Base::run() # for each tool
-            pytempl.templ.hook.CollectionFactory::to_file()
-    """
-
     @ex(
         help='Use to configure the lint/format tools.',
-
-
-        # sub-command level arguments. ex: 'pytempl command1 --foo bar'
+        # sub-command level arguments. ex: 'pytempl precommit-config'
         arguments=PreCommitConfig.arguments()
     )
     def precommit_config(self):
         """Use to configure the lint/format tools."""
-
         PreCommitConfig(app=self.app).run()
-
         # data = {
         #     'foo': 'bar',
         # }
@@ -59,18 +54,16 @@ class Base(Controller):
 
     @ex(
         help='Use to run configured lint/format tools from pre-commit hook.'
+        # sub-command level arguments. ex: 'pytempl precommit'
     )
     def precommit(self):
-
         PreCommit(app=self.app).run()
 
     @ex(
         help='Use to lint JSON files.',
-
-        # sub-command level arguments. ex: 'pytempl command1 --foo bar'
+        # sub-command level arguments. ex: 'pytempl jsonlint -f /path/to/file.json'
         arguments=Jsonlint.arguments()
     )
     def jsonlint(self):
         """Use to lint JSON files."""
-
         Jsonlint(app=self.app).run()
