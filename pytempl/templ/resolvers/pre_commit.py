@@ -69,7 +69,7 @@ class PreCommit(Base):
                 pcprint(str(e))
                 sys.exit(1)
 
-        sys.exit(1)
+        # sys.exit(1)
 
     def _get_precommit_hook(self) -> dict:
         """

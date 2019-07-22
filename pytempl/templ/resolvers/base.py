@@ -9,6 +9,7 @@ from pytempl.templ.hooks import Base as BaseHook
 from pytempl.templ.hooks import Init as InitHook
 from pytempl.templ.hooks import Collection as HookCollection
 from pytempl.templ.hooks import CollectionFactory as HookCollectionFactory
+from pytempl.templ.utils import run_shell_command
 
 
 class Base:
@@ -32,7 +33,6 @@ class Base:
         Command resolve
         :return:
         """
-        pass
 
     def _can_reconfig(self) -> bool:
         """
@@ -54,13 +54,16 @@ class Base:
             return
 
         pcprint('`{}` hook is already configured.'.format(wcolour(hook_type, colour=BLUE, ecolour=GREEN)), colour=GREEN)
-        pcprint('to re-configure, use one of the {} options'.format(wcolour('--reconfigure, --reconfigure-*', colour=BLUE, ecolour=GREEN)), colour=GREEN)
-        pcprint('check {} command for more help'.format(wcolour('pytempl precommit-config', colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('to re-configure, use one of the {} options'.format(wcolour('--reconfigure, --reconfigure-*',
+                                                                            colour=BLUE, ecolour=GREEN)), colour=GREEN)
+        pcprint('check {} command for more help'.format(
+            wcolour('pytempl precommit-config', colour=BLUE, ecolour=GREEN)), colour=GREEN)
         pcprint('exiting...')
         print('')
         sys.exit(0)
 
-    def _check_required_packages(self, packages: list) -> None:
+    @staticmethod
+    def _check_required_packages(packages: list) -> None:
         """
         :param packages:
         :return:
@@ -74,8 +77,9 @@ class Base:
         packages_in_files = list(filter(lambda item: len(item) > 0, packages_in_files))
 
         required_packages = list(filter(lambda item: item not in packages_in_files, packages))
-        if len(required_packages) > 0:
-            pcprint('some packages are missing from {}'.format(wcolour('requirements-dev.txt', colour=BLUE)), colour=GREEN)
+        if required_packages:
+            pcprint('some packages are missing from {}'.format(
+                wcolour('requirements-dev.txt', colour=BLUE)), colour=GREEN)
             _run = 'pip install ' + ' '.join(required_packages)
             _add = "\n".join(required_packages)
             pcprint('run {}'.format(wcolour(_run, colour=BLUE)), colour=GREEN)
@@ -95,10 +99,10 @@ class Base:
             commands = config.get('hook', None)
             extensions = config.get('ext', None)
 
-            if type(commands) == str:
+            if isinstance(commands, str):
                 for ext in extensions:
                     hook.add_command(command=commands, ext=ext)
-            if type(commands) == list:
+            if isinstance(commands, list):
                 for ext in extensions:
                     for command in commands:
                         hook.add_command(command=command, ext=ext)
@@ -107,11 +111,11 @@ class Base:
             if 'append-pre-commit' in config.keys():
                 hook.add_post_command(config.get('append-pre-commit', ''))
 
-        if len(args.prepend_pre_commit) > 0:
+        if args.prepend_pre_commit:
             for command in args.prepend_pre_commit:
                 hook.add_pre_command(command)
 
-        if len(args.append_pre_commit) > 0:
+        if args.append_pre_commit:
             for command in args.append_pre_commit:
                 hook.add_post_command(command)
 
@@ -157,13 +161,14 @@ class Base:
 
 pytempl {command}
 
-# exit 1        
+# exit 1
 """.format(command=command)
         file_write(content=content, path=hook_file)
+        run_shell_command('chmod 766 .git/hooks/{}'.format(hook_type))
         pcprint('{} created'.format(wcolour('.git/hooks/{}'.format(hook_type), colour=BLUE, ecolour=GREEN)), colour=GREEN)
         print('')
 
-    def _reconfig(self, klass: BaseHook, tools: list = [], command: str = '') -> None:
+    def _reconfig(self, klass: BaseHook, tools: list = None, command: str = '') -> None:
         """
         Reconfigure a specific git hook and write the entire hook collection to config file.
         :param klass: class
@@ -171,6 +176,9 @@ pytempl {command}
         :param command: str
         :return:
         """
+        if not tools:
+            tools = []
+
         hook = self._create_hook(tools=tools, klass=klass)
         self.hook_collection.add_hook(hook_type=HookCollection.TYPE_PRECOMMIT, hook=hook, force=True)
 
@@ -181,7 +189,8 @@ pytempl {command}
         # collection.add_hook(hook_type=HookCollection.TYPE_INIT, hook=init, force=True)
         self.hook_collection.to_file()
 
-    def _required_packages(self, tools: list) -> list:
+    @staticmethod
+    def _required_packages(tools: list) -> list:
         """
         Obtain list of packages requiered
         :param tools:
