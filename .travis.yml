@@ -9,8 +9,8 @@ python:
     - "3.6-dev" # 3.6 development branch
     - "3.7"
     - "3.7-dev" # 3.7 development branch
-    - "3.8-dev" # 3.8 development branch
-    - "nightly" # nightly build
+    # - "3.8-dev" # 3.8 development branch
+    # - "nightly" # nightly build
 install:
     - make virtualenv
 addons:
@@ -21,11 +21,142 @@ addons:
 script:
     - source env/bin/activate
     - pytempl --help
-    # - python -m unittest discover -s ./tests/unit -p *_test.py
-    # - sleep 1
-    # - python -m unittest discover -s ./tests/integration -p *_test.py
-    # - sleep 1
-    # - python --version | grep 3.5 | grep -v "dev" && sonar-scanner || true
+    - pytempl --version
+    - pytempl precommit-config --help
+    - pytempl precommit --help
+    - pytempl jsonlint --help
+    - pytempl precommit-config
+    - pytempl precommit-config --reconfig --skip-editorconfig
+    - pytempl precommit-config --reconfig --with-flake8 && grep flake8 .pytemplrc.yaml
+
+#   --silent [SILENT]     Silent run. Logging is disabled.
+#   --append-pre-commit APPEND_PRE_COMMIT [APPEND_PRE_COMMIT ...]
+#                         Add custom pre-commit command at beggining of list.
+#   --prepend-pre-commit PREPEND_PRE_COMMIT [PREPEND_PRE_COMMIT ...]
+#                         Add custom pre-commit command at end of list.
+#   --with-flake8 [WITH_FLAKE8]
+#                         also install `flake8` tool.
+#   --reconfig-flake8 [RECONFIG_FLAKE8]
+#                         reconfigure `flake8` tool.
+#   --with-flake8-extensions WITH_FLAKE8_EXTENSIONS [WITH_FLAKE8_EXTENSIONS ...]
+#                         add file extensions to be processed by the `flake8`
+#                         tool. i.e. "--with-flake8-extensions *.js *.jsx"
+#   --with-pylama [WITH_PYLAMA]
+#                         also install `pylama` tool.
+#   --reconfig-pylama [RECONFIG_PYLAMA]
+#                         reconfigure `pylama` tool.
+#   --with-pylama-extensions WITH_PYLAMA_EXTENSIONS [WITH_PYLAMA_EXTENSIONS ...]
+#                         add file extensions to be processed by the `pylama`
+#                         tool. i.e. "--with-pylama-extensions *.js *.jsx"
+#   --with-autopep8 [WITH_AUTOPEP8]
+#                         also install `autopep8` tool.
+#   --reconfig-autopep8 [RECONFIG_AUTOPEP8]
+#                         reconfigure `autopep8` tool.
+#   --with-autopep8-extensions WITH_AUTOPEP8_EXTENSIONS [WITH_AUTOPEP8_EXTENSIONS ...]
+#                         add file extensions to be processed by the `autopep8`
+#                         tool. i.e. "--with-autopep8-extensions *.js *.jsx"
+#   --with-black [WITH_BLACK]
+#                         also install `black` tool.
+#   --reconfig-black [RECONFIG_BLACK]
+#                         reconfigure `black` tool.
+#   --with-black-extensions WITH_BLACK_EXTENSIONS [WITH_BLACK_EXTENSIONS ...]
+#                         add file extensions to be processed by the `black`
+#                         tool. i.e. "--with-black-extensions *.js *.jsx"
+#   --skip-isort [SKIP_ISORT]
+#                         skip installing `isort` tool.
+#   --reconfig-isort [RECONFIG_ISORT]
+#                         reconfigure `isort` tool.
+#   --with-isort-extensions WITH_ISORT_EXTENSIONS [WITH_ISORT_EXTENSIONS ...]
+#                         add file extensions to be processed by the `isort`
+#                         tool. i.e. "--with-isort-extensions *.js *.jsx"
+#   --with-bandit [WITH_BANDIT]
+#                         also install `bandit` tool.
+#   --reconfig-bandit [RECONFIG_BANDIT]
+#                         reconfigure `bandit` tool.
+#   --with-bandit-extensions WITH_BANDIT_EXTENSIONS [WITH_BANDIT_EXTENSIONS ...]
+#                         add file extensions to be processed by the `bandit`
+#                         tool. i.e. "--with-bandit-extensions *.js *.jsx"
+#   --with-mypy [WITH_MYPY]
+#                         also install `mypy` tool.
+#   --reconfig-mypy [RECONFIG_MYPY]
+#                         reconfigure `mypy` tool.
+#   --with-mypy-extensions WITH_MYPY_EXTENSIONS [WITH_MYPY_EXTENSIONS ...]
+#                         add file extensions to be processed by the `mypy`
+#                         tool. i.e. "--with-mypy-extensions *.js *.jsx"
+#   --with-pycodestyle [WITH_PYCODESTYLE]
+#                         also install `pycodestyle` tool.
+#   --reconfig-pycodestyle [RECONFIG_PYCODESTYLE]
+#                         reconfigure `pycodestyle` tool.
+#   --with-pycodestyle-extensions WITH_PYCODESTYLE_EXTENSIONS [WITH_PYCODESTYLE_EXTENSIONS ...]
+#                         add file extensions to be processed by the
+#                         `pycodestyle` tool. i.e. "--with-pycodestyle-
+#                         extensions *.js *.jsx"
+#   --with-pydocstyle [WITH_PYDOCSTYLE]
+#                         also install `pydocstyle` tool.
+#   --reconfig-pydocstyle [RECONFIG_PYDOCSTYLE]
+#                         reconfigure `pydocstyle` tool.
+#   --with-pydocstyle-extensions WITH_PYDOCSTYLE_EXTENSIONS [WITH_PYDOCSTYLE_EXTENSIONS ...]
+#                         add file extensions to be processed by the
+#                         `pydocstyle` tool. i.e. "--with-pydocstyle-extensions
+#                         *.js *.jsx"
+#   --skip-pylint [SKIP_PYLINT]
+#                         skip installing `pylint` tool.
+#   --reconfig-pylint [RECONFIG_PYLINT]
+#                         reconfigure `pylint` tool.
+#   --with-pylint-extensions WITH_PYLINT_EXTENSIONS [WITH_PYLINT_EXTENSIONS ...]
+#                         add file extensions to be processed by the `pylint`
+#                         tool. i.e. "--with-pylint-extensions *.js *.jsx"
+#   --skip-jsonlint [SKIP_JSONLINT]
+#                         skip installing `jsonlint` tool.
+#   --reconfig-jsonlint [RECONFIG_JSONLINT]
+#                         reconfigure `jsonlint` tool.
+#   --with-jsonlint-extensions WITH_JSONLINT_EXTENSIONS [WITH_JSONLINT_EXTENSIONS ...]
+#                         add file extensions to be processed by the `jsonlint`
+#                         tool. i.e. "--with-jsonlint-extensions *.js *.jsx"
+#   --skip-yamllint [SKIP_YAMLLINT]
+#                         skip installing `yamllint` tool.
+#   --reconfig-yamllint [RECONFIG_YAMLLINT]
+#                         reconfigure `yamllint` tool.
+#   --with-yamllint-extensions WITH_YAMLLINT_EXTENSIONS [WITH_YAMLLINT_EXTENSIONS ...]
+#                         add file extensions to be processed by the `yamllint`
+#                         tool. i.e. "--with-yamllint-extensions *.js *.jsx"
+#   --with-mccabe [WITH_MCCABE]
+#                         also install `mccabe` tool.
+#   --reconfig-mccabe [RECONFIG_MCCABE]
+#                         reconfigure `mccabe` tool.
+#   --with-mccabe-extensions WITH_MCCABE_EXTENSIONS [WITH_MCCABE_EXTENSIONS ...]
+#                         add file extensions to be processed by the `mccabe`
+#                         tool. i.e. "--with-mccabe-extensions *.js *.jsx"
+#   --with-radon [WITH_RADON]
+#                         also install `radon` tool.
+#   --reconfig-radon [RECONFIG_RADON]
+#                         reconfigure `radon` tool.
+#   --with-radon-extensions WITH_RADON_EXTENSIONS [WITH_RADON_EXTENSIONS ...]
+#                         add file extensions to be processed by the `radon`
+#                         tool. i.e. "--with-radon-extensions *.js *.jsx"
+#   --with-pytest [WITH_PYTEST]
+#                         also install `pytest` tool.
+#   --reconfig-pytest [RECONFIG_PYTEST]
+#                         reconfigure `pytest` tool.
+#   --with-pytest-extensions WITH_PYTEST_EXTENSIONS [WITH_PYTEST_EXTENSIONS ...]
+#                         add file extensions to be processed by the `pytest`
+#                         tool. i.e. "--with-pytest-extensions *.js *.jsx"
+#   --skip-unittest [SKIP_UNITTEST]
+#                         skip installing `unittest` tool.
+#   --reconfig-unittest [RECONFIG_UNITTEST]
+#                         reconfigure `unittest` tool.
+#   --with-unittest-extensions WITH_UNITTEST_EXTENSIONS [WITH_UNITTEST_EXTENSIONS ...]
+#                         add file extensions to be processed by the `unittest`
+#                         tool. i.e. "--with-unittest-extensions *.js *.jsx"
+#   --with-unittestcov [WITH_UNITTESTCOV]
+#                         also install `unittestcov` tool.
+#   --reconfig-unittestcov [RECONFIG_UNITTESTCOV]
+#                         reconfigure `unittestcov` tool.
+#   --with-unittestcov-extensions WITH_UNITTESTCOV_EXTENSIONS [WITH_UNITTESTCOV_EXTENSIONS ...]
+#                         add file extensions to be processed by the
+#                         `unittestcov` tool. i.e. "--with-unittestcov-
+#                         extensions *.js *.jsx"
+
 notifications:
     # slack:
     #   rooms:
