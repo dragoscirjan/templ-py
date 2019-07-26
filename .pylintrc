@@ -139,7 +139,7 @@ callbacks=cb_,_cb
 [FORMAT]
 
 # Maximum number of characters on a single line.
-max-line-length=100
+max-line-length=120
 
 # Regexp for a line that is allowed to be longer than the limit.
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
@@ -319,7 +319,7 @@ max-branches=26
 max-statements=100
 
 # Maximum number of parents for a class (see R0901).
-max-parents=7
+max-parents=10
 
 # Maximum number of attributes for a class (see R0902).
 max-attributes=11

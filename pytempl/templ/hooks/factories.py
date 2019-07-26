@@ -2,9 +2,8 @@ import json
 
 import yaml
 
-from pytempl.templ.hooks import Base, Init, PreCommit
-from pytempl.templ.hooks import Collection
-from pytempl.templ.utils import file_exists, file_read
+from pytempl.templ.hooks import Base, Init, PreCommit, Collection
+from pytempl.templ.utils import file_read, file_exists
 
 
 class HookFactory:

@@ -1,5 +1,6 @@
-from jinja2 import Template
 import sys
+
+from jinja2 import Template
 
 from .utils import run_shell_command
 
@@ -7,9 +8,9 @@ BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 
 def tput_colors():
-    stdout, stderr = run_shell_command(['tput', 'colors'])
-    if stderr is None:
-        return int(stdout) >= 8
+    process = run_shell_command('tput colors')
+    if 0 == process.returncode:
+        return 8 <= int(process.stdout.read().decode())
     return False
 
 

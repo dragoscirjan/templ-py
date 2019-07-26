@@ -1,18 +1,18 @@
-PY_VER?=3.5
-
+PY_VER:=
 PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
 
 GLOBAL_PYTHON=python$(PY_VER)
 GLOBAPL_PIP=pip$(PY_VER)
 GLOBAL_PIP_INSTALL=$(GLOBAPL_PIP) install $(PIP_FLAGS)
 
-ifeq (,$(shell test -f env/bin/pip && echo 'test'))
-LOCAL_PYTHON=env/Scripts/python
-LOCAL_PIP=env/Scripts/pip
+ifeq ($(OS),Windows_NT)
+    LOCAL_PYTHON=env/Scripts/python
+    LOCAL_PIP=env/Scripts/pip
 else
-LOCAL_PYTHON=env/bin/python
-LOCAL_PIP=env/bin/pip
+    LOCAL_PYTHON=env/bin/python
+    LOCAL_PIP=env/bin/pip
 endif
+
 LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
 
 VIRTUALENV_ARGS?=--python python$(PY_VER)

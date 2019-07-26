@@ -16,9 +16,9 @@ class Pylint(BaseReq):
         super().__init__(app)
         self._config.update({
             'files': {
-                'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylintrc'
+                '.pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/.pylintrc'
             },
-            'hook': 'pylint',
+            'hook': 'pylint --rcfile=.pylintrc',
             'name': 'Pylint (https://www.pylint.org/)',
             'packages': ['pylint']
         })

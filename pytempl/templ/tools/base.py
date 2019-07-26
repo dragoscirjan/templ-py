@@ -6,8 +6,8 @@ import requests
 from cement import App
 from jinja2 import Template
 
-from pytempl.templ.output import pcprint, wcolour, GREEN, YELLOW, BLUE
 from pytempl.templ.utils import str2bool, file_backup
+from pytempl.templ.output import BLUE, GREEN, YELLOW, pcprint, wcolour
 
 
 class Base:
@@ -39,7 +39,6 @@ class Base:
     ORDER_LINTER_OTHER = 31
     ORDER_UNITTEST = 90
 
-
     _config = {}
     _app = None
 
@@ -54,6 +53,7 @@ class Base:
             'packages': []
         }
 
+    @staticmethod
     def _arguments(klass):
         return [
             (['--reconfig-{}'.format(klass.TOKEN)],
@@ -80,16 +80,17 @@ class Base:
         :return:
         """
         return [
-                   (['--with-{}'.format(klass.TOKEN)],
-                    {'const': True,
-                     'default': False,
-                     'dest': 'with_{}'.format(klass.TOKEN),
-                     'help': 'also install `{}` tool.'.format(klass.TOKEN),
-                     'nargs': '?',
-                     'type': str2bool})
-               ] + Base._arguments(klass=klass)
+            (['--with-{}'.format(klass.TOKEN)],
+             {'const': True,
+              'default': False,
+              'dest': 'with_{}'.format(klass.TOKEN),
+              'help': 'also install `{}` tool.'.format(klass.TOKEN),
+              'nargs': '?',
+              'type': str2bool})
+        ] + Base._arguments(klass=klass)
 
-    def exists(self, path: str):
+    @staticmethod
+    def exists(path: str):
         """
         Determine whether path exists and it's file.
         :param path: str
@@ -139,7 +140,7 @@ class Base:
         """
         args = vars(self._app.pargs)
         return args.get('skip_{}'.format(self.TOKEN), None) is False or \
-               args.get('with_{}'.format(self.TOKEN), None) is True
+            args.get('with_{}'.format(self.TOKEN), None) is True
 
     def validate(self):
         pass

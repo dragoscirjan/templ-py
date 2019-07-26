@@ -1,7 +1,5 @@
 # Pre-Commit Python Lint/Formatter Configurator
 
-* https://realpython.com/python-code-quality/
-
 ## Installation
 
 ```

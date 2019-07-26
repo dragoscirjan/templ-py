@@ -1,9 +1,8 @@
 import sys
 
-from pytempl.templ import BLUE, GREEN, RED, pcprint, run_shell_command, wcolour
+from pytempl.templ import BLUE, GREEN, RED, YELLOW, ShellCommandException, pcprint, run_shell_command, wcolour
 from pytempl.templ.hooks import Base as BaseHook
 from pytempl.templ.hooks import Collection as HookCollection
-
 from .base import Base
 
 
@@ -20,25 +19,37 @@ class PreCommit(Base):
         """
         hook = self._get_precommit_hook()
         files = self._map_files_by_hook_extensions(files_list=self._get_changed_precommit_files())
+        commands = []
+        # errors = []
 
-        if hook[BaseHook.KEY_PRE_COMMANDS] and len(hook[BaseHook.KEY_PRE_COMMANDS]):
-            for command in hook[BaseHook.KEY_PRE_COMMANDS]:
-                self._run_hook_command(command)
+        for command in hook.get(BaseHook.KEY_PRE_COMMANDS, []):
+            commands.append((command, False))
 
-        for ext1 in hook[BaseHook.KEY_COMMANDS].keys():
-            for ext2 in files:
-                if ext1 == ext2:
-                    for command in hook[BaseHook.KEY_COMMANDS][ext1]:
-                        for file in files[ext2]:
-                            if command and file:
-                                c = command + ' ' + file
-                                self._run_hook_command(c)
-                                c = 'git add ' + file
-                                self._run_hook_command(c)
+        ext1 = list(files.keys())
+        ext2 = list(hook[BaseHook.KEY_COMMANDS].keys())
+        extensions = list(set(ext1 + ext2))
+        for ext in extensions:
+            for command in hook[BaseHook.KEY_COMMANDS].get(ext, []):
+                for file in files.get(ext, []):
+                    commands.append((command, file))
 
-        if hook[BaseHook.KEY_POST_COMMANDS] and len(hook[BaseHook.KEY_POST_COMMANDS]):
-            for command in hook[BaseHook.KEY_POST_COMMANDS]:
-                self._run_hook_command(command)
+        for command in hook.get(BaseHook.KEY_POST_COMMANDS, []):
+            commands.append((command, False))
+
+        for command in commands:
+            c, f = command
+            try:
+                if f:
+                    self. _run_hook_command(c + ' ' + f)
+                    self._run_hook_command('git add ' + f)
+                else:
+                    self. _run_hook_command(c)
+            except ShellCommandException as e:
+                pcprint('Error @ precommit of: {}'.format(f, colour=YELLOW), colour=RED)
+                pcprint(str(e))
+                sys.exit(1)
+
+        # sys.exit(1)
 
     def _get_precommit_hook(self) -> dict:
         """
@@ -47,25 +58,25 @@ class PreCommit(Base):
         """
         return self.hook_collection.get_hook(hook_type=HookCollection.TYPE_PRECOMMIT).to_dict()
 
-    def _get_changed_precommit_files(self) -> list:
+    @staticmethod
+    def _get_changed_precommit_files() -> list:
         """
         Get list of files de
         :return: list
         """
-        stdout, stderr = run_shell_command(['git', 'diff', '--cached', '--name-only'])
-        if stderr is not None:
-            pass
-        return stdout.decode().split("\n")
+        process = run_shell_command('git diff --cached --name-only')
+        if process.returncode > 0:
+            if process.stderr:
+                pcprint(process.stderr.read().decode(), colour=RED)
+            return []
+        return process.stdout.read().decode().split("\n")
 
-    def _run_hook_command(self, command: list) -> None:
+    @staticmethod
+    def _run_hook_command(command: str) -> None:
         """
 
-        :param command:
-        :return:
+        :param command: str
+        :return: None
         """
         pcprint('running ' + wcolour(command, colour=BLUE), colour=GREEN)
-        stdout, stderr = run_shell_command(command)
-        if stderr is not None:
-            pcprint('error', colour=RED)
-            print(stderr.decode())
-            sys.exit()
+        run_shell_command(command=command, raise_output=True)

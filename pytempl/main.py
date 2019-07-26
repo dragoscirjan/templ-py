@@ -1,6 +1,7 @@
 
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
+
 from pytempl.core.exc import TemplError
 from pytempl.controllers.base import Base
 

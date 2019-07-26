@@ -1,5 +1,5 @@
-from .base import Base
 from pytempl.templ.utils import str2bool
+from .base import Base
 
 
 class BaseReq(Base):

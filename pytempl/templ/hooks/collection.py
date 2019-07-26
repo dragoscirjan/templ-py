@@ -1,8 +1,9 @@
 import json
+
 import yaml
 
 from pytempl.templ.hooks import Base
-from pytempl.templ.utils import file_exists, file_write
+from pytempl.templ.utils import file_write, file_exists
 
 
 class Collection:

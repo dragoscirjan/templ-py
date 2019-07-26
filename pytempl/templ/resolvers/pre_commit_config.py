@@ -1,13 +1,16 @@
 from functools import reduce
 
-from PyInquirer import prompt
 from cement import App
+from PyInquirer import prompt
 
 from pytempl.templ import BLUE, GREEN, pcprint, wcolour
-from pytempl.templ.hooks import Collection as HookCollection, PreCommit as PreCommitHook
-from pytempl.templ.resolvers import Base as BaseResolver
-from pytempl.templ.tools import active_precommit_tools, Editorconfig, Base as BaseTool, BaseReq as BaseReqTool
+from pytempl.templ.hooks import PreCommit as PreCommitHook
+from pytempl.templ.hooks import Collection as HookCollection
+from pytempl.templ.tools import Base as BaseTool
+from pytempl.templ.tools import BaseReq as BaseReqTool
+from pytempl.templ.tools import Editorconfig, active_precommit_tools
 from pytempl.templ.utils import str2bool, run_shell_command
+from pytempl.templ.resolvers import Base as BaseResolver
 
 
 class PreCommitConfig(BaseResolver):
@@ -56,7 +59,6 @@ class PreCommitConfig(BaseResolver):
 
     def __init__(self, app: App) -> None:
         """
-
         :param app: App
         """
         super().__init__(app)

@@ -1,0 +1,44 @@
+dist: xenial
+services:
+    - docker
+language: python
+python:
+    - "3.5"
+    - "3.5-dev" # 3.5 development branch
+    - "3.6"
+    - "3.6-dev" # 3.6 development branch
+    - "3.7"
+    - "3.7-dev" # 3.7 development branch
+    - "3.8-dev" # 3.8 development branch
+    - "nightly" # nightly build
+install:
+    - make virtualenv
+addons:
+    sonarcloud:
+        organization: "dragoscirjan" # the key of the org you chose at step #3
+        token:
+            secure: "$SONAR_TOKEN" # encrypted value of your token
+script:
+    - source env/bin/activate
+    - pytempl --help
+    # - python -m unittest discover -s ./tests/unit -p *_test.py
+    # - sleep 1
+    # - python -m unittest discover -s ./tests/integration -p *_test.py
+    # - sleep 1
+    # - python --version | grep 3.5 | grep -v "dev" && sonar-scanner || true
+notifications:
+    # slack:
+    #   rooms:
+    #     # obtained by running
+    #     # docker run -v $(pwd):/home/travis ruby sh -c 'set -xe; cd /home/travis; gem install travis -v 1.8.8 --no-rdoc --no-ri; travis encrypt "<account>:<token>#channel" --add notifications.slack.rooms'
+    #     # - secure: "sdfusdhfsdofguhdfgubdsifgudfbgs3453durghssecurestringidsuag34522irueg="
+    #     # or
+    #     # - <account>:<token>#channel
+    #     - secure: b8gIBp0r38fOgQ2wxgG/G6R03+sxqR7emZ0Ri0DsMBxstS1ccKuC0o09Wrb7Wqo2V+oAI7LEdOh9q8/HRdqETzZ8UYJzBaS2GCzCM1/FLaLQcm7sx0dpah7Ebp6vuoiWGmbtMlf3x25VfD00Wk5W6Vit6MfHJMEiXixj11NPxFcDwznor72N6/H0xmzdrkNAo5gVeKi3WfLeGqimD2rFTvBpzDLBbIb3fAR1rO53W09bZbcuoJSuiBQuEdzZRSxVUD7jVpSpyVj82jzy5/dFed8dt2LSYXEz+hOuy15w6uU0MZzoXLWFjDOUmshgspwZDvZ79CPoKFd9DzM9liRBCZWjsuwKIdpWdFA1VUFS8a7oHywDXHbxVJJyT4Uyq8waRPDrwgzzwh2lV9JCrHTimyBSOMR8gHvKkpfdT9PeoYB8DFiVCIPeYeaelgxFu+jV3s2dG1m2G/7tCQTGJ9BacwvHeOMEvg9c7ZHwVmSoAh7qEv9EV7FA39XKcG2NiVz7iZRaI58BrVP1sg+Eg/WIH/K5O+9IFCFGPZFFXHIDqc+iE5ua3b0+hy7mhE0FZ+f7vQtFLgo49Lq7STZ/lJ47jkiKvKZ8+O8FbsAVLm3Ma9NYxlx8p5tUDoVJBCb7liCrwDX3x8wwLz7l37orRony0mrEHs9tgquEya1uleH53UI=
+    #   on_success: always
+    #   on_failure: always
+    email:
+        recipients:
+            - dragos.cirjan+templ-py@gmail.com
+        on_success: never # default: change
+        on_failure: always # default: always
