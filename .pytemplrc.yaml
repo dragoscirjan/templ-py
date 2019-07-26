@@ -1,9 +1,10 @@
+---
 init:
     precommit: pytempl precommit-config --silent
 pre-commit:
     commands:
         "*.json":
-            - pytempl jsonlint
+            - pytempl jsonlint -f
         "*.py":
             - isort
             - pylint --rcfile=.pylintrc
@@ -12,5 +13,5 @@ pre-commit:
         "*.yml":
             - yamllint -c .yamllint
     post-commands:
-        - python -m unittest discover -s tests -p "*_test.py"
+        - python -m pytest -v --cov=pytempl --cov-report=term --cov-report=html:coverage-report tests/
     pre-commands: []

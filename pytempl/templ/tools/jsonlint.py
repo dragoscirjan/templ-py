@@ -17,7 +17,7 @@ class Jsonlint(BaseReq):
         super().__init__(app)
         self._config.update({
             'ext': ['*.json'] + getattr(app.pargs, 'with_{}_extensions'.format(self.TOKEN), []),
-            'hook': 'pytempl jsonlint',
+            'hook': 'pytempl jsonlint -f',
             'name': 'Jsonlint (https://github.com/tangwz/jsonlint)',
-            'packages': ['jsonlint']
+            'packages': ['simplejson']
         })

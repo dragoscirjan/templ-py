@@ -2,7 +2,7 @@ from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
 from pytempl.core.version import get_version
-from pytempl.templ.resolvers import Jsonlint, Resolvers, PreCommitConfig
+from pytempl.templ.resolvers import Jsonlint, PreCommit, PreCommitConfig
 
 VERSION_BANNER = """
 Pre-Commit Python Lint/Formatter Configurator %s
@@ -30,9 +30,9 @@ class Base(Controller):
 
     resolvers = None
 
-    def __init__(self, *args, **kw):
-        super().__init__(*args, **kw)
-        self.resolvers = Resolvers(config={'app': self.app})
+    # def __init__(self, *args, **kw):
+    #     super().__init__(*args, **kw)
+    #     self.resolvers = Resolvers(config={'app': self.app})
 
     def _default(self):
         """Default action if no sub-command is passed."""
@@ -46,7 +46,8 @@ class Base(Controller):
     )
     def precommit_config(self):
         """Use to configure the lint/format tools."""
-        self.resolvers.pre_commit_config().run()
+        # self.resolvers.pre_commit_config().run()
+        PreCommitConfig(app=self.app).run()
         # data = {
         #     'foo': 'bar',
         # }
@@ -57,7 +58,8 @@ class Base(Controller):
         # sub-command level arguments. ex: 'pytempl precommit'
     )
     def precommit(self):
-        self.resolvers.pre_commit().run()
+        # self.resolvers.pre_commit().run()
+        PreCommit(app=self.app).run()
 
     @ex(
         help='Use to lint JSON files.',
@@ -66,4 +68,5 @@ class Base(Controller):
     )
     def jsonlint(self):
         """Use to lint JSON files."""
-        self.resolvers.jsonlint()(app=self.app).run()
+        # self.resolvers.jsonlint().run()
+        Jsonlint(app=self.app).run()

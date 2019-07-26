@@ -4,11 +4,11 @@ from functools import reduce
 
 from cement import App
 
-from pytempl.templ import BLUE, GREEN, pcprint, wcolour, file_read, file_write, file_exists
+from pytempl.templ import BLUE, GREEN, file_exists, file_read, file_write, pcprint, wcolour
 from pytempl.templ.hooks import Base as BaseHook
-from pytempl.templ.hooks import Init as InitHook
 from pytempl.templ.hooks import Collection as HookCollection
 from pytempl.templ.hooks import CollectionFactory as HookCollectionFactory
+from pytempl.templ.hooks import Init as InitHook
 from pytempl.templ.utils import run_shell_command
 
 
@@ -19,6 +19,7 @@ class Base:
     def __init__(self, app: App) -> None:
         self.app = app
         self.hook_collection = HookCollectionFactory.from_file()
+        # print(self.app)
 
     @staticmethod
     def arguments() -> list:

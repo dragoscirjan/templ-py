@@ -1,4 +1,4 @@
-from dependency_injector import providers, containers
+from dependency_injector import containers, providers
 
 from .base import Base
 from .jsonlint import Jsonlint
@@ -11,7 +11,7 @@ class Resolvers(containers.DeclarativeContainer):
 
     config = providers.Configuration('config')
 
-    jsonlint = providers.Singleton(Jsonlint, config.app)
+    jsonlint = providers.Singleton(Jsonlint, app=config.app)
 
-    pre_commit_config = providers.Singleton(PreCommitConfig, config.app)
-    pre_commit = providers.Singleton(PreCommit, config.app)
+    pre_commit_config = providers.Singleton(PreCommitConfig, app=config.app)
+    pre_commit = providers.Singleton(PreCommit, app=config.app)
