@@ -4,4 +4,4 @@ pyyaml
 colorlog
 requests
 PyInquirer
-dependency_injector
+dependency-injector

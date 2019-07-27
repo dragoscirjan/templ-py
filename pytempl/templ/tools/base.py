@@ -6,8 +6,8 @@ import requests
 from cement import App
 from jinja2 import Template
 
-from pytempl.templ.utils import str2bool, file_backup
 from pytempl.templ.output import BLUE, GREEN, YELLOW, pcprint, wcolour
+from pytempl.templ.utils import file_backup, str2bool
 
 
 class Base:
@@ -99,29 +99,44 @@ class Base:
         return os.path.isfile(path)
 
     def http_copy(self, url: str, file: str):
+        headers = {
+            'Accept': 'application/vnd.github.v3.raw'
+        }
+        if os.getenv('GITHUB_TOKEN', None):
+            headers['Authorization'] = 'token {}'.format(os.getenv('GITHUB_TOKEN', None))
+
         req = requests.get(url)
+
         try:
             if req.status_code < 200 or req.status_code >= 300:
                 raise Exception(req.text)
             f = open(file, 'w')
             f.write(req.text)
             f.close()
-        except Exception as e:
+        except Exception as e:  #pylint: disable=W0703
             self._app.log.error('Could not download file {}'.format(url))
             self._app.log.warn(e)
             sys.exit(req.status_code)
 
     def http_compile(self, url: str, file: str):
-        req = requests.get(url)
+        headers = {
+            'Accept': 'application/vnd.github.v3.raw'
+        }
+        if os.getenv('GITHUB_TOKEN', None):
+            headers['Authorization'] = 'token {}'.format(os.getenv('GITHUB_TOKEN', None))
+
+        req = requests.get(url, headers=headers)
+
         if req.sratus_code < 200 or req.status_code >= 300:
             raise Exception(req.text)
+
         template = Template(req.text)
         f = open(file, 'w')
         f.write(template.render(**self._app.pargs))
         f.close()
 
     def run(self):
-        args = vars(self._app.pargs)
+        # args = vars(self._app.pargs)
 
         pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)),
                 colour=GREEN)
@@ -158,7 +173,7 @@ class Base:
                     pcprint('backed up...', colour=YELLOW)
 
                 url = config.get('files').get(file)
-                match = re.compile('\.jinja2$', re.IGNORECASE)
+                match = re.compile('.jinja2$', re.IGNORECASE)
 
                 if re.search(match, url) is None:
                     self.http_copy(url=url, file=file)

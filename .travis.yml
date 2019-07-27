@@ -20,14 +20,15 @@ addons:
             secure: "$SONAR_TOKEN" # encrypted value of your token
 script:
     - source env/bin/activate
-    - pytempl --help
-    - pytempl --version
-    - pytempl precommit-config --help
-    - pytempl precommit --help
-    - pytempl jsonlint --help
-    - pytempl precommit-config
-    - pytempl precommit-config --reconfig --skip-editorconfig
-    - pytempl precommit-config --reconfig --with-flake8 && grep flake8 .pytemplrc.yaml
+    - make test
+#    - pytempl --help
+#    - pytempl --version
+#    - pytempl precommit-config --help
+#    - pytempl precommit --help
+#    - pytempl jsonlint --help
+#    - pytempl precommit-config
+#    - pytempl precommit-config --reconfig --skip-editorconfig
+#    - pytempl precommit-config --reconfig --with-flake8 && grep flake8 .pytemplrc.yaml
 
 #   --silent [SILENT]     Silent run. Logging is disabled.
 #   --append-pre-commit APPEND_PRE_COMMIT [APPEND_PRE_COMMIT ...]

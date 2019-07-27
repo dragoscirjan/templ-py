@@ -25,13 +25,16 @@ clean:
 virtualenv:
 	$(GLOBAL_PIP_INSTALL) virtualenv
 	virtualenv $(VIRTUALENV_ARGS) --prompt '|> pytempl <| ' env
-	$(LOCAL_PIP_INSTALL) -r requirements-dev.txt || ( \
-		curl https://bootstrap.pypa.io/get-pip.py | $(LOCAL_PYTHON) && $(LOCAL_PIP_INSTALL) -r requirements-dev.txt \
-	)
+	make install
 	$(LOCAL_PYTHON) setup.py develop
 	@echo
 	@echo "VirtualENV Setup Complete. Now run: source env/bin/activate"
 	@echo
+
+install:
+	$(LOCAL_PIP_INSTALL) -r requirements-dev.txt || ( \
+		curl https://bootstrap.pypa.io/get-pip.py | $(LOCAL_PYTHON) && $(LOCAL_PIP_INSTALL) -r requirements-dev.txt \
+	)
 
 test:
 	$(LOCAL_PYTHON) -m pytest \
