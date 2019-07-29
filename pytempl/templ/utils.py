@@ -2,6 +2,7 @@ import argparse
 import datetime
 import os
 import subprocess
+import sys
 import time
 
 
@@ -55,19 +56,20 @@ def run_shell_command(command: str, print_output: bool = False, raise_output: bo
     :param command: str
     :return: subprocess.Popen
     """
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    process.wait()
-    if print_output is True or raise_output is True:
-        output = ''
-        if process.stdout:
-            output += process.stdout.read().decode()
-        if process.returncode > 0:
-            if process.stderr:
-                if output:
-                    output += "\n"
-                output += process.stderr.read().decode()
-            if raise_output:
-                raise ShellCommandException(output)
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = ''
+    try:
+        stdout, stderr = process.communicate(timeout=1000)
+        if print_output or raise_output:
+            output = stdout.decode()
+            if process.returncode > 0:
+                output += "\n"
+                output += stderr.decode()
+                if raise_output:
+                    raise ShellCommandException(output)
         if print_output:
-            print(output)
-    return process
+            sys.stdout.write(output)
+    except subprocess.TimeoutExpired:
+        stdout = stderr = b''
+        process.kill()
+    return process, stdout.decode(), stderr.decode()

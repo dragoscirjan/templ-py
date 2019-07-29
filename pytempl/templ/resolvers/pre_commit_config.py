@@ -4,13 +4,13 @@ from cement import App
 from PyInquirer import prompt
 
 from pytempl.templ import BLUE, GREEN, pcprint, wcolour
-from pytempl.templ.hooks import PreCommit as PreCommitHook
 from pytempl.templ.hooks import Collection as HookCollection
+from pytempl.templ.hooks import PreCommit as PreCommitHook
+from pytempl.templ.resolvers import Base as BaseResolver
 from pytempl.templ.tools import Base as BaseTool
 from pytempl.templ.tools import BaseReq as BaseReqTool
 from pytempl.templ.tools import Editorconfig, active_precommit_tools
-from pytempl.templ.utils import str2bool, run_shell_command
-from pytempl.templ.resolvers import Base as BaseResolver
+from pytempl.templ.utils import run_shell_command, str2bool
 
 
 class PreCommitConfig(BaseResolver):
@@ -195,11 +195,11 @@ class PreCommitConfig(BaseResolver):
             pcprint('Running compiled command: {}'.format(
                 wcolour(self.query_to_command(answers), colour=BLUE)
             ), colour=GREEN)
-            stdout, stderr = run_shell_command(self.query_to_command(answers))
+            process, stdout, stderr = run_shell_command(self.query_to_command(answers))
             if stderr:
-                print(stderr.decode())
+                print(stderr)
             else:
-                print(stdout.decode())
+                print(stdout)
             return
 
         self._prepare_git_hook(hook_type=HookCollection.TYPE_PRECOMMIT, command='precommit')

@@ -54,8 +54,9 @@ class Base(Controller):
         # self.app.render(data, 'command1.jinja2')
 
     @ex(
-        help='Use to run configured lint/format tools from pre-commit hook.'
+        help='Use to run configured lint/format tools from pre-commit hook.',
         # sub-command level arguments. ex: 'pytempl precommit'
+        arguments=PreCommit.arguments()
     )
     def precommit(self):
         # self.resolvers.pre_commit().run()
