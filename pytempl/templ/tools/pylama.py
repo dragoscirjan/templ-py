@@ -16,7 +16,7 @@ class Pylama(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                'pylintrc': 'https://raw.githubusercontent.com/PyCQA/pylint/master/pylama.ini'
+                'pylintrc': 'https://templ-project.github.io/python-configs/pylama.ini'
             },
             'hook': 'pylama',
             'name': 'Pylama (https://github.com/klen/pylama)',

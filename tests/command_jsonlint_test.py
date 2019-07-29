@@ -1,4 +1,6 @@
-# import sys
+"""
+PyTest Fixtures.
+"""
 
 from pytempl.main import TemplTest
 from pytempl.templ.resolvers import Jsonlint

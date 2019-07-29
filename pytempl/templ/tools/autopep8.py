@@ -16,7 +16,7 @@ class Autopep8(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.pep8': 'https://github.com/dragoscirjan/templ-py/raw/master/.pep8'
+                '.pep8': 'https://templ-project.github.io/python-configs/.pep8'
             },
             'hook': 'autopep8 --global-config .pep8',
             'name': 'Autopep8 (https://github.com/hhatto/autopep8)',

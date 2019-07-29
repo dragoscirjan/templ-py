@@ -18,7 +18,7 @@ class Yamllint(BaseReq):
         self._config.update({
             'ext': ['*.yaml', '*.yml'] + getattr(app.pargs, 'with_{}_extensions'.format(self.TOKEN), []),
             'files': {
-                '.yamllint': 'https://github.com/dragoscirjan/templ-py/raw/master/.yamllint'
+                '.yamllint': 'https://templ-project.github.io/python-configs/.yamllint'
             },
             'hook': 'yamllint -c .yamllint',
             'name': 'Yamllint (https://github.com/tangwz/yamllint)',

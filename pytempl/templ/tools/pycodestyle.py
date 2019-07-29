@@ -17,7 +17,7 @@ class Pycodestyle(Base):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.pydocstylerc': 'https://github.com/dragoscirjan/templ-py/raw/master/.pydocstylerc'
+                '.pydocstylerc': 'https://templ-project.github.io/python-configs/.pydocstylerc'
             },
             'hook': 'pycodestyle --config .pydocstylerc',
             'name': 'PyCodeStyle (http://pycodestyle.pycqa.org)',

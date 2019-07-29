@@ -16,7 +16,7 @@ class Isort(BaseReq):
         super().__init__(app)
         self._config.update({
             'files': {
-                'isort.cfg': 'https://github.com/dragoscirjan/templ-py/raw/master/isort.cfg'
+                'isort.cfg': 'https://templ-project.github.io/python-configs/isort.cfg'
             },
             'hook': 'isort',
             'name': 'Isort (https://github.com/timothycrosley/isort)',

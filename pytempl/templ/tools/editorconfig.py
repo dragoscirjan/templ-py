@@ -17,7 +17,7 @@ class Editorconfig(BaseReq):
         super().__init__(app)
         self._config.update({
             'files': {
-                '.editorconfig': 'https://github.com/dragoscirjan/templ-py/raw/master/.editorconfig'
+                '.editorconfig': 'https://templ-project.github.io/python-configs/.editorconfig'
             },
             'name': 'Editorconfig (https://editorconfig.org/)'
         })
