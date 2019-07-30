@@ -1,10 +1,8 @@
-
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
-from pytempl.controllers.resolvers import JSONLint
+from pytempl.controllers.resolvers import JSONLint, PreCommit
 from pytempl.core.version import get_version
-from pytempl.di import DI
 
 VERSION_BANNER = """
 Tool aggregator for python code analisys %s
@@ -31,10 +29,6 @@ class Base(Controller):
                 'version' : VERSION_BANNER } ),
         ]
 
-    # def __init__(self, *args, **kw):
-    #     super().__init__(*args, **kw)
-    #     self.di = DI()
-
     def _default(self):
         """Default action if no sub-command is passed."""
         self.app.args.print_help()
@@ -46,8 +40,16 @@ class Base(Controller):
     )
     def jsonlint(self):
         """Use to lint JSON files."""
-        JSONLint(logger=DI.logger(), args=vars(self.app.pargss)).run()
-        # DI.jsonlint(args=vars(self.app.pargs)).run()
+        self.app.di.jsonlint(args=vars(self.app.pargs)).run()
+
+    @ex(
+        help='Use to lint JSON files.',
+        # sub-command level arguments. ex: 'pytempl jsonlint -f /path/to/file.json'
+        arguments=PreCommit.arguments()
+    )
+    def precommit(self):
+        """Use to lint JSON files."""
+        self.app.di.precommit(args=vars(self.app.pargs)).run()
 
     # @ex(
     #     help='example sub command1',

@@ -11,7 +11,7 @@ class BaseResolver:
 
     def __init__(self, logger: logging.Logger, args: dict = None):
         """
-
+        Constructor
         :param logger: logging.Logger
         :param args: dict
         """

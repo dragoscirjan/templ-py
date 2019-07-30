@@ -1,7 +1,9 @@
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
+import logging
 
 from pytempl.controllers.base import Base
+from pytempl.di import DI
 
 # configuration defaults
 CONFIG = init_defaults('pytempl')
@@ -10,6 +12,15 @@ CONFIG['pytempl']['foo'] = 'bar'
 
 class PyTempl(App):
     """PyTempl primary application."""
+
+    di = {}
+    """Dependency Injection Container"""
+
+    def run(self):
+        self.di = DI()
+        if self.debug:
+            self.di.logger().setLevel(logging.DEBUG)
+        return super().run()
 
     class Meta:
         label = 'pytempl'
@@ -43,3 +54,4 @@ class PyTempl(App):
         handlers = [
             Base
         ]
+

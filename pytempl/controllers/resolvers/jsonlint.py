@@ -2,8 +2,7 @@ import sys
 import simplejson
 
 from .base import BaseResolver
-# from pytempl.templ.output import RED, YELLOW, pcprint, wcolour
-# from pytempl.templ.utils import file_exists
+from pytempl.os import file_exists
 
 
 class JSONLint(BaseResolver):
@@ -34,6 +33,7 @@ class JSONLint(BaseResolver):
         :return:
         """
         self._files = self._args.get('files', [])
+        self._logger.debug('JSONLINT > Discovered files [{}]'.format(' '.join(self._files)))
         return self
 
     def lint(self):
@@ -41,24 +41,20 @@ class JSONLint(BaseResolver):
         Perform linting action
         :return:
         """
-        print('linting')
-        # if not self._files:
-        #     return
-        # for file in self._files:
-        #     if not file_exists(file):
-        #         pcprint("File issue: {} does not exist.".format(wcolour(file, colour=YELLOW, ecolour=RED)), colour=RED)
-        #         sys.exit(self.EXIT_INVALID_FILE)
-        #     with open(file) as json_file:
-        #         try:
-        #             simplejson.load(json_file)
-        #         except simplejson.JSONDecodeError as ejd:
-        #             if len(self.app.pargs.files) > 1:
-        #                 pcprint(file, colour=YELLOW)
-        #             pcprint("JSON object issue: {}".format(wcolour(ejd.msg, colour=YELLOW, ecolour=RED)), colour=RED)
-        #             sys.exit(self.EXIT_INVALID_JSON)
-        #         except Exception as e: #pylint: disable=W0703
-        #             if len(self.app.pargs.files) > 1:
-        #                 pcprint(file, colour=YELLOW)
-        #             pcprint("JSON object issue: {}".format(wcolour(e, colour=YELLOW, ecolour=RED)), colour=RED)
-        #             sys.exit(self.EXIT_INVALID_JSON)
+        if not self._files:
+            self._logger.warn('JSONLINT > No files to test.')
+            return
+        for file in self._files:
+            if not file_exists(file):
+                self._logger.warn('JSONLINT > File issue: (blue){} does not exist.'.format(file))
+                sys.exit(self.EXIT_INVALID_FILE)
+            with open(file) as json_file:
+                try:
+                    simplejson.load(json_file)
+                except simplejson.JSONDecodeError as ejd:
+                    self._logger.error("JSON object issue: {} ".format(str(ejd)))
+                    sys.exit(self.EXIT_INVALID_JSON)
+                except Exception as e: #pylint: disable=W0703
+                    self._logger.error("JSON object issue: {} ".format(str(e)))
+                    sys.exit(self.EXIT_INVALID_JSON)
         return self
