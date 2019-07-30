@@ -1,7 +1,7 @@
-from .base import Base
+from .base import BaseResolver
 
 
-class PreCommit(Base):
+class PreCommit(BaseResolver):
 
     def run(self):
         self.determine_files().compile_commands().process()

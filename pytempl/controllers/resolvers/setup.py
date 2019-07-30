@@ -1,6 +1,7 @@
-from .base import Base
+from .base import BaseResolver
 
-class Setup(Base):
+
+class Setup(BaseResolver):
 
     def run(self):
         self.inquire().compile().write()

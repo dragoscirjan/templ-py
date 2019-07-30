@@ -1,16 +1,22 @@
+import logging
 
 
-class Base:
+class BaseResolver:
 
-    args: dict = {}
+    _logger = None
+    """Logger"""
+
+    _args = {}
     """Resolver Arguments"""
 
-    def __init__(self, args: dict = None):
+    def __init__(self, logger: logging.Logger, args: dict = None):
         """
 
+        :param logger: logging.Logger
         :param args: dict
         """
-        self.args = args if args else {}
+        self._logger = logger
+        self._args = args if args else {}
 
     def run(self):
         pass
