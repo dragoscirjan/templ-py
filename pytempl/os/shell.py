@@ -1,6 +1,10 @@
 import subprocess
 import sys
 
+#
+# https://www.endpoint.com/blog/2015/01/28/getting-realtime-output-using-python
+#
+
 def run_shell_command(command: str, print_output: bool = False, raise_output: bool = False) -> subprocess.Popen:
     """
 

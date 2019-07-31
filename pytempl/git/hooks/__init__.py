@@ -1,0 +1,1 @@
+from .hooks_config import HooksConfig

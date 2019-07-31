@@ -6,7 +6,7 @@ import yaml
 from pytempl.os import file_exists, file_read, file_write, file_backup
 
 
-class Config:
+class HooksConfig:
 
     HOOK_APPLYPATCH_MSG = 'applypatch-msg'
     HOOK_COMMIT_MSG = 'commit-msg'
@@ -17,6 +17,10 @@ class Config:
     HOOK_PRE_PUSH = 'pre-push'
     HOOK_PRE_REBASE = 'pre-rebase'
     HOOK_UPDATE = 'update'
+
+    KEY_COMMANDS = 'commands'
+    KEY_PRE_COMMANDS = 'pre-commands'
+    KEY_POST_COMMANDS = 'post-commands'
 
     CONFIG_FILES = [
         '.pytemplrc.yml',
@@ -29,6 +33,11 @@ class Config:
     _logger = None
 
     def __init__(self, logger: logging.Logger):
+        """
+        docstring here
+        :param self: 
+        :param logger: logging.Logger
+        """
         self._logger = logger
 
     def config_file(self):
@@ -44,19 +53,23 @@ class Config:
     def read(self) -> dict:
         config_file = self.config_file()
         self._logger.debug('Detected & reading config file {}'.format(config_file))
-        if not re.compile('.json$').find(config_file.lower()):
+        if not re.compile('.json$').search(config_file.lower()):
             self._config = yaml.load(open(config_file))
         else:
             self._config = json.loads(file_read(config_file))
         return self
 
     def to_dict(self) -> dict:
+        """
+        Convert config to dictionary
+        :return dict
+        """
         return self._config
 
     def write(self):
         config_file = self.config_file()
         self._logger.debug('Detected & writing config file {}'.format(config_file))
-        if not re.compile('.json$').find(config_file.lower()):
+        if not re.compile('.json$').search(config_file.lower()):
             file_write(content=json.dumps(self.to_dict(), indent=4), path=config_file)
         else:
             yaml.dump(self._config, open(config_file, 'w+'))
