@@ -17,8 +17,10 @@ class PreCommit(BaseResolver):
     """Used Git Hook Type"""
 
     _files = []
+    """Files to apply preconfig filters on"""
 
     _commands = []
+    """Compiled commands to run"""
 
     @staticmethod
     def arguments() -> list:
@@ -61,21 +63,21 @@ class PreCommit(BaseResolver):
         :return:
         """
         hook_config = self._hooks_config.to_dict().get(self._hook_type, {})
-        print(hook_config, self._files)
 
-        # for command in hook.get(BaseHook.KEY_PRE_COMMANDS, []):
-        #     commands.append((command, False))
+        for command in hook_config.get(HooksConfig.KEY_PRE_COMMANDS, []):
+            self._commands.append((command, False))
 
-        # ext1 = list(files.keys())
-        # ext2 = list(hook[BaseHook.KEY_COMMANDS].keys())
-        # extensions = list(set(ext1 + ext2))
+        for pext, commands in hook_config.get(HooksConfig.KEY_COMMANDS, {}).items():
+            print(pext, commands)
         # for ext in extensions:
         #     for command in hook[BaseHook.KEY_COMMANDS].get(ext, []):
         #         for file in files.get(ext, []):
         #             commands.append((command, file))
 
-        # for command in hook.get(BaseHook.KEY_POST_COMMANDS, []):
-        #     commands.append((command, False))
+        for command in hook_config.get(HooksConfig.KEY_POST_COMMANDS, []):
+            self._commands.append((command, False))
+
+        print(self._commands)
         return self
 
     def process(self):
