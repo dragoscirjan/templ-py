@@ -15,6 +15,9 @@ class PreCommit(BaseResolver):
     _hooks_config = None
     """Git Hooks Config"""
 
+    _compiled_config = {}
+    """Compiled config object"""
+
     _hook_type = None
     """Used Git Hook Type"""
 
@@ -42,6 +45,9 @@ class PreCommit(BaseResolver):
         self._hook_type = HooksConfig.HOOK_PRE_COMMIT
 
     def run(self):
+        if self.setup:
+            self.inquire().compile().write()
+            return
         self.determine_files().determine_config().compile_commands().process()
 
     def determine_files(self):
@@ -93,4 +99,29 @@ class PreCommit(BaseResolver):
             )
             if (file):
                 self._git.add(file=file)
+        return self
+
+    def inquire(self):
+        """
+        Ask user for setup details
+        :return:
+        """
+        return self
+
+    def compile(self):
+        """
+        Compile user choices into the application config
+        :return:
+        """
+        return self
+
+    def write(self):
+        """
+        Write Config
+        :return:
+        """
+        config = self._hooks_config.to_dict()
+        config[HooksConfig.HOOK_PRE_COMMIT] = self._compiled_config
+        self._hooks_config.from_dict(config)
+        self._hooks_config.write()
         return self
