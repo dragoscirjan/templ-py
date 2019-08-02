@@ -4,6 +4,7 @@ import re
 from .base import BaseResolver
 from pytempl.git import Git
 from pytempl.git.hooks import HooksConfig
+from pytempl.os.shell import run_shell_command
 
 
 class PreCommit(BaseResolver):
@@ -76,8 +77,6 @@ class PreCommit(BaseResolver):
 
         for command in hook_config.get(HooksConfig.KEY_POST_COMMANDS, []):
             self._commands.append((command, False))
-
-        print(self._commands)
         return self
 
     def process(self):
@@ -85,4 +84,13 @@ class PreCommit(BaseResolver):
         Process commands
         :return:
         """
+        for command, file in self._commands:
+            self._logger.info('Running command `{} {}`'.format(command, file))
+            run_shell_command(
+                command='{} {}'.format(command, file) if file else command,
+                print_output=True,
+                raise_output=True
+            )
+            if (file):
+                self._git.add(file=file)
         return self

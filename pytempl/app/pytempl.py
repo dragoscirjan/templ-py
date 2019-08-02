@@ -1,5 +1,6 @@
 from cement import App, init_defaults
 from cement.core.exc import CaughtSignal
+import colorlog
 import logging
 
 from pytempl.controllers.base import Base
@@ -18,8 +19,7 @@ class PyTempl(App):
 
     def run(self):
         self.di = DI()
-        if self.debug:
-            self.di.logger().setLevel(logging.DEBUG)
+        self._setup_logger()
         return super().run()
 
     class Meta:
@@ -54,4 +54,24 @@ class PyTempl(App):
         handlers = [
             Base
         ]
+
+    def _setup_logger(self):
+        colorlog_formatter = colorlog.ColoredFormatter(">> %(log_color)s%(name)s %(reset)s>> %(log_color)s%(message)s",
+                                                        datefmt=None,
+                                                        reset=True,
+                                                        log_colors={
+                                                            'DEBUG': 'cyan',
+                                                            'INFO': 'green',
+                                                            'WARNING': 'yellow',
+                                                            'ERROR': 'red',
+                                                            'CRITICAL': 'red,bg_white',
+                                                        },
+                                                        secondary_log_colors={},
+                                                        style='%')
+        colorlog_handler = colorlog.StreamHandler()
+        colorlog_handler.setFormatter(colorlog_formatter)
+        self.di.logger().addHandler(colorlog_handler)
+        self.di.logger().setLevel(logging.INFO)
+        if self.debug:
+            self.di.logger().setLevel(logging.DEBUG)
 
