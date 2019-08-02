@@ -1,4 +1,5 @@
 import logging
+import re
 
 from .base import BaseResolver
 from pytempl.git import Git
@@ -68,11 +69,10 @@ class PreCommit(BaseResolver):
             self._commands.append((command, False))
 
         for pext, commands in hook_config.get(HooksConfig.KEY_COMMANDS, {}).items():
-            print(pext, commands)
-        # for ext in extensions:
-        #     for command in hook[BaseHook.KEY_COMMANDS].get(ext, []):
-        #         for file in files.get(ext, []):
-        #             commands.append((command, file))
+            for file in self._files:
+                if re.compile(".{}$".format(pext.split('.')[1]), re.IGNORECASE).search(file):
+                    for command in commands:
+                        self._commands.append((command, file))
 
         for command in hook_config.get(HooksConfig.KEY_POST_COMMANDS, []):
             self._commands.append((command, False))
