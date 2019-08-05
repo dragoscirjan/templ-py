@@ -1,5 +1,5 @@
 from .base import BaseToolReq
-from pytempl.templ.utils import str2bool
+from pytempl.os import str2bool
 
 
 class Editorconfig(BaseToolReq):
