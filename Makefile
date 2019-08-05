@@ -21,6 +21,7 @@ VIRTUALENV_ARGS?=--python python$(PY_VER)
 
 clean:
 	find . -name '*.py[co]' -delete
+	find . -type d -iname "*__pycache__*" -delete
 
 virtualenv:
 	$(GLOBAL_PIP_INSTALL) virtualenv

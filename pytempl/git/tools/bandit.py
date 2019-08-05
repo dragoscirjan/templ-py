@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Bandit(Base):
+class Bandit(BaseTool):
     """
     :see: https://github.com/PyCQA/bandit
     """
 
     TOKEN = 'bandit'
 
-    ORDER = Base.ORDER_LINTER
+    ORDER = BaseTool.ORDER_LINTER
 
-    CATEGORY = Base.CATEGORY_LINTER
+    CATEGORY = BaseTool.CATEGORY_LINTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.bandit': 'https://templ-project.github.io/python-configs/.bandit'
             },

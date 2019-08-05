@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Pylama(Base):
+class Pylama(BaseTool):
     """
     :see: https://github.com/klen/pylama
     """
 
     TOKEN = 'pylama'
 
-    ORDER = Base.ORDER_AUDIT
+    ORDER = BaseTool.ORDER_AUDIT
 
-    CATEGORY = Base.CATEGORY_AUDIT
+    CATEGORY = BaseTool.CATEGORY_AUDIT
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 'pylintrc': 'https://templ-project.github.io/python-configs/pylama.ini'
             },

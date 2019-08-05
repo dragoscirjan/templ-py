@@ -1,20 +1,19 @@
-from pytempl.templ.tools import BaseReq
+from .base import BaseToolReq
 
 
-class Pylint(BaseReq):
+class Pylint(BaseToolReq):
     """
     :see: https://www.pylint.org/
     """
 
     TOKEN = 'pylint'
 
-    ORDER = BaseReq.ORDER_LINTER
+    ORDER = BaseToolReq.ORDER_LINTER
 
-    CATEGORY = BaseReq.CATEGORY_LINTER
+    CATEGORY = BaseToolReq.CATEGORY_LINTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.pylintrc': 'https://templ-project.github.io/python-configs/.pylintrc'
             },

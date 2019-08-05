@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Unittestcov(Base):
+class Unittestcov(BaseTool):
     """
     :see: https://docs.Unittest.org/en/latest/
     """
 
     TOKEN = 'unittestcov'
 
-    ORDER = Base.ORDER_UNITTEST
+    ORDER = BaseTool.ORDER_UNITTEST
 
-    CATEGORY = Base.CATEGORY_UNITTEST
+    CATEGORY = BaseTool.CATEGORY_UNITTEST
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'name': 'Unittest + Coverage (https://docs.python.org/3.5/library/unittest.html)',
             'packages': ['coverage'],
             'append-pre-commit': 'python -m unittest discover -s tests -p "*_test.py"'

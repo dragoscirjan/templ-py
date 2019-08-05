@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Mypy(Base):
+class Mypy(BaseTool):
     """
     :see: http://mypy-lang.org/
     """
 
     TOKEN = 'mypy'
 
-    ORDER = Base.ORDER_LINTER
+    ORDER = BaseTool.ORDER_LINTER
 
-    CATEGORY = Base.CATEGORY_LINTER
+    CATEGORY = BaseTool.CATEGORY_LINTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.mypy.ini': 'https://templ-project.github.io/python-configs/.mypy.ini'
             },

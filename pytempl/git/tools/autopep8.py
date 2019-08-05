@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Autopep8(Base):
+class Autopep8(BaseTool):
     """
     :see: https://github.com/hhatto/autopep8
     """
 
-    ORDER = Base.ORDER_FORMATTER
+    ORDER = BaseTool.ORDER_FORMATTER
 
     TOKEN = 'autopep8'
 
-    CATEGORY = Base.CATEGORY_FORMATTER
+    CATEGORY = BaseTool.CATEGORY_FORMATTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.pep8': 'https://templ-project.github.io/python-configs/.pep8'
             },

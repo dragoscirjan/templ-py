@@ -1,7 +1,7 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Pycodestyle(Base):
+class Pycodestyle(BaseTool):
     """
     :see: https://github.com/PyCQA/pycodestyle
     :see: http://pycodestyle.pycqa.org
@@ -9,13 +9,12 @@ class Pycodestyle(Base):
 
     TOKEN = 'pycodestyle'
 
-    ORDER = Base.ORDER_LINTER
+    ORDER = BaseTool.ORDER_LINTER
 
-    CATEGORY = Base.CATEGORY_LINTER
+    CATEGORY = BaseTool.CATEGORY_LINTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.pydocstylerc': 'https://templ-project.github.io/python-configs/.pydocstylerc'
             },

@@ -1,7 +1,7 @@
 from cement import Controller, ex
 from cement.utils.version import get_version_banner
 
-from pytempl.controllers.resolvers import JSONLint, PreCommit
+from pytempl.controllers.resolvers import Init, JSONLint, PreCommit
 from pytempl.core.version import get_version
 
 VERSION_BANNER = """
@@ -32,6 +32,15 @@ class Base(Controller):
     def _default(self):
         """Default action if no sub-command is passed."""
         self.app.args.print_help()
+
+    @ex(
+        help='Initialize and configure PyTempl.',
+        # sub-command level arguments. ex: 'pytempl jsonlint -f /path/to/file.json'
+        arguments=Init.arguments()
+    )
+    def init(self):
+        """Use to lint JSON files."""
+        self.app.di.init(args=vars(self.app.pargs)).run()
 
     @ex(
         help='Use to lint JSON files.',

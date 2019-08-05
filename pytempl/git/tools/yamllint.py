@@ -1,7 +1,7 @@
-from pytempl.templ.tools import BaseReq
+from .base import BaseToolReq
 
 
-class Yamllint(BaseReq):
+class Yamllint(BaseToolReq):
     """
     :see: https://github.com/tangwz/yamllint/
     :see: https://pypi.org/project/yamllint/
@@ -9,14 +9,13 @@ class Yamllint(BaseReq):
 
     TOKEN = 'yamllint'
 
-    ORDER = BaseReq.ORDER_LINTER_OTHER
+    ORDER = BaseToolReq.ORDER_LINTER_OTHER
 
-    CATEGORY = BaseReq.CATEGORY_LINTER_OTHER
+    CATEGORY = BaseToolReq.CATEGORY_LINTER_OTHER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
-            'ext': ['*.yaml', '*.yml'] + getattr(app.pargs, 'with_{}_extensions'.format(self.TOKEN), []),
+    def _init_config(self):
+        self.config.update({
+            'ext': ['*.yaml', '*.yml'],
             'files': {
                 '.yamllint': 'https://templ-project.github.io/python-configs/.yamllint'
             },

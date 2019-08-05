@@ -1,40 +1,22 @@
-from pytempl.templ.tools import BaseReq
+from .base import BaseToolReq
 from pytempl.templ.utils import str2bool
 
 
-class Editorconfig(BaseReq):
+class Editorconfig(BaseToolReq):
     """
     :see: https://www.pylint.org/
     """
 
-    TOKEN = BaseReq.CATEGORY_EDITORCONFIG
+    TOKEN = BaseToolReq.CATEGORY_EDITORCONFIG
 
-    ORDER = BaseReq.ORDER_EDITORCONFIG
+    ORDER = BaseToolReq.ORDER_EDITORCONFIG
 
     CATEGORY = 'editorconfig'
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 '.editorconfig': 'https://templ-project.github.io/python-configs/.editorconfig'
             },
             'name': 'Editorconfig (https://editorconfig.org/)'
         })
-
-    @staticmethod
-    def arguments(klass) -> list:
-        """
-        Obtain list of arguments for tool
-        :param klass: class to build arguments for
-        :return:
-        """
-        return [
-            (['--skip-{}'.format(klass.TOKEN)],
-             {'const': True,
-              'default': False,
-              'dest': 'skip_{}'.format(klass.TOKEN),
-              'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
-              'nargs': '?',
-              'type': str2bool})
-        ]

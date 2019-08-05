@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Radon(Base):
+class Radon(BaseTool):
     """
     :see: https://radon.readthedocs.io/en/latest/
     """
 
     TOKEN = 'radon'
 
-    ORDER = Base.ORDER_ANALYZER
+    ORDER = BaseTool.ORDER_ANALYZER
 
-    CATEGORY = Base.CATEGORY_ANALYZER
+    CATEGORY = BaseTool.CATEGORY_ANALYZER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'hook': 'radon cc --min B --max E',
             'name': 'Radon (https://radon.readthedocs.io/en/latest/)',
             'packages': ['radon']

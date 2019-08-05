@@ -1,20 +1,19 @@
-from pytempl.templ.tools import BaseReq
+from .base import BaseToolReq
 
 
-class Unittest(BaseReq):
+class Unittest(BaseToolReq):
     """
     :see: https://docs.Unittest.org/en/latest/
     """
 
     TOKEN = 'unittest'
 
-    ORDER = BaseReq.ORDER_UNITTEST
+    ORDER = BaseToolReq.ORDER_UNITTEST
 
-    CATEGORY = BaseReq.CATEGORY_UNITTEST
+    CATEGORY = BaseToolReq.CATEGORY_UNITTEST
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'name': 'Unittest (https://docs.python.org/3.5/library/unittest.html)',
             'packages': [],
             'append-pre-commit': 'python -m unittest discover -s tests -p "*_test.py"'

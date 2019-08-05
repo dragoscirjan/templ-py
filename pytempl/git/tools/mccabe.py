@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Mccabe(Base):
+class Mccabe(BaseTool):
     """
     :see: http://pypi.python.org/pypi/mccabe
     """
 
     TOKEN = 'mccabe'
 
-    ORDER = Base.ORDER_ANALYZER
+    ORDER = BaseTool.ORDER_ANALYZER
 
-    CATEGORY = Base.CATEGORY_ANALYZER
+    CATEGORY = BaseTool.CATEGORY_ANALYZER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'hook': 'python -m mccabe --min 5',
             'name': 'Mccabe (http://pypi.python.org/pypi/mccabe)',
             'packages': ['mccabe']

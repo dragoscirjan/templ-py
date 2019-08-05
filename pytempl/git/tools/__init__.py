@@ -1,7 +1,4 @@
-from dependency_injector import containers, providers
-
-from .base import Base #isort:skip
-from .base_req import BaseReq #isort:skip
+from .base import BaseTool, BaseToolReq #isort:skip
 from .autopep8 import Autopep8 #isort:skip
 from .bandit import Bandit #isort:skip
 from .black import Black #isort:skip
@@ -20,34 +17,6 @@ from .radon import Radon #isort:skip
 from .unittest import Unittest #isort:skip
 from .unittestcov import Unittestcov #isort:skip
 from .yamllint import Yamllint #isort:skip
-
-
-
-
-class Tools(containers.DeclarativeContainer):
-    """Tools Container."""
-
-    config = providers.Configuration('config')
-
-    autopep8 = providers.Singleton(Autopep8, app=config.app)
-    mypy = providers.Singleton(Mypy, app=config.app)
-    black = providers.Singleton(Black, app=config.app)
-    isort = providers.Singleton(Isort, app=config.app)
-    radon = providers.Singleton(Radon, app=config.app)
-    bandit = providers.Singleton(Bandit, app=config.app)
-    flake8 = providers.Singleton(Flake8, app=config.app)
-    mccabe = providers.Singleton(Mccabe, app=config.app)
-    pylama = providers.Singleton(Pylama, app=config.app)
-    pylint = providers.Singleton(Pylint, app=config.app)
-    pytest = providers.Singleton(Pytest, app=config.app)
-    jsonlint = providers.Singleton(Jsonlint, app=config.app)
-    unittest = providers.Singleton(Unittest, app=config.app)
-    yamllint = providers.Singleton(Yamllint, app=config.app)
-    pydocstyle = providers.Singleton(Pydocstyle, app=config.app)
-    pycodestyle = providers.Singleton(Pycodestyle, app=config.app)
-    unittestcov = providers.Singleton(Unittestcov, app=config.app)
-    editorconfig = providers.Singleton(Editorconfig, app=config.app)
-
 
 def __get_order(klass):
     return getattr(klass, 'ORDER', -1)

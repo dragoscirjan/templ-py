@@ -1,20 +1,19 @@
-from pytempl.templ.tools import Base
+from .base import BaseTool
 
 
-class Pytest(Base):
+class Pytest(BaseTool):
     """
     :see: https://docs.pytest.org/en/latest/
     """
 
     TOKEN = 'pytest'
 
-    ORDER = Base.ORDER_UNITTEST
+    ORDER = BaseTool.ORDER_UNITTEST
 
-    CATEGORY = Base.CATEGORY_UNITTEST
+    CATEGORY = BaseTool.CATEGORY_UNITTEST
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'hook': 'pytest',
             'name': 'Pytest (https://docs.pytest.org/en/latest/)',
             'packages': ['coverage', 'pytest', 'pytest-cov', 'pytest-xdist'],

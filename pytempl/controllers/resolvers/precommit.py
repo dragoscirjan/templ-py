@@ -45,9 +45,6 @@ class PreCommit(BaseResolver):
         self._hook_type = HooksConfig.HOOK_PRE_COMMIT
 
     def run(self):
-        if self.setup:
-            self.inquire().compile().write()
-            return
         self.determine_files().determine_config().compile_commands().process()
 
     def determine_files(self):

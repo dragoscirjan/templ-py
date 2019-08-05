@@ -1,20 +1,19 @@
-from pytempl.templ.tools import BaseReq
+from .base import BaseTool
 
 
-class Isort(BaseReq):
+class Isort(BaseToolReq):
     """
     :see: https://github.com/timothycrosley/isort
     """
 
-    ORDER = BaseReq.ORDER_FORMATTER
+    ORDER = BaseToolReq.ORDER_FORMATTER
 
     TOKEN = 'isort'
 
-    CATEGORY = BaseReq.CATEGORY_FORMATTER
+    CATEGORY = BaseToolReq.CATEGORY_FORMATTER
 
-    def __init__(self, app=None):
-        super().__init__(app)
-        self._config.update({
+    def _init_config(self):
+        self.config.update({
             'files': {
                 'isort.cfg': 'https://templ-project.github.io/python-configs/isort.cfg'
             },
