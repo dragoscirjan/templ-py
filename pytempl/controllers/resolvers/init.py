@@ -1,6 +1,3 @@
-import sys
-import simplejson
-
 import logging
 
 from .base import BaseResolver
@@ -11,14 +8,15 @@ from pytempl.os import file_exists, str2bool
 
 class Init(BaseResolver):
 
-    EXIT_INVALID_FILE = 1
-    EXIT_INVALID_JSON = 2
-
     _inquire_list = {}
     _answers_list = {}
 
-    def __init__(self, logger: logging.Logger, args: dict = None, inquire_list: list = None):
+    _hooks_config = None
+    """Git Hooks Config"""
+
+    def __init__(self, hooks_config: HooksConfig, logger: logging.Logger, args: dict = None, inquire_list: list = None):
         super().__init__(logger=logger, args=args)
+        self._hooks_config = hooks_config
         self._inquire_list = inquire_list if inquire_list else []
 
     @staticmethod
@@ -46,16 +44,25 @@ class Init(BaseResolver):
         Compile user choices into the application config
         :return:
         """
-
+        config = {
+            HooksConfig.HOOK_PRE_COMMIT: self._compile_precommit()
+        }
+        self._hooks_config.from_dict(config)
         return self
+
+    def _compile_precommit(self):
+        return {
+            HooksConfig.KEY_PRE_COMMANDS: [],
+            HooksConfig.KEY_COMMANDS: {},
+            HooksConfig.KEY_POST_COMMANDS: []
+        }
+
 
     def write(self):
         """
         Write Config
         :return:
         """
-        config = self._hooks_config.to_dict()
-        config[HooksConfig.HOOK_PRE_COMMIT] = self._compiled_config
-        self._hooks_config.from_dict(config)
-        self._hooks_config.write()
+        print(self._hooks_config.to_dict())
+        # self._hooks_config.write()
         return self
