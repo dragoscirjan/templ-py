@@ -13,7 +13,8 @@ class Pytest(BaseTool):
     CATEGORY = BaseTool.CATEGORY_UNITTEST
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'hook': 'pytest',
             'name': 'Pytest (https://docs.pytest.org/en/latest/)',
             'packages': ['coverage', 'pytest', 'pytest-cov', 'pytest-xdist'],

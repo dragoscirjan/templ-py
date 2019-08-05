@@ -13,7 +13,8 @@ class Isort(BaseToolReq):
     CATEGORY = BaseToolReq.CATEGORY_FORMATTER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 'isort.cfg': 'https://templ-project.github.io/python-configs/isort.cfg'
             },

@@ -13,7 +13,8 @@ class Autopep8(BaseTool):
     CATEGORY = BaseTool.CATEGORY_FORMATTER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 '.pep8': 'https://templ-project.github.io/python-configs/.pep8'
             },

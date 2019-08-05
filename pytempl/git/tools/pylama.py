@@ -13,7 +13,8 @@ class Pylama(BaseTool):
     CATEGORY = BaseTool.CATEGORY_AUDIT
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 'pylintrc': 'https://templ-project.github.io/python-configs/pylama.ini'
             },

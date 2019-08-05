@@ -14,7 +14,8 @@ class Yamllint(BaseToolReq):
     CATEGORY = BaseToolReq.CATEGORY_LINTER_OTHER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'ext': ['*.yaml', '*.yml'],
             'files': {
                 '.yamllint': 'https://templ-project.github.io/python-configs/.yamllint'

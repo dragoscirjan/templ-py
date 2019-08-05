@@ -13,7 +13,8 @@ class Pyflakes(BaseTool):
     CATEGORY = BaseTool.CATEGORY_LINTER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'hook': 'pyflakes',
             'name': 'Pyflakes (https://github.com/PyCQA/pyflakes)',
             'packages': ['pyflakes']

@@ -14,7 +14,8 @@ class Jsonlint(BaseToolReq):
     CATEGORY = BaseToolReq.CATEGORY_LINTER_OTHER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'ext': ['*.json'],
             'hook': 'pytempl jsonlint -f',
             'name': 'Jsonlint (https://github.com/tangwz/jsonlint)',

@@ -13,7 +13,8 @@ class Radon(BaseTool):
     CATEGORY = BaseTool.CATEGORY_ANALYZER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'hook': 'radon cc --min B --max E',
             'name': 'Radon (https://radon.readthedocs.io/en/latest/)',
             'packages': ['radon']

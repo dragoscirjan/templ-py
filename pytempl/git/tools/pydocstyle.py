@@ -14,7 +14,8 @@ class Pydocstyle(BaseTool):
     CATEGORY = BaseTool.CATEGORY_LINTER
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 '.pydocstylerc': 'https://templ-project.github.io/python-configs/.pydocstylerc'
             },

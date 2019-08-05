@@ -13,7 +13,8 @@ class Unittest(BaseToolReq):
     CATEGORY = BaseToolReq.CATEGORY_UNITTEST
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'name': 'Unittest (https://docs.python.org/3.5/library/unittest.html)',
             'packages': [],
             'append-pre-commit': 'python -m unittest discover -s tests -p "*_test.py"'

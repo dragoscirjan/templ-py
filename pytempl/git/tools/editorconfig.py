@@ -14,7 +14,8 @@ class Editorconfig(BaseToolReq):
     CATEGORY = 'editorconfig'
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 '.editorconfig': 'https://templ-project.github.io/python-configs/.editorconfig'
             },

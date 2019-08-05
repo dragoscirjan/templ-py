@@ -14,7 +14,8 @@ class Flake8(BaseTool):
     CATEGORY = BaseTool.CATEGORY_AUDIT
 
     def _init_config(self):
-        self.config.update({
+        super()._init_config()
+        self._config.update({
             'files': {
                 '.flake8': 'https://templ-project.github.io/python-configs/.flake8'
             },

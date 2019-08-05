@@ -40,7 +40,7 @@ class BaseTool:
     ORDER_LINTER_OTHER = 31
     ORDER_UNITTEST = 90
 
-    config = {}
+    _config = {}
     
     _args = None
     _logger = None
@@ -52,13 +52,17 @@ class BaseTool:
         self._init_config()
 
     def _init_config(self):
-        self.config = {
+        self._config = {
             'ext': ['*.py'],
             'files': {},
             'hook': None,
             'name': '',
             'packages': []
         }
+
+    @property
+    def config(self):
+        return self._config
 
     # @staticmethod
     # def _arguments(klass):
@@ -145,7 +149,7 @@ class BaseTool:
     # def run(self):
     #     # args = vars(self._app.pargs)
 
-    #     pcprint('checking {} config...'.format(wcolour(self.config.get('name', None), colour=BLUE, ecolour=GREEN)),
+    #     pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)),
     #             colour=GREEN)
 
     #     if not self.use():
@@ -169,7 +173,7 @@ class BaseTool:
 
     # def _write_config_files(self) -> None:
     #     args = vars(self._app.pargs)
-    #     config = self.config
+    #     config = self._config
 
     #     reconfig = args.get('reconfig', False) or args.get('reconfig_{}'.format(self.TOKEN))
 
