@@ -1,10 +1,11 @@
 from dependency_injector import containers, providers
 import logging
 
+from pytempl.controllers.resolvers import *
+from pytempl.controllers.resolvers.inquire import *
 from pytempl.git import Git
 from pytempl.git.hooks import HooksConfig
 from pytempl.git.tools import *
-from pytempl.controllers.resolvers import JSONLint, PreCommit, Init
 
 class DI(containers.DeclarativeContainer):
 
@@ -15,30 +16,62 @@ class DI(containers.DeclarativeContainer):
     git = providers.Singleton(Git, logger=logger)
     git_hooks_config = providers.Singleton(HooksConfig, logger=logger)
 
-    init = providers.Factory(Init, logger=logger)
+    autopep8 = providers.Singleton(Autopep8, logger=logger)
+    mypy = providers.Singleton(Mypy, logger=logger)
+    black = providers.Singleton(Black, logger=logger)
+    isort = providers.Singleton(Isort, logger=logger)
+    radon = providers.Singleton(Radon, logger=logger)
+    bandit = providers.Singleton(Bandit, logger=logger)
+    flake8 = providers.Singleton(Flake8, logger=logger)
+    mccabe = providers.Singleton(Mccabe, logger=logger)
+    pylama = providers.Singleton(Pylama, logger=logger)
+    pylint = providers.Singleton(Pylint, logger=logger)
+    pytest = providers.Singleton(Pytest, logger=logger)
+    jsonlint = providers.Singleton(Jsonlint, logger=logger)
+    unittest = providers.Singleton(Unittest, logger=logger)
+    yamllint = providers.Singleton(Yamllint, logger=logger)
+    pydocstyle = providers.Singleton(Pydocstyle, logger=logger)
+    pycodestyle = providers.Singleton(Pycodestyle, logger=logger)
+    unittestcov = providers.Singleton(Unittestcov, logger=logger)
+    editorconfig = providers.Singleton(Editorconfig, logger=logger)
+
+    inquire_hooks = providers.Singleton(InquireHooks)
+    inquire_precommit = providers.Singleton(
+        InquirePreCommit,
+        git_tools_list=[
+            autopep8,
+            mypy,
+            black,
+            isort,
+            radon,
+            bandit,
+            flake8,
+            mccabe,
+            pylama,
+            pylint,
+            pytest,
+            jsonlint,
+            unittest,
+            yamllint,
+            pydocstyle,
+            pycodestyle,
+            unittestcov,
+            editorconfig
+        ]
+    )
+
+    init = providers.Factory(
+        Init,
+        logger=logger,
+        inquire_list=[
+            inquire_hooks,
+            # inquire_precommit,
+        ]
+    )
     jsonlint = providers.Factory(JSONLint, logger=logger)
     precommit = providers.Factory(
         PreCommit,
         logger=logger,
         git=git,
-        hooks_config=git_hooks_config,
+        hooks_config=git_hooks_config
     )
-
-    autopep8 = providers.Singleton(Autopep8, app=config.app)
-    mypy = providers.Singleton(Mypy, app=config.app)
-    black = providers.Singleton(Black, app=config.app)
-    isort = providers.Singleton(Isort, app=config.app)
-    radon = providers.Singleton(Radon, app=config.app)
-    bandit = providers.Singleton(Bandit, app=config.app)
-    flake8 = providers.Singleton(Flake8, app=config.app)
-    mccabe = providers.Singleton(Mccabe, app=config.app)
-    pylama = providers.Singleton(Pylama, app=config.app)
-    pylint = providers.Singleton(Pylint, app=config.app)
-    pytest = providers.Singleton(Pytest, app=config.app)
-    jsonlint = providers.Singleton(Jsonlint, app=config.app)
-    unittest = providers.Singleton(Unittest, app=config.app)
-    yamllint = providers.Singleton(Yamllint, app=config.app)
-    pydocstyle = providers.Singleton(Pydocstyle, app=config.app)
-    pycodestyle = providers.Singleton(Pycodestyle, app=config.app)
-    unittestcov = providers.Singleton(Unittestcov, app=config.app)
-    editorconfig = providers.Singleton(Editorconfig, app=config.app)

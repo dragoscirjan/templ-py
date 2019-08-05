@@ -1,3 +1,4 @@
+import logging
 # import os
 # import re
 # import sys
@@ -42,10 +43,12 @@ class BaseTool:
     config = {}
     
     _args = None
+    _logger = None
 
     # def __init__(self, app: App = None):
-    def __init__(self):
+    def __init__(self, logger: logging.Logger):
         # self._args = vars(app.pargs)
+        self._logger = logger
         self._init_config()
 
     def _init_config(self):

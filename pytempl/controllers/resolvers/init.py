@@ -1,9 +1,10 @@
 import sys
 import simplejson
 
+import logging
+
 from .base import BaseResolver
 from pytempl.os import file_exists, str2bool
-from pytempl.controllers.resolvers.inquire import InquireHooks, InquirePreCommit
 
 
 class Init(BaseResolver):
@@ -11,8 +12,11 @@ class Init(BaseResolver):
     EXIT_INVALID_FILE = 1
     EXIT_INVALID_JSON = 2
 
-    _files = []
-    """Files to lint"""
+    _inquire_list = []
+
+    def __init__(self, logger: logging.Logger, args: dict = None, inquire_list: list = None):
+        super().__init__(logger=logger, args=args)
+        self._inquire_list = inquire_list if inquire_list else []
 
     @staticmethod
     def arguments() -> list:
@@ -27,8 +31,5 @@ class Init(BaseResolver):
         ]
 
     def run(self):
-        for  klass in [
-            InquireHooks,
-            InquirePreCommit,
-        ]:
-            print(klass().ask().answers)
+        for inquire in self._inquire_list:
+            print(inquire.ask().answers)
