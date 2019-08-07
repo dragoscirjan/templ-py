@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Unittestcov(BaseTool):
+class Unittestcov(BaseCodeTool):
     """
     :see: https://docs.Unittest.org/en/latest/
     """
 
     TOKEN = 'unittestcov'
 
-    ORDER = BaseTool.ORDER_UNITTEST
+    ORDER = BaseCodeTool.ORDER_UNITTEST
 
-    CATEGORY = BaseTool.CATEGORY_UNITTEST
+    CATEGORY = BaseCodeTool.CATEGORY_UNITTEST
 
     def _init_config(self):
         super()._init_config()

@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Autopep8(BaseTool):
+class Autopep8(BaseCodeTool):
     """
     :see: https://github.com/hhatto/autopep8
     """
 
-    ORDER = BaseTool.ORDER_FORMATTER
+    ORDER = BaseCodeTool.ORDER_FORMATTER
 
     TOKEN = 'autopep8'
 
-    CATEGORY = BaseTool.CATEGORY_FORMATTER
+    CATEGORY = BaseCodeTool.CATEGORY_FORMATTER
 
     def _init_config(self):
         super()._init_config()

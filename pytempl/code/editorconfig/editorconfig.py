@@ -1,4 +1,4 @@
-from .base import BaseToolReq
+from pytempl.code.base import BaseToolReq
 from pytempl.os import str2bool
 
 

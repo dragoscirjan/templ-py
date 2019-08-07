@@ -1,19 +1,19 @@
 import sys
 
 # from pytempl.templ import RED, pcprint
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Black(BaseTool):
+class Black(BaseCodeTool):
     """
     :see: https://github.com/python/black
     """
 
-    ORDER = BaseTool.ORDER_FORMATTER
+    ORDER = BaseCodeTool.ORDER_FORMATTER
 
     TOKEN = 'black'
 
-    CATEGORY = BaseTool.CATEGORY_FORMATTER
+    CATEGORY = BaseCodeTool.CATEGORY_FORMATTER
 
     def _init_config(self):
         super()._init_config()

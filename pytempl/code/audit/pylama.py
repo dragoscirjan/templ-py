@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Pylama(BaseTool):
+class Pylama(BaseCodeTool):
     """
     :see: https://github.com/klen/pylama
     """
 
     TOKEN = 'pylama'
 
-    ORDER = BaseTool.ORDER_AUDIT
+    ORDER = BaseCodeTool.ORDER_AUDIT
 
-    CATEGORY = BaseTool.CATEGORY_AUDIT
+    CATEGORY = BaseCodeTool.CATEGORY_AUDIT
 
     def _init_config(self):
         super()._init_config()

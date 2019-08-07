@@ -1,7 +1,7 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Pycodestyle(BaseTool):
+class Pycodestyle(BaseCodeTool):
     """
     :see: https://github.com/PyCQA/pycodestyle
     :see: http://pycodestyle.pycqa.org
@@ -9,9 +9,9 @@ class Pycodestyle(BaseTool):
 
     TOKEN = 'pycodestyle'
 
-    ORDER = BaseTool.ORDER_LINTER
+    ORDER = BaseCodeTool.ORDER_LINTER
 
-    CATEGORY = BaseTool.CATEGORY_LINTER
+    CATEGORY = BaseCodeTool.CATEGORY_LINTER
 
     def _init_config(self):
         super()._init_config()

@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Mccabe(BaseTool):
+class Mccabe(BaseCodeTool):
     """
     :see: http://pypi.python.org/pypi/mccabe
     """
 
     TOKEN = 'mccabe'
 
-    ORDER = BaseTool.ORDER_ANALYZER
+    ORDER = BaseCodeTool.ORDER_ANALYZER
 
-    CATEGORY = BaseTool.CATEGORY_ANALYZER
+    CATEGORY = BaseCodeTool.CATEGORY_ANALYZER
 
     def _init_config(self):
         super()._init_config()

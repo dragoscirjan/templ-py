@@ -1,16 +1,11 @@
-from functools import reduce
-
 import logging
 
-from .base import BaseResolver
-from pytempl.git import Git
 from pytempl.git.hooks import HooksConfig
-from pytempl.git.tools import BaseTool
-from pytempl.os import file_exists, str2bool
+from pytempl.os import str2bool
+from .base import BaseResolver
 
 
 class Init(BaseResolver):
-
     _new = False
 
     _inquire_list = {}
@@ -19,19 +14,21 @@ class Init(BaseResolver):
     _hooks_config = None
     """Git Hooks Config"""
 
-    def __init__(
-            self,
-            hooks_config: HooksConfig,
-            logger: logging.Logger,
-            args: dict = None,
-            inquire_list: list = None,
-            git_tools_list: list = None
-        ):
+    _hooks_list = []
+    """List of Git Hooks"""
+
+    def __init__(self, hooks_config: HooksConfig, logger: logging.Logger, args: dict = None, inquire_list: list = None,
+                 hooks_list: list = None):
         super().__init__(logger=logger, args=args)
-        self._new = args.get('new', False)
+
         self._hooks_config = hooks_config
-        self._inquire_list = inquire_list if inquire_list else []
-        self._git_tools_list = [item() for item in git_tools_list] if git_tools_list else []
+        if inquire_list and isinstance(inquire_list, list):
+            self._inquire_list = inquire_list
+
+        if hooks_list and isinstance(hooks_list, list):
+            self._hooks_list = list(map(lambda item: item(), hooks_list))
+
+        self._new = args.get('new', False)
 
     @staticmethod
     def arguments() -> list:
@@ -53,6 +50,8 @@ class Init(BaseResolver):
             return self
         for inquire in list(map(lambda item: item(), self._inquire_list)):
             self._answers_list[inquire.key] = inquire.ask().answers
+        # self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
+        #                                      'linter_other': ['jsonlint', 'yamllint']}}
         return self
 
     def compile(self):
@@ -62,9 +61,9 @@ class Init(BaseResolver):
         """
         if not self._new:
             return self
-        config = {
-            HooksConfig.HOOK_PRE_COMMIT: self._compile_precommit()
-        }
+        config = {}
+        for hook in self._hooks_list:
+            config[hook.hook_type] = hook.compile_config(self._answers_list.get(hook.hook_type, {}))
         self._hooks_config.from_dict(config)
         return self
 
@@ -73,55 +72,8 @@ class Init(BaseResolver):
         Write Config
         :return:
         """
-        self._write_hook()
-        self.
+        for hook in self._hooks_list:
+            hook.write_hook()
         if self._new:
             self._hooks_config.write()
         return self
-
-    def _compile_precommit(self):
-        answers = self._answers_list[HooksConfig.HOOK_PRE_COMMIT]
-        
-        tools = []
-        for category in BaseTool.CATEGORIES:
-            if category == BaseTool.CATEGORY_EDITORCONFIG and answers.get(category, None):
-                tools += [BaseTool.CATEGORY_EDITORCONFIG]
-            else:
-                tools += answers.get(category, []) if isinstance(answers.get(category, None), list) else [answers.get(category, None)]
-        tools = list(filter(lambda item: item, tools))
-        
-        code_tools = list(filter(lambda item: item.TOKEN in tools, self._git_tools_list))
-
-        commands = {}
-        for tool in code_tools:
-            for ext in tool.config.get('ext'):
-                if not ext in commands:
-                    commands[ext] = []
-                if tool.config.get('hook', None):
-                    commands[ext].append(tool.config.get('hook'))
-
-        return {
-            HooksConfig.KEY_PRE_COMMANDS: list(reduce(
-                lambda a, b: a + b,
-                filter(
-                    lambda item: item,
-                    map(
-                        lambda item: item.config.get('prepend-pre-commit', None),
-                        code_tools
-                    )
-                ),
-                []
-            )),
-            HooksConfig.KEY_COMMANDS: commands,
-            HooksConfig.KEY_POST_COMMANDS:  list(reduce(
-                lambda a, b: a + b,
-                filter(
-                    lambda item: item,
-                    map(
-                        lambda item: item.config.get('append-pre-commit', None),
-                        code_tools
-                    )
-                ),
-                []
-            )),
-        }

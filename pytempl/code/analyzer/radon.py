@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Radon(BaseTool):
+class Radon(BaseCodeTool):
     """
     :see: https://radon.readthedocs.io/en/latest/
     """
 
     TOKEN = 'radon'
 
-    ORDER = BaseTool.ORDER_ANALYZER
+    ORDER = BaseCodeTool.ORDER_ANALYZER
 
-    CATEGORY = BaseTool.CATEGORY_ANALYZER
+    CATEGORY = BaseCodeTool.CATEGORY_ANALYZER
 
     def _init_config(self):
         super()._init_config()

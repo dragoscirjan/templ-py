@@ -11,7 +11,7 @@ import logging
 # from pytempl.templ.utils import file_backup, str2bool
 
 
-class BaseTool:
+class BaseCodeTool:
     TOKEN = 'base'
 
     CATEGORY_AUDIT = 'audit'
@@ -100,7 +100,7 @@ class BaseTool:
     #           'help': 'also install `{}` tool.'.format(klass.TOKEN),
     #           'nargs': '?',
     #           'type': str2bool})
-    #     ] + BaseTool._arguments(klass=klass)
+    #     ] + BaseCodeTool._arguments(klass=klass)
 
     # @staticmethod
     # def exists(path: str):
@@ -201,7 +201,7 @@ class BaseTool:
 
     #     print('')
 
-class BaseToolReq(BaseTool):
+class BaseToolReq(BaseCodeTool):
     pass    
     # @staticmethod
     # def arguments(klass) -> list:
@@ -218,4 +218,4 @@ class BaseToolReq(BaseTool):
     #           'help': 'skip installing `{}` tool.'.format(klass.TOKEN),
     #           'nargs': '?',
     #           'type': str2bool})
-    #     ] + BaseTool._arguments(klass=klass)
+    #     ] + BaseCodeTool._arguments(klass=klass)

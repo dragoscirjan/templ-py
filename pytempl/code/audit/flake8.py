@@ -1,7 +1,7 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Flake8(BaseTool):
+class Flake8(BaseCodeTool):
     """
     :see: http://flake8.pycqa.org
     :see: https://github.com/PyCQA/flake8
@@ -9,9 +9,9 @@ class Flake8(BaseTool):
 
     TOKEN = 'flake8'
 
-    ORDER = BaseTool.ORDER_AUDIT
+    ORDER = BaseCodeTool.ORDER_AUDIT
 
-    CATEGORY = BaseTool.CATEGORY_AUDIT
+    CATEGORY = BaseCodeTool.CATEGORY_AUDIT
 
     def _init_config(self):
         super()._init_config()

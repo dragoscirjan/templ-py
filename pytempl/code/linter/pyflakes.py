@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Pyflakes(BaseTool):
+class Pyflakes(BaseCodeTool):
     """
     :see: https://github.com/PyCQA/pyflakes
     """
 
     TOKEN = 'pyflakes'
 
-    ORDER = BaseTool.ORDER_LINTER
+    ORDER = BaseCodeTool.ORDER_LINTER
 
-    CATEGORY = BaseTool.CATEGORY_LINTER
+    CATEGORY = BaseCodeTool.CATEGORY_LINTER
 
     def _init_config(self):
         super()._init_config()

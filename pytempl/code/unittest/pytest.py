@@ -1,16 +1,16 @@
-from .base import BaseTool
+from pytempl.code.base import BaseCodeTool
 
 
-class Pytest(BaseTool):
+class Pytest(BaseCodeTool):
     """
     :see: https://docs.pytest.org/en/latest/
     """
 
     TOKEN = 'pytest'
 
-    ORDER = BaseTool.ORDER_UNITTEST
+    ORDER = BaseCodeTool.ORDER_UNITTEST
 
-    CATEGORY = BaseTool.CATEGORY_UNITTEST
+    CATEGORY = BaseCodeTool.CATEGORY_UNITTEST
 
     def _init_config(self):
         super()._init_config()

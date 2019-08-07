@@ -3,18 +3,15 @@ import logging
 
 from pytempl.controllers.resolvers import *
 from pytempl.controllers.resolvers.inquire import *
+from pytempl.code import *
 from pytempl.git import Git
-from pytempl.git.hooks import HooksConfig
-from pytempl.git.tools import *
+from pytempl.git.hooks import *
 
 class DI(containers.DeclarativeContainer):
 
     config = providers.Configuration('config')
 
     logger = providers.Singleton(logging.Logger, name='pytempl')
-
-    git = providers.Singleton(Git, logger=logger)
-    git_hooks_config = providers.Singleton(HooksConfig, logger=logger)
 
     code_tool_autopep8 = providers.Singleton(Autopep8, logger=logger)
     code_tool_mypy = providers.Singleton(Mypy, logger=logger)
@@ -35,26 +32,38 @@ class DI(containers.DeclarativeContainer):
     code_tool_unittestcov = providers.Singleton(Unittestcov, logger=logger)
     code_tool_editorconfig = providers.Singleton(Editorconfig, logger=logger)
 
-    code_tools_list=[
-            code_tool_autopep8,
-            code_tool_bandit,
-            code_tool_black,
-            code_tool_editorconfig,
-            code_tool_flake8,
-            code_tool_isort,
-            code_tool_jsonlint,
-            code_tool_mccabe,
-            code_tool_mypy,
-            code_tool_pycodestyle,
-            code_tool_pydocstyle,
-            code_tool_pylama,
-            code_tool_pylint,
-            code_tool_pytest,
-            code_tool_radon,
-            code_tool_unittest,
-            code_tool_unittestcov,
-            code_tool_yamllint,
-        ]
+    code_tools_list = [
+        code_tool_autopep8,
+        code_tool_bandit,
+        code_tool_black,
+        code_tool_editorconfig,
+        code_tool_flake8,
+        code_tool_isort,
+        code_tool_jsonlint,
+        code_tool_mccabe,
+        code_tool_mypy,
+        code_tool_pycodestyle,
+        code_tool_pydocstyle,
+        code_tool_pylama,
+        code_tool_pylint,
+        code_tool_pytest,
+        code_tool_radon,
+        code_tool_unittest,
+        code_tool_unittestcov,
+        code_tool_yamllint,
+    ]
+
+    git = providers.Singleton(Git, logger=logger)
+    git_hooks_config = providers.Singleton(HooksConfig, logger=logger)
+    git_hooks_precommit = providers.Singleton(
+        PreCommitHook,
+        logger=logger,
+        code_tools_list=code_tools_list
+    )
+
+    git_hooks_list = [
+        git_hooks_precommit
+    ]
 
     inquire_hooks = providers.Singleton(InquireHooks, logger=logger)
 
@@ -63,15 +72,18 @@ class DI(containers.DeclarativeContainer):
         logger=logger,
         git_tools_list=code_tools_list
     )
+
+    inquire_list = [
+        # inquire_hooks,
+        inquire_precommit,
+    ]
+
     init = providers.Singleton(
         Init,
         logger=logger,
-        inquire_list=[
-            # inquire_hooks,
-            inquire_precommit,
-        ],
+        inquire_list=inquire_list,
         hooks_config=git_hooks_config,
-        git_tools_list=code_tools_list
+        hooks_list=git_hooks_list
     )
     jsonlint = providers.Factory(JSONLint, logger=logger)
     precommit = providers.Factory(
