@@ -35,12 +35,7 @@ class DI(containers.DeclarativeContainer):
     code_tool_unittestcov = providers.Singleton(Unittestcov, logger=logger)
     code_tool_editorconfig = providers.Singleton(Editorconfig, logger=logger)
 
-    inquire_hooks = providers.Singleton(InquireHooks, logger=logger)
-
-    inquire_precommit = providers.Singleton(
-        InquirePreCommit,
-        logger=logger,
-        git_tools_list=[
+    code_tools_list=[
             code_tool_autopep8,
             code_tool_bandit,
             code_tool_black,
@@ -60,6 +55,13 @@ class DI(containers.DeclarativeContainer):
             code_tool_unittestcov,
             code_tool_yamllint,
         ]
+
+    inquire_hooks = providers.Singleton(InquireHooks, logger=logger)
+
+    inquire_precommit = providers.Singleton(
+        InquirePreCommit,
+        logger=logger,
+        git_tools_list=code_tools_list
     )
     init = providers.Singleton(
         Init,
@@ -68,7 +70,8 @@ class DI(containers.DeclarativeContainer):
             # inquire_hooks,
             inquire_precommit,
         ],
-        hooks_config=git_hooks_config
+        hooks_config=git_hooks_config,
+        git_tools_list=code_tools_list
     )
     jsonlint = providers.Factory(JSONLint, logger=logger)
     precommit = providers.Factory(

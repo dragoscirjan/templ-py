@@ -55,9 +55,11 @@ class BaseTool:
         self._config = {
             'ext': ['*.py'],
             'files': {},
-            'hook': None,
             'name': '',
-            'packages': []
+            'packages': [],
+            'hook': None,
+            'append-pre-commit': None,
+            'prepend-pre-commit': None
         }
 
     @property

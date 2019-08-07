@@ -84,6 +84,9 @@ class HooksConfig:
     def write(self):
         config_file = self.config_file()
         self._logger.debug('Detected & writing config file {}'.format(config_file))
+        if file_exists(config_file):
+            self._logger.debug('Backing `{}` old file'.format(config_file))
+            file_backup(config_file)
         if not re.compile('.json$').search(config_file.lower()):
             file_write(content=json.dumps(self.to_dict(), indent=4), path=config_file)
         else:

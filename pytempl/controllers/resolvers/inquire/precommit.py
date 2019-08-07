@@ -1,6 +1,7 @@
 import logging
 
 from .base import BaseInquire
+from pytempl.git.hooks import HooksConfig
 from pytempl.git.tools import Editorconfig, BaseTool
 
 
@@ -10,6 +11,7 @@ class InquirePreCommit(BaseInquire):
 
     def __init__(self, logger: logging.Logger, git_tools_list: list = None):
         super().__init__(logger)
+        self._key = HooksConfig.HOOK_PRE_COMMIT
         self._git_tools_list = git_tools_list if git_tools_list else []
 
         self._questions = [

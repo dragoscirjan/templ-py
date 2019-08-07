@@ -15,8 +15,7 @@ class Pytest(BaseTool):
     def _init_config(self):
         super()._init_config()
         self._config.update({
-            'hook': 'pytest',
             'name': 'Pytest (https://docs.pytest.org/en/latest/)',
             'packages': ['coverage', 'pytest', 'pytest-cov', 'pytest-xdist'],
-            'append-pre-commit': 'pytest --cov=myproj tests/'
+            'append-pre-commit': ['pytest --cov=myproj tests/']
         })

@@ -13,7 +13,7 @@ class BaseInquire:
         self._logger = logger
 
     def ask(self):
-        self._answers[self._key] = prompt(self._questions)
+        self._answers = prompt(self._questions)
         return self
 
     @property
