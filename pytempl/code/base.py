@@ -1,8 +1,5 @@
 from jinja2 import Template
 
-import urllib3
-urllib3.disable_warnings()
-
 import re
 import requests
 import sys
