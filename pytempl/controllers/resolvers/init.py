@@ -48,10 +48,10 @@ class Init(BaseResolver):
     def inquire(self):
         if not self._new:
             return self
-        for inquire in list(map(lambda item: item(), self._inquire_list)):
-            self._answers_list[inquire.key] = inquire.ask().answers
-        # self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
-        #                                      'linter_other': ['jsonlint', 'yamllint']}}
+        # for inquire in list(map(lambda item: item(), self._inquire_list)):
+        #     self._answers_list[inquire.key] = inquire.ask().answers
+        self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
+                                             'linter_other': ['jsonlint', 'yamllint']}}
         return self
 
     def compile(self):

@@ -16,7 +16,7 @@ class Pylint(BaseToolReq):
         super()._init_config()
         self._config.update({
             'files': {
-                '.pylintrc': 'https://templ-project.github.io/python-configs/.pylintrc'
+                '.pylintrc': 'https://templ-project.github.io/python-configs/pylintrc'
             },
             'hook': 'pylint --rcfile=.pylintrc',
             'name': 'Pylint (https://www.pylint.org/)',

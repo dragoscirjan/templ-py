@@ -1,20 +1,7 @@
 {
     "pre-commit": {
-        "pre-commands": [],
-        "commands": {
-            "*.py": [
-                "flake8 --show-source"
-            ],
-            "*.json": [
-                "pytempl jsonlint -f"
-            ],
-            "*.yaml": [
-                "yamllint -c .yamllint"
-            ],
-            "*.yml": [
-                "yamllint -c .yamllint"
-            ]
-        },
-        "post-commands": []
+        "commands": {},
+        "post-commands": [],
+        "pre-commands": []
     }
 }

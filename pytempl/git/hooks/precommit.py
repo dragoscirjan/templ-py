@@ -28,8 +28,8 @@ class PreCommitHook(BaseHook):
         # filter used tools from list
         code_tools = filter(lambda item: item.TOKEN in tools, self._code_tools_list)
 
-        # for tool in code_tools:
-        #     tool.run()
+        for tool in code_tools:
+            tool.run()
 
         code_tools = filter(lambda item: item.TOKEN != Editorconfig.TOKEN, code_tools)
 

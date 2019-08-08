@@ -17,7 +17,7 @@ class Pydocstyle(BaseCodeTool):
         super()._init_config()
         self._config.update({
             'files': {
-                '.pydocstylerc': 'https://templ-project.github.io/python-configs/.pydocstylerc'
+                '.pydocstylerc': 'https://templ-project.github.io/python-configs/pydocstylerc'
             },
             'hook': 'pydocstyle --config .pydocstylerc',
             'name': 'Pydocstyle (http://www.pydocstyle.org)',

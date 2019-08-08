@@ -17,7 +17,7 @@ class Flake8(BaseCodeTool):
         super()._init_config()
         self._config.update({
             'files': {
-                '.flake8': 'https://templ-project.github.io/python-configs/.flake8'
+                '.flake8': 'https://templ-project.github.io/python-configs/flake8'
             },
             'hook': 'flake8 --show-source',
             'name': 'Flake8 (http://flake8.pycqa.org)',

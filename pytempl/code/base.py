@@ -1,17 +1,14 @@
-import logging
-# import os
-# import re
+from jinja2 import Template
+
+import re
+import requests
 # import sys
 
-# import requests
-# from cement import App
-# from jinja2 import Template
-
-# # from pytempl.templ.output import BLUE, GREEN, YELLOW, pcprint, wcolour
-# from pytempl.templ.utils import file_backup, str2bool
+from pytempl.core import Loggable
+from pytempl.os import file_exists, file_backup, file_write
 
 
-class BaseCodeTool:
+class BaseCodeTool(Loggable):
     TOKEN = 'base'
 
     CATEGORY_AUDIT = 'audit'
@@ -41,13 +38,10 @@ class BaseCodeTool:
     ORDER_UNITTEST = 90
 
     _config = {}
-    
     _args = None
     _logger = None
 
-    # def __init__(self, app: App = None):
-    def __init__(self, logger: logging.Logger):
-        # self._args = vars(app.pargs)
+    def __init__(self, logger: Loggable.Logger):
         self._logger = logger
         self._init_config()
 
@@ -65,6 +59,10 @@ class BaseCodeTool:
     @property
     def config(self):
         return self._config
+
+    def run(self):
+        self._logger.info('checking {} config...'.format(self._config.get('name', None)))
+        self._write_config_files()
 
     # @staticmethod
     # def _arguments(klass):
@@ -111,95 +109,48 @@ class BaseCodeTool:
     #     """
     #     return os.path.isfile(path)
 
-    # def http_copy(self, url: str, file: str):
-    #     headers = {
-    #         'Accept': 'application/vnd.github.v3.raw'
-    #     }
-    #     if os.getenv('GITHUB_TOKEN', None):
-    #         headers['Authorization'] = 'token {}'.format(os.getenv('GITHUB_TOKEN', None))
+    def http_copy(self, url: str, file: str):
+        try:
+            session = requests.Session()
+            session.verify = False
+            req = session.get(url, verify=False)
+            if req.status_code < 200 or req.status_code >= 400:
+                raise Exception(req.text)
+            file_write(req.text, file)
+        except Exception as e:  #pylint: disable=W0703
+            self._logger.error('Could not download file {}'.format(url))
+            self._logger.error(str(e))
+            # sys.exit(req.status_code)
 
-    #     req = requests.get(url)
-
-    #     try:
-    #         if req.status_code < 200 or req.status_code >= 300:
-    #             raise Exception(req.text)
-    #         f = open(file, 'w')
-    #         f.write(req.text)
-    #         f.close()
-    #     except Exception as e:  #pylint: disable=W0703
-    #         self._app.log.error('Could not download file {}'.format(url))
-    #         self._app.log.warn(e)
-    #         sys.exit(req.status_code)
-
-    # def http_compile(self, url: str, file: str):
-    #     headers = {
-    #         'Accept': 'application/vnd.github.v3.raw'
-    #     }
-    #     if os.getenv('GITHUB_TOKEN', None):
-    #         headers['Authorization'] = 'token {}'.format(os.getenv('GITHUB_TOKEN', None))
-
-    #     req = requests.get(url, headers=headers)
-
-    #     if req.sratus_code < 200 or req.status_code >= 300:
-    #         raise Exception(req.text)
-
-    #     template = Template(req.text)
-    #     f = open(file, 'w')
-    #     f.write(template.render(**self._app.pargs))
-    #     f.close()
-
-    # def run(self):
-    #     # args = vars(self._app.pargs)
-
-    #     pcprint('checking {} config...'.format(wcolour(self._config.get('name', None), colour=BLUE, ecolour=GREEN)),
-    #             colour=GREEN)
-
-    #     if not self.use():
-    #         pcprint('not used. skipping.', colour=YELLOW)
-    #         print('')
-    #         return
-
-    #     self._write_config_files()
-
-    # def use(self) -> bool:
-    #     """
-    #     Test whether tool is used or not
-    #     :return: bool
-    #     """
-    #     args = vars(self._app.pargs)
-    #     return args.get('skip_{}'.format(self.TOKEN), None) is False or \
-    #         args.get('with_{}'.format(self.TOKEN), None) is True
+    def http_compile(self, url: str, file: str):
+        try:
+            session = requests.Session()
+            session.verify = False
+            req = session.get(url, verify=False)
+            if req.status_code < 200 or req.status_code >= 400:
+                raise Exception(req.text)
+            template = Template(req.text)
+            file_write(template.render(**{}), file)
+        except Exception as e:  #pylint: disable=W0703
+            self._logger.error('Could not download file {}'.format(url))
+            self._logger.error(str(e))
+            # sys.exit(req.status_code)
 
     # def validate(self):
     #     pass
 
-    # def _write_config_files(self) -> None:
-    #     args = vars(self._app.pargs)
-    #     config = self._config
+    def _write_config_files(self) -> None:
+        for file, url in self._config.get('files').items():
+            if file_exists(file):
+                self._logger.debug('Backing up {} file'.format(file))
 
-    #     reconfig = args.get('reconfig', False) or args.get('reconfig_{}'.format(self.TOKEN))
+            match = re.compile('.jinja2$', re.IGNORECASE)
+            if re.search(match, url) is None:
+                self.http_copy(url=url, file=file)
+            else:
+                self.http_compile(url=url, file=file)
 
-    #     for file in config.get('files').keys():
-    #         if not self.exists(file) or reconfig:
-    #             if self.exists(file):
-    #                 file_backup(file)
-    #                 pcprint('backed up...', colour=YELLOW)
-
-    #             url = config.get('files').get(file)
-    #             match = re.compile('.jinja2$', re.IGNORECASE)
-
-    #             if re.search(match, url) is None:
-    #                 self.http_copy(url=url, file=file)
-    #             else:
-    #                 self.http_compile(url=url, file=file)
-
-    #             if reconfig:
-    #                 pcprint('reconfigured...', colour=YELLOW)
-    #             pcprint('{} written.'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
-    #         else:
-    #             pcprint('{} exists. moving on...'.format(wcolour(file, colour=BLUE, ecolour=GREEN)))
-
-    #     print('')
+            self._logger.info('{} written.'.format(file))
 
 class BaseToolReq(BaseCodeTool):
     pass    

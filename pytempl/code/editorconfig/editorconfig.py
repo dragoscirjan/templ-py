@@ -17,7 +17,7 @@ class Editorconfig(BaseToolReq):
         super()._init_config()
         self._config.update({
             'files': {
-                '.editorconfig': 'https://templ-project.github.io/python-configs/.editorconfig'
+                '.editorconfig': 'https://templ-project.github.io/python-configs/editorconfig'
             },
             'name': 'Editorconfig (https://editorconfig.org/)'
         })

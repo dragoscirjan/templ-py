@@ -16,7 +16,7 @@ class Bandit(BaseCodeTool):
         super()._init_config()
         self._config.update({
             'files': {
-                '.bandit': 'https://templ-project.github.io/python-configs/.bandit'
+                '.bandit': 'https://templ-project.github.io/python-configs/bandit'
             },
             'hook': 'bandit -ini .bandit',
             'name': 'Bandit (https://github.com/PyCQA/bandit)',

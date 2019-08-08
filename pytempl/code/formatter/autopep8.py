@@ -16,7 +16,7 @@ class Autopep8(BaseCodeTool):
         super()._init_config()
         self._config.update({
             'files': {
-                '.pep8': 'https://templ-project.github.io/python-configs/.pep8'
+                '.pep8': 'https://templ-project.github.io/python-configs/pep8'
             },
             'hook': 'autopep8 --global-config .pep8',
             'name': 'Autopep8 (https://github.com/hhatto/autopep8)',
