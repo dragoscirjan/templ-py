@@ -3,6 +3,8 @@ jinja2
 pyyaml
 colorlog
 
+pyOpenSSL # requests[security]
+cryptography # requests[security]
 requests
 PyInquirer
 dependency-injector
