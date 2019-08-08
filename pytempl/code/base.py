@@ -1,5 +1,8 @@
 from jinja2 import Template
 
+import urllib3
+urllib3.disable_warnings()
+
 import re
 import requests
 import sys
@@ -111,10 +114,10 @@ class BaseCodeTool(Loggable):
 
     def http_copy(self, url: str, file: str):
         try:
-            session = requests.Session()
-            session.verify = False
-            req = session.get(url, verify=False)
-            # req = requests.get(url)
+            # session = requests.Session()
+            # session.verify = False
+            # req = session.get(url, verify=False)
+            req = requests.get(url, verify=False)
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             file_write(req.text, file)
