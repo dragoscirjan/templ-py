@@ -2,7 +2,7 @@ from jinja2 import Template
 
 import re
 import requests
-# import sys
+import sys
 
 from pytempl.core import Loggable
 from pytempl.os import file_exists, file_backup, file_write
@@ -114,6 +114,7 @@ class BaseCodeTool(Loggable):
             session = requests.Session()
             session.verify = False
             req = session.get(url, verify=False)
+            # req = requests.get(url)
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             file_write(req.text, file)
