@@ -6,6 +6,7 @@ from pytempl.controllers.resolvers.inquire import *
 from pytempl.code import *
 from pytempl.git import Git
 from pytempl.git.hooks import *
+from pytempl.pip import Pip
 
 class DI(containers.DeclarativeContainer):
 
@@ -13,24 +14,29 @@ class DI(containers.DeclarativeContainer):
 
     logger = providers.Singleton(logging.Logger, name='pytempl')
 
-    code_tool_autopep8 = providers.Singleton(Autopep8, logger=logger)
-    code_tool_mypy = providers.Singleton(Mypy, logger=logger)
-    code_tool_black = providers.Singleton(Black, logger=logger)
-    code_tool_isort = providers.Singleton(Isort, logger=logger)
-    code_tool_radon = providers.Singleton(Radon, logger=logger)
-    code_tool_bandit = providers.Singleton(Bandit, logger=logger)
-    code_tool_flake8 = providers.Singleton(Flake8, logger=logger)
-    code_tool_mccabe = providers.Singleton(Mccabe, logger=logger)
-    code_tool_pylama = providers.Singleton(Pylama, logger=logger)
-    code_tool_pylint = providers.Singleton(Pylint, logger=logger)
-    code_tool_pytest = providers.Singleton(Pytest, logger=logger)
-    code_tool_jsonlint = providers.Singleton(Jsonlint, logger=logger)
-    code_tool_unittest = providers.Singleton(Unittest, logger=logger)
-    code_tool_yamllint = providers.Singleton(Yamllint, logger=logger)
-    code_tool_pydocstyle = providers.Singleton(Pydocstyle, logger=logger)
-    code_tool_pycodestyle = providers.Singleton(Pycodestyle, logger=logger)
-    code_tool_unittestcov = providers.Singleton(Unittestcov, logger=logger)
-    code_tool_editorconfig = providers.Singleton(Editorconfig, logger=logger)
+    pip = providers.Singleton(
+        Pip,
+        logger=logger
+    )
+
+    code_tool_autopep8 = providers.Singleton(Autopep8, logger=logger, pip=pip)
+    code_tool_mypy = providers.Singleton(Mypy, logger=logger, pip=pip)
+    code_tool_black = providers.Singleton(Black, logger=logger, pip=pip)
+    code_tool_isort = providers.Singleton(Isort, logger=logger, pip=pip)
+    code_tool_radon = providers.Singleton(Radon, logger=logger, pip=pip)
+    code_tool_bandit = providers.Singleton(Bandit, logger=logger, pip=pip)
+    code_tool_flake8 = providers.Singleton(Flake8, logger=logger, pip=pip)
+    code_tool_mccabe = providers.Singleton(Mccabe, logger=logger, pip=pip)
+    code_tool_pylama = providers.Singleton(Pylama, logger=logger, pip=pip)
+    code_tool_pylint = providers.Singleton(Pylint, logger=logger, pip=pip)
+    code_tool_pytest = providers.Singleton(Pytest, logger=logger, pip=pip)
+    code_tool_jsonlint = providers.Singleton(Jsonlint, logger=logger, pip=pip)
+    code_tool_unittest = providers.Singleton(Unittest, logger=logger, pip=pip)
+    code_tool_yamllint = providers.Singleton(Yamllint, logger=logger, pip=pip)
+    code_tool_pydocstyle = providers.Singleton(Pydocstyle, logger=logger, pip=pip)
+    code_tool_pycodestyle = providers.Singleton(Pycodestyle, logger=logger, pip=pip)
+    code_tool_unittestcov = providers.Singleton(Unittestcov, logger=logger, pip=pip)
+    code_tool_editorconfig = providers.Singleton(Editorconfig, logger=logger, pip=pip)
 
     code_tools_list = [
         code_tool_autopep8,

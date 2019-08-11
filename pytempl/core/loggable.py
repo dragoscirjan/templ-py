@@ -1,5 +1,6 @@
 import logging
 
+
 class Loggable:
 
     _logger = None

@@ -2,6 +2,7 @@ import logging
 
 from pytempl.git.hooks import HooksConfig
 from pytempl.os import str2bool
+from pytempl.pip import Pip
 from .base import BaseResolver
 
 
@@ -11,14 +12,16 @@ class Init(BaseResolver):
     _inquire_list = {}
     _answers_list = {}
 
+    _pip = None
+
     _hooks_config = None
     """Git Hooks Config"""
 
     _hooks_list = []
     """List of Git Hooks"""
 
-    def __init__(self, hooks_config: HooksConfig, logger: logging.Logger, args: dict = None, inquire_list: list = None,
-                 hooks_list: list = None):
+    def __init__(self, hooks_config: HooksConfig, logger: logging.Logger, args: dict = None,
+                 inquire_list: list = None, hooks_list: list = None):
         super().__init__(logger=logger, args=args)
 
         self._hooks_config = hooks_config

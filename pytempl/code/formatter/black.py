@@ -26,7 +26,7 @@ class Black(BaseCodeTool):
             'packages': ['black']
         })
 
-    # def validate(self):
-    #     if self._args.with_black is True and (sys.version_info[0] < 3 or sys.version_info[1] < 6):
-    #         pcprint('Black requires python 3.6 or higher. Please used `Isort` for python 3.5.', colour=RED)
-    #         sys.exit(10)
+    def validate(self):
+        if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+            self._logger.error('Black requires python 3.6 or higher. Please used `Isor` or `Autopep8` instead.')
+            sys.exit(10)

@@ -6,6 +6,7 @@ import sys
 
 from pytempl.core import Loggable
 from pytempl.os import file_exists, file_backup, file_write
+from pytempl.pip import Pip
 
 
 class BaseCodeTool(Loggable):
@@ -40,9 +41,11 @@ class BaseCodeTool(Loggable):
     _config = {}
     _args = None
     _logger = None
+    _pip = Pip
 
-    def __init__(self, logger: Loggable.Logger):
-        self._logger = logger
+    def __init__(self, logger: Loggable.Logger, pip: Pip):
+        super().__init__(logger=logger)
+        self.pip = pip
         self._init_config()
 
     def _init_config(self):
@@ -62,59 +65,18 @@ class BaseCodeTool(Loggable):
 
     def run(self):
         self._logger.info('checking {} config...'.format(self._config.get('name', None)))
+        self.validate()
         self._write_config_files()
-
-    # @staticmethod
-    # def _arguments(klass):
-    #     return [
-    #         (['--reconfig-{}'.format(klass.TOKEN)],
-    #          {'const': True,
-    #           'default': False,
-    #           'dest': 'reconfig_{}'.format(klass.TOKEN),
-    #           'help': 'reconfigure `{}` tool.'.format(klass.TOKEN),
-    #           'nargs': '?',
-    #           'type': str2bool}),
-    #         (['--with-{}-extensions'.format(klass.TOKEN)],
-    #          {'default': [],
-    #           'dest': 'with_{}_extensions'.format(klass.TOKEN),
-    #           'help': 'add file extensions to be processed by the `{}` tool. i.e. "--with-{}-extensions *.js *.jsx"'.format(
-    #               klass.TOKEN, klass.TOKEN),
-    #           'nargs': '+',
-    #           'type': str})
-    #     ]
-
-    # @staticmethod
-    # def arguments(klass) -> list:
-    #     """
-    #     Obtain list of arguments for tool
-    #     :param klass: class to build arguments for
-    #     :return:
-    #     """
-    #     return [
-    #         (['--with-{}'.format(klass.TOKEN)],
-    #          {'const': True,
-    #           'default': False,
-    #           'dest': 'with_{}'.format(klass.TOKEN),
-    #           'help': 'also install `{}` tool.'.format(klass.TOKEN),
-    #           'nargs': '?',
-    #           'type': str2bool})
-    #     ] + BaseCodeTool._arguments(klass=klass)
-
-    # @staticmethod
-    # def exists(path: str):
-    #     """
-    #     Determine whether path exists and it's file.
-    #     :param path: str
-    #     :return: bool
-    #     """
-    #     return os.path.isfile(path)
+        packages = self._config.get('packages', [])
+        self._pip.install(packages=packages)
 
     def http_copy(self, url: str, file: str):
         try:
             # session = requests.Session()
             # session.verify = False
             # req = session.get(url, verify=False)
-            req = requests.get(url, verify=False)
+            req = requests.get(url)
+            self._logger.debug(f'Downloading {url} to {file}')
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             file_write(req.text, file)
@@ -125,9 +87,8 @@ class BaseCodeTool(Loggable):
 
     def http_compile(self, url: str, file: str):
         try:
-            session = requests.Session()
-            session.verify = False
-            req = session.get(url, verify=False)
+            req = requests.get(url)
+            self._logger.debug(f'Downloading {url} to {file}')
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             template = Template(req.text)
@@ -137,8 +98,8 @@ class BaseCodeTool(Loggable):
             self._logger.error(str(e))
             # sys.exit(req.status_code)
 
-    # def validate(self):
-    #     pass
+    def validate(self):
+        pass
 
     def _write_config_files(self) -> None:
         for file, url in self._config.get('files').items():
@@ -153,8 +114,10 @@ class BaseCodeTool(Loggable):
 
             self._logger.info('{} written.'.format(file))
 
+    # def _install_dependencies(self):
+
 class BaseToolReq(BaseCodeTool):
-    pass    
+    pass
     # @staticmethod
     # def arguments(klass) -> list:
     #     """
