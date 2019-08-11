@@ -67,8 +67,7 @@ class BaseCodeTool(Loggable):
         self._logger.info('checking {} config...'.format(self._config.get('name', None)))
         self.validate()
         self._write_config_files()
-        packages = self._config.get('packages', [])
-        self._pip.install(packages=packages)
+        self._pip.install(self._pip, packages=self._config.get('packages', []))
 
     def http_copy(self, url: str, file: str):
         try:

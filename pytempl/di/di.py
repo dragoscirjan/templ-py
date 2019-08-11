@@ -14,10 +14,7 @@ class DI(containers.DeclarativeContainer):
 
     logger = providers.Singleton(logging.Logger, name='pytempl')
 
-    pip = providers.Singleton(
-        Pip,
-        logger=logger
-    )
+    pip = providers.Singleton(Pip, logger=logger)
 
     code_tool_autopep8 = providers.Singleton(Autopep8, logger=logger, pip=pip)
     code_tool_mypy = providers.Singleton(Mypy, logger=logger, pip=pip)

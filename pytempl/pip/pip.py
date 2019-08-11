@@ -1,5 +1,5 @@
 from pytempl.core import Loggable
-from pytempl.os import file_exists, file_read
+from pytempl.os import file_exists, file_read, run_shell_command
 
 
 class Pip(Loggable):
@@ -14,8 +14,15 @@ class Pip(Loggable):
         self.read_dependencies()
 
     def install(self, packages: list = []):
-        print(self._packages)
-        print(packages)
+        dev = self._packages.get('dev', [])
+        if not dev:
+            dev = ['-r requirements-dev.txt']
+
+        for package in packages:
+            dev.append(package)
+
+        if packages:
+            run_shell_command('pip install {}'.format(' '.join(packages)), print_output=True, raise_output=True)
 
     def read_dependencies(self):
         if file_exists('requirements-dev.txt'):
