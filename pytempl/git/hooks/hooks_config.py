@@ -31,7 +31,7 @@ class HooksConfig:
     HOOK_SEND_EMAIL_VALIDATE = 'sendemail-validate'
     HOOK_FSMONITOR_WATCHMAN = 'fsmonitor-watchman'
     HOOK_PS4_PRE_SUBMIT = 'p4-pre-submit'
-    HOOK_POST_INDEX_CHANGE = 'post-index-change'    
+    HOOK_POST_INDEX_CHANGE = 'post-index-change'
 
     KEY_COMMANDS = 'commands'
     KEY_PRE_COMMANDS = 'pre-commands'
@@ -50,7 +50,7 @@ class HooksConfig:
     def __init__(self, logger: logging.Logger):
         """
         docstring here
-        :param self: 
+        :param self:
         :param logger: logging.Logger
         """
         self._logger = logger
@@ -65,7 +65,7 @@ class HooksConfig:
         self._config = config
         return self
 
-    def read(self) -> dict:
+    def read(self):
         config_file = self.config_file()
         self._logger.debug('Detected & reading config file {}'.format(config_file))
         if not re.compile('.json$').search(config_file.lower()):

@@ -9,4 +9,3 @@ wheel>=0.31.0
 
 isort
 pylint
-simplejson

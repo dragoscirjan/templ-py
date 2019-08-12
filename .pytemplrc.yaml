@@ -1,7 +1,22 @@
 {
     "pre-commit": {
-        "post-commands": [],
         "pre-commands": [],
-        "commands": {}
+        "commands": {
+            "*.py": [
+                "flake8 --show-source"
+            ],
+            "*.json": [
+                "pytempl jsonlint -f"
+            ],
+            "*.yaml": [
+                "yamllint -c .yamllint"
+            ],
+            "*.yml": [
+                "yamllint -c .yamllint"
+            ]
+        },
+        "post-commands": [
+            "pytest --cov=myproj tests/"
+        ]
     }
 }

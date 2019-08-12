@@ -1,3 +1,5 @@
+import simplejson
+
 from pytempl.core import Loggable
 from pytempl.os import file_exists, file_read, file_write, run_shell_command
 
@@ -25,11 +27,11 @@ class Pip(Loggable):
                     found = True
                     break
             if not found:
-                self._logger.debug('Adding {package} to {file}'.format(package=package,file=self._requirements_dev))
+                self._logger.debug('Adding {package} to {file}'.format(package=package, file=self._requirements_dev))
                 dev.append(package)
 
-        # if packages:
-        #     run_shell_command('pip install {}'.format(' '.join(packages)), print_output=True, raise_output=True)
+        if packages:
+            run_shell_command('pip install {}'.format(' '.join(packages)), print_output=True, raise_output=True)
 
         # self.write_dependencies()
         pass
@@ -39,6 +41,8 @@ class Pip(Loggable):
             self._packages['dev'] = file_read('requirements-dev.txt').split("\n")
         if file_exists('requirements.txt'):
             self._packages['prod'] = file_read('requirements.txt').split("\n")
+        self._logger.debug('requirements read: {}'.format(simplejson.dumps(self._packages)))
+
 
     def set_requirements(self, value: str):
         self._requirements = value

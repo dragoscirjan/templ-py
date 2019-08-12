@@ -71,9 +71,6 @@ class BaseCodeTool(Loggable):
 
     def http_copy(self, url: str, file: str):
         try:
-            # session = requests.Session()
-            # session.verify = False
-            # req = session.get(url, verify=False)
             req = requests.get(url)
             self._logger.debug('Downloading {url} to {file}'.format(url=url, file=file))
             if req.status_code < 200 or req.status_code >= 400:
@@ -104,6 +101,7 @@ class BaseCodeTool(Loggable):
         for file, url in self._config.get('files').items():
             if file_exists(file):
                 self._logger.debug('Backing up {} file'.format(file))
+                file_backup(file)
 
             match = re.compile('.jinja2$', re.IGNORECASE)
             if re.search(match, url) is None:

@@ -1,3 +1,5 @@
+import simplejson
+
 from pytempl.core import Loggable
 from pytempl.git.hooks import HooksConfig
 from pytempl.os import str2bool
@@ -26,7 +28,6 @@ class Init(BaseResolver):
         self._hooks_config = hooks_config
 
         self._pip = pip
-        print(args)
         self._pip.set_requirements(args.get('requirements', None))
         self._pip.set_requirements_dev(args.get('requirements_dev', None))
 
@@ -77,6 +78,7 @@ class Init(BaseResolver):
         #     self._answers_list[inquire.key] = inquire.ask().answers
         self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
                                              'linter_other': ['jsonlint', 'yamllint']}}
+        self._logger.debug('Inquire read: {}'.format(simplejson.dumps(self._answers_list)))
         return self
 
     def compile(self):

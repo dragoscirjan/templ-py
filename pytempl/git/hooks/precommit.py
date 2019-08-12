@@ -26,12 +26,12 @@ class PreCommitHook(BaseHook):
         tools = map(lambda item: item if isinstance(item, list) else [item], tools)
         tools = reduce(lambda a, b: a + b, tools, [])
         # filter used tools from list
-        code_tools = filter(lambda item: item.TOKEN in tools, self._code_tools_list)
+        code_tools = list(filter(lambda item: item.TOKEN in tools, self._code_tools_list))
 
         for tool in code_tools:
             tool.run()
 
-        code_tools = filter(lambda item: item.TOKEN != Editorconfig.TOKEN, code_tools)
+        code_tools = list(filter(lambda item: item.TOKEN != Editorconfig.TOKEN, code_tools))
 
         commands = {}
         for extensions, hook in list(

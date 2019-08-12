@@ -1,7 +1,9 @@
-import logging
+import simplejson
+
+from pytempl.core import Loggable
 
 
-class BaseResolver:
+class BaseResolver(Loggable):
 
     _logger = None
     """Logger"""
@@ -9,14 +11,18 @@ class BaseResolver:
     _args = {}
     """Resolver Arguments"""
 
-    def __init__(self, logger: logging.Logger, args: dict = None):
+    def __init__(self, logger: Loggable.Logger, args: dict = None):
         """
         Constructor
-        :param logger: logging.Logger
+        :param logger: Loggable.Logger
         :param args: dict
         """
-        self._logger = logger
+        super().__init__(logger=logger)
         self._args = args if args else {}
+        self._logger.debug('{} resolver initialised with args: {}'.format(
+            self.__class__.__name__,
+            simplejson.dumps(args)
+        ))
 
     def run(self):
         pass
