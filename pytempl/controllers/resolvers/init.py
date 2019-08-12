@@ -8,6 +8,8 @@ from .base import BaseResolver
 
 
 class Init(BaseResolver):
+    """Resolver for `pytempl init < --new >` ."""
+
     _new = False
 
     _inquire_list = {}
@@ -23,6 +25,15 @@ class Init(BaseResolver):
 
     def __init__(self, logger: Loggable.Logger, hooks_config: HooksConfig, pip: Pip, args: dict = None,
                  inquire_list: list = None, hooks_list: list = None):
+        """Constructor .
+
+        :param logger: Loggable.Logger
+        :param hooks_config: HooksConfig
+        :param pip: Pip
+        :param args: dict
+        :param inquire_list: list
+        :param hooks_list: list
+        """
         super().__init__(logger=logger, args=args)
 
         self._hooks_config = hooks_config
@@ -51,19 +62,17 @@ class Init(BaseResolver):
               'type': str2bool}),
             (['--requirements'],
              {'const': True,
-              'default': False,
+              'default': 'requirements.txt',
               'dest': 'requirements',
               'help': 'Requirements file. Default: requirements.txt',
               'nargs': '?',
-              'default': 'requirements.txt',
               'type': str}),
             (['--requirements-dev'],
              {'const': True,
-              'default': False,
+              'default': 'requirements-dev.txt',
               'dest': 'requirements_dev',
               'help': 'Requirements dev file. Default: requirements-dev.txt',
               'nargs': '?',
-              'default': 'requirements-dev.txt',
               'type': str})
         ]
 
@@ -74,10 +83,10 @@ class Init(BaseResolver):
         if not self._new:
             return self
         self._pip.read_dependencies()
-        # for inquire in list(map(lambda item: item(), self._inquire_list)):
-        #     self._answers_list[inquire.key] = inquire.ask().answers
-        self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
-                                             'linter_other': ['jsonlint', 'yamllint']}}
+        for inquire in list(map(lambda item: item(), self._inquire_list)):
+            self._answers_list[inquire.key] = inquire.ask().answers
+        # self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
+        #                                      'linter_other': ['jsonlint', 'yamllint']}}
         self._logger.debug('Inquire read: {}'.format(simplejson.dumps(self._answers_list)))
         return self
 

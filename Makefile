@@ -23,7 +23,7 @@ clean:
 	find . -name '*.py[co]' -delete || true
 	find . -type d -iname "*__pycache__*" -delete || true
 	rm -rf *.bak-* .*.bak-* || true
-	rm .git/hooks/pre-commit || true
+	# rm .git/hooks/pre-commit || true
 
 virtualenv:
 	$(GLOBAL_PIP_INSTALL) virtualenv

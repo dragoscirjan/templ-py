@@ -1,22 +1,17 @@
-{
-    "pre-commit": {
-        "pre-commands": [],
-        "commands": {
-            "*.py": [
-                "flake8 --show-source"
-            ],
-            "*.json": [
-                "pytempl jsonlint -f"
-            ],
-            "*.yaml": [
-                "yamllint -c .yamllint"
-            ],
-            "*.yml": [
-                "yamllint -c .yamllint"
-            ]
-        },
-        "post-commands": [
-            "pytest --cov=myproj tests/"
-        ]
-    }
-}
+---
+pre-commit:
+    pre-commands: []
+    commands:
+        '*.py':
+            - isort
+#            - pydocstyle --config .pydocstylerc
+            - pylint --rcfile=.pylintrc
+            - radon cc --min B --max E
+        '*.json':
+            - pytempl jsonlint -f
+        '*.yaml':
+            - yamllint -c .yamllint
+        '*.yml':
+            - yamllint -c .yamllint
+    post-commands: []
+#        - pytest --cov=myproj tests/

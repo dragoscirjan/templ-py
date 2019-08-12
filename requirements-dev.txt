@@ -9,3 +9,9 @@ wheel>=0.31.0
 
 isort
 pylint
+
+pycodestyle
+pydocstyle
+pytest-xdist
+radon
+yamllint
