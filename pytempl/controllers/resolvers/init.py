@@ -1,5 +1,4 @@
-import logging
-
+from pytempl.core import Loggable
 from pytempl.git.hooks import HooksConfig
 from pytempl.os import str2bool
 from pytempl.pip import Pip
@@ -20,11 +19,17 @@ class Init(BaseResolver):
     _hooks_list = []
     """List of Git Hooks"""
 
-    def __init__(self, hooks_config: HooksConfig, logger: logging.Logger, args: dict = None,
+    def __init__(self, logger: Loggable.Logger, hooks_config: HooksConfig, pip: Pip, args: dict = None,
                  inquire_list: list = None, hooks_list: list = None):
         super().__init__(logger=logger, args=args)
 
         self._hooks_config = hooks_config
+
+        self._pip = pip
+        print(args)
+        self._pip.set_requirements(args.get('requirements', None))
+        self._pip.set_requirements_dev(args.get('requirements_dev', None))
+
         if inquire_list and isinstance(inquire_list, list):
             self._inquire_list = inquire_list
 
@@ -42,7 +47,23 @@ class Init(BaseResolver):
               'dest': 'new',
               'help': 'Initialize setup query and create new config.',
               'nargs': '?',
-              'type': str2bool})
+              'type': str2bool}),
+            (['--requirements'],
+             {'const': True,
+              'default': False,
+              'dest': 'requirements',
+              'help': 'Requirements file. Default: requirements.txt',
+              'nargs': '?',
+              'default': 'requirements.txt',
+              'type': str}),
+            (['--requirements-dev'],
+             {'const': True,
+              'default': False,
+              'dest': 'requirements_dev',
+              'help': 'Requirements dev file. Default: requirements-dev.txt',
+              'nargs': '?',
+              'default': 'requirements-dev.txt',
+              'type': str})
         ]
 
     def run(self):
@@ -51,6 +72,7 @@ class Init(BaseResolver):
     def inquire(self):
         if not self._new:
             return self
+        self._pip.read_dependencies()
         # for inquire in list(map(lambda item: item(), self._inquire_list)):
         #     self._answers_list[inquire.key] = inquire.ask().answers
         self._answers_list = {'pre-commit': {'editorconfig': 'editorconfig', 'audit': 'flake8', 'unittest': 'pytest',
@@ -79,4 +101,5 @@ class Init(BaseResolver):
             hook.write_hook()
         if self._new:
             self._hooks_config.write()
+        self._pip.write_dependencies()
         return self

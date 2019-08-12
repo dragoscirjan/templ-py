@@ -86,7 +86,8 @@ class DI(containers.DeclarativeContainer):
         logger=logger,
         inquire_list=inquire_list,
         hooks_config=git_hooks_config,
-        hooks_list=git_hooks_list
+        hooks_list=git_hooks_list,
+        pip=pip
     )
     jsonlint = providers.Factory(JSONLint, logger=logger)
     precommit = providers.Factory(

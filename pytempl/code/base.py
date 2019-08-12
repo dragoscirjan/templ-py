@@ -41,11 +41,11 @@ class BaseCodeTool(Loggable):
     _config = {}
     _args = None
     _logger = None
-    _pip = Pip
+    _pip = None
 
     def __init__(self, logger: Loggable.Logger, pip: Pip):
         super().__init__(logger=logger)
-        self.pip = pip
+        self._pip = pip
         self._init_config()
 
     def _init_config(self):
@@ -67,7 +67,7 @@ class BaseCodeTool(Loggable):
         self._logger.info('checking {} config...'.format(self._config.get('name', None)))
         self.validate()
         self._write_config_files()
-        self._pip.install(self._pip, packages=self._config.get('packages', []))
+        self._pip.install(packages=self._config.get('packages', []))
 
     def http_copy(self, url: str, file: str):
         try:
@@ -75,7 +75,7 @@ class BaseCodeTool(Loggable):
             # session.verify = False
             # req = session.get(url, verify=False)
             req = requests.get(url)
-            self._logger.debug(f'Downloading {url} to {file}')
+            self._logger.debug('Downloading {url} to {file}'.format(url=url, file=file))
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             file_write(req.text, file)
@@ -87,7 +87,7 @@ class BaseCodeTool(Loggable):
     def http_compile(self, url: str, file: str):
         try:
             req = requests.get(url)
-            self._logger.debug(f'Downloading {url} to {file}')
+            self._logger.debug('Downloading {url} to {file}'.format(url=url, file=file))
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             template = Template(req.text)
@@ -112,8 +112,6 @@ class BaseCodeTool(Loggable):
                 self.http_compile(url=url, file=file)
 
             self._logger.info('{} written.'.format(file))
-
-    # def _install_dependencies(self):
 
 class BaseToolReq(BaseCodeTool):
     pass

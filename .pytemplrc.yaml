@@ -1,7 +1,7 @@
 {
     "pre-commit": {
+        "post-commands": [],
         "pre-commands": [],
-        "commands": {},
-        "post-commands": []
+        "commands": {}
     }
 }
