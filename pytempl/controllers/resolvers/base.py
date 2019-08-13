@@ -1,4 +1,5 @@
 import simplejson
+import sys
 
 from pytempl.core import Loggable
 
@@ -18,11 +19,13 @@ class BaseResolver(Loggable):
         :param args: dict
         """
         super().__init__(logger=logger)
+
         self._args = args if args else {}
         self._logger.debug('{} resolver initialised with args: {}'.format(
             self.__class__.__name__,
             simplejson.dumps(args)
         ))
+        sys.exit(0)
 
     def run(self):
         pass

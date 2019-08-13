@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
-import logging
+# import logging
+import loguru
 
 from pytempl.controllers.resolvers import *
 from pytempl.controllers.resolvers.inquire import *
@@ -12,7 +13,8 @@ class DI(containers.DeclarativeContainer):
 
     config = providers.Configuration('config')
 
-    logger = providers.Singleton(logging.Logger, name='pytempl')
+    # logger = providers.Singleton(logging.Logger, name='pytempl')
+    logger = providers.Singleton(loguru._Logger, None, 0, False, False, False, False, None, {})
 
     pip = providers.Singleton(Pip, logger=logger)
 
