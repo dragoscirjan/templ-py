@@ -1,17 +1,19 @@
----
-init:
-    precommit: pytempl precommit-config --silent
 pre-commit:
-    commands:
-        "*.json":
-            - pytempl jsonlint -f
-        "*.py":
-            - isort
-            - pylint --rcfile=.pylintrc
-        "*.yaml":
-            - yamllint -c .yamllint
-        "*.yml":
-            - yamllint -c .yamllint
-    post-commands:
-        - python -m pytest -v --cov=pytempl --cov-report=term --cov-report=html:coverage-report tests/
-    pre-commands: []
+#  run-all: true
+  commands:
+    '*.json':
+    - pytempl jsonlint -f
+    '*.py':
+    - autopep8 --global-config .pep8
+    - isort
+#    - pydocstyle --config .pydocstylerc
+    - pylint --rcfile=.pylintrc
+    - bandit -x tests --ini .bandit
+    - radon cc --min B --max E
+    '*.yaml':
+    - yamllint -c .yamllint
+    '*.yml':
+    - yamllint -c .yamllint
+  post-commands:
+  - pytest --cov=pytempl tests/
+  pre-commands: []

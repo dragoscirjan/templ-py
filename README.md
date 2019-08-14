@@ -1,4 +1,4 @@
-# Pre-Commit Python Lint/Formatter Configurator
+# Tool aggregator for python code analisys
 
 ## Installation
 
@@ -59,7 +59,7 @@ $ make dist-upload
 
 ### Docker
 
-Included is a basic `Dockerfile` for building and distributing `Templ Python`,
+Included is a basic `Dockerfile` for building and distributing `PyTempl`,
 and can be built with the included `make` helper:
 
 ```
