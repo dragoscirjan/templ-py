@@ -6,7 +6,7 @@ class Bandit(BaseCodeTool):
     :see: https://github.com/PyCQA/bandit
     """
 
-    TOKEN = 'bandit'
+    TOKEN = 'bandit'  # nosec
 
     ORDER = BaseCodeTool.ORDER_LINTER
 
@@ -18,7 +18,7 @@ class Bandit(BaseCodeTool):
             'files': {
                 '.bandit': 'https://templ-project.github.io/python-configs/bandit'
             },
-            'hook': 'bandit -ini .bandit',
+            'hook': 'bandit --ini .bandit',
             'name': 'Bandit (https://github.com/PyCQA/bandit)',
             'packages': ['bandit']
         })

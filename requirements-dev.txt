@@ -15,3 +15,5 @@ pydocstyle
 pytest-xdist
 radon
 yamllint
+bandit
+autopep8

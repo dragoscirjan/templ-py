@@ -1,15 +1,15 @@
-import logging
-
+from pytempl.code import BaseCodeTool, Editorconfig
+from pytempl.core import Loggable
 from pytempl.git.hooks import HooksConfig
-from pytempl.code import Editorconfig, BaseCodeTool
 from .base import BaseInquire
 
 
 class InquirePreCommit(BaseInquire):
     _git_tools_list = []
 
-    def __init__(self, logger: logging.Logger, git_tools_list: list = None):
+    def __init__(self, logger: Loggable.Logger, git_tools_list: list = None):
         super().__init__(logger)
+
         self._key = HooksConfig.HOOK_PRE_COMMIT
         self._git_tools_list = git_tools_list if git_tools_list else []
 
@@ -34,17 +34,18 @@ class InquirePreCommit(BaseInquire):
                            ] + self.query_anwers(category=BaseCodeTool.CATEGORY_AUDIT)
             },
             {
-                'type': 'list',
+                'type': 'checkbox',
                 'qmark': '?',
                 'message': 'Select Code Formatter Tool',
                 'name': BaseCodeTool.CATEGORY_FORMATTER,
-                'choices': [
-                               {
-                                   'name': 'Don\'t use formatter',
-                                   'value': None,
-                               }
-                           ] + self.query_anwers(category=BaseCodeTool.CATEGORY_FORMATTER),
-                'validate': lambda answer: 'You must choose at least one code formatter.' if len(answer) == 0 else True,
+                'choices': self.query_anwers(category=BaseCodeTool.CATEGORY_FORMATTER),
+                           # [
+                           #     {
+                           #         'name': 'Don\'t use formatter',
+                           #         'value': None,
+                           #     }
+                           # ] + self.query_anwers(category=BaseCodeTool.CATEGORY_FORMATTER),
+                # 'validate': lambda answer: 'You must choose at least one code formatter.' if answer else True,
                 'when': lambda answers: answers.get(BaseCodeTool.CATEGORY_AUDIT, None) is None,
             },
             {
@@ -53,7 +54,7 @@ class InquirePreCommit(BaseInquire):
                 'message': 'Select Code Linter Tool',
                 'name': BaseCodeTool.CATEGORY_LINTER,
                 'choices': self.query_anwers(category=BaseCodeTool.CATEGORY_LINTER),
-                'validate': lambda answer: 'You must choose at least one code linter.' if len(answer) == 0 else True,
+                # 'validate': lambda answer: 'You must choose at least one code linter.' if answer else True,
                 'when': lambda answers: answers.get(BaseCodeTool.CATEGORY_AUDIT, None) is None,
             },
             {
@@ -67,7 +68,7 @@ class InquirePreCommit(BaseInquire):
                                    'value': None,
                                },
                            ] + self.query_anwers(category=BaseCodeTool.CATEGORY_ANALYZER),
-                'validate': lambda answer: 'You must choose at least one code analyzer.' if len(answer) == 0 else True,
+                # 'validate': lambda answer: 'You must choose at least one code analyzer.' if answer else True,
                 'when': lambda answers: answers.get(BaseCodeTool.CATEGORY_AUDIT, None) is None,
             },
             {

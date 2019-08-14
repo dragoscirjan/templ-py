@@ -112,5 +112,5 @@ class Init(BaseResolver):
             hook.write_hook()
         if self._new:
             self._hooks_config.write()
-        self._pip.write_dependencies()
+            self._pip.write_dependencies()
         return self

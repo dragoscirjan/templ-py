@@ -1,5 +1,4 @@
 import simplejson
-import sys
 
 from pytempl.core import Loggable
 
@@ -25,7 +24,6 @@ class BaseResolver(Loggable):
             self.__class__.__name__,
             simplejson.dumps(args)
         ))
-        sys.exit(0)
 
     def run(self):
         pass

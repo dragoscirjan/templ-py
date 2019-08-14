@@ -1,17 +1,8 @@
-import logging
-
+from pytempl.core import Loggable
 from pytempl.os import run_shell_command
 
 
-class Git:
-    
-    def __init__(self, logger: logging.Logger):
-        """
-        Constructor
-        :param logger: logging.Logger
-        """
-        self._logger = logger
-
+class Git(Loggable):
     @staticmethod
     def _ll_diff(args: str = '', ) -> tuple:
         """
@@ -30,7 +21,7 @@ class Git:
         command = 'git add {}'.format(file)
         process, stdout, stderr = run_shell_command(command)
         if process.returncode > 0:
-            self._logger.warning('`{}` failed with {}'.format(command, stderr))
+            self._logger.warning('`{}` failed with {}\n{}'.format(command, stdout, stderr))
             return False
         return True
 
@@ -53,6 +44,6 @@ class Git:
         """
         process, stdout, stderr = self._ll_diff(args='--cached --name-only')
         if process.returncode > 0:
-            self._logger.warning('`git diff --cached --name-only` failed with'.format(stderr))
+            self._logger.warning('`git diff --cached --name-only` failed with {}'.format(stderr))
             return []
         return stdout.split("\n")

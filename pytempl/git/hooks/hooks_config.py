@@ -1,12 +1,13 @@
 import json
-import logging
 import re
+
 import yaml
 
-from pytempl.os import file_exists, file_read, file_write, file_backup
+from pytempl.core import Loggable
+from pytempl.os import file_backup, file_exists, file_read, file_write
 
 
-class HooksConfig:
+class HooksConfig(Loggable):
 
     # :see https://git-scm.com/docs/githooks
     HOOK_PRE_APPLYPATCH = 'pre-applypatch'
@@ -45,15 +46,6 @@ class HooksConfig:
     ]
 
     _config = {}
-    _logger = None
-
-    def __init__(self, logger: logging.Logger):
-        """
-        docstring here
-        :param self:
-        :param logger: logging.Logger
-        """
-        self._logger = logger
 
     def config_file(self):
         for file in self.CONFIG_FILES:
@@ -69,7 +61,8 @@ class HooksConfig:
         config_file = self.config_file()
         self._logger.debug('Detected & reading config file {}'.format(config_file))
         if not re.compile('.json$').search(config_file.lower()):
-            self._config = yaml.load(open(config_file))
+            # self._config = yaml.load(open(config_file), Loader=yaml.Loader)
+            self._config = yaml.safe_load(open(config_file))
         else:
             self._config = json.loads(file_read(config_file))
         return self
@@ -88,7 +81,8 @@ class HooksConfig:
             self._logger.debug('Backing `{}` old file'.format(config_file))
             file_backup(config_file)
         if not re.compile('.json$').search(config_file.lower()):
-            file_write(content=json.dumps(self.to_dict(), indent=4), path=config_file)
-        else:
             yaml.dump(self._config, open(config_file, 'w+'))
+        else:
+            file_write(content=json.dumps(self.to_dict(), indent=4), path=config_file)
+
         return self

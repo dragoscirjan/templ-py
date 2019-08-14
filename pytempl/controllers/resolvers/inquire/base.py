@@ -1,16 +1,13 @@
 from PyInquirer import prompt
 
-import logging
+from pytempl.core import Loggable
 
 
-class BaseInquire:
+class BaseInquire(Loggable):
 
     _answers = {}
     _key = ''
     _questions = []
-    
-    def __init__(self, logger: logging.Logger = None):
-        self._logger = logger
 
     def ask(self):
         self._answers = prompt(self._questions)
