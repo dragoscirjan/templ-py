@@ -1,4 +1,4 @@
-# Templ Python Change History
+# PyTempl Change History
 
 ## 0.0.1
 

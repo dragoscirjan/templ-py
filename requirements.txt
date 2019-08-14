@@ -1,7 +1,12 @@
 cement==3.0.4
 jinja2
 pyyaml
-colorlog
-requests
+
+
+cryptography # requests[security]
+dependency-injector
+loguru
 PyInquirer
-dependency_injector
+pyOpenSSL # requests[security]
+requests
+simplejson

@@ -8,7 +8,12 @@ setuptools>=38.6.0
 wheel>=0.31.0
 
 isort
-jsonlint
 pylint
+
+pycodestyle
+pydocstyle
+pytest-xdist
+radon
 yamllint
-simplejson
+bandit
+autopep8

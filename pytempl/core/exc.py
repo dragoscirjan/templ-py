@@ -1,4 +1,4 @@
 
-class TemplError(Exception):
+class PyTemplError(Exception):
     """Generic errors."""
     pass
