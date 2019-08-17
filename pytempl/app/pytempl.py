@@ -1,10 +1,7 @@
-# import colorlog
-# import logging
-import sys
-
 from cement import App, init_defaults
 
 from pytempl.controllers.base import Base
+from pytempl.core import Loggable
 from pytempl.di import DI
 
 # from cement.core.exc import CaughtSignal
@@ -60,8 +57,4 @@ class PyTempl(App):
         ]
 
     def _setup_logger(self):
-        self.di.logger().remove()
-        self.di.logger().add(sys.stdout, colorize=True, format=">> <lvl>{message}</lvl>", level="INFO")
-        if self.debug:
-            self.di.logger().add(sys.stdout, colorize=True, format=">> DBG <lvl>{message}</lvl>", level="DEBUG")
-        self.di.logger()
+        Loggable.setup_logger(self.di.logger(), debug=self.debug)

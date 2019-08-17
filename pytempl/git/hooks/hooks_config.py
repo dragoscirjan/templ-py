@@ -47,6 +47,12 @@ class HooksConfig(Loggable):
 
     _config = {}
 
+    def exists(self) -> bool:
+        for file in self.CONFIG_FILES:
+            if file_exists(file):
+                return True
+        return False
+
     def config_file(self):
         for file in self.CONFIG_FILES:
             if file_exists(file):

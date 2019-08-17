@@ -1,5 +1,6 @@
+from setuptools import find_packages, setup
 
-from setuptools import setup, find_packages
+from pytempl.core.setup import PostDevelopCommand, PostInstallCommand
 from pytempl.core.version import get_version
 
 VERSION = get_version()
@@ -25,4 +26,8 @@ setup(
         [console_scripts]
         pytempl = pytempl.main:main
     """,
+    cmdclass={
+        'develop': PostDevelopCommand,
+        'install': PostInstallCommand
+    },
 )
