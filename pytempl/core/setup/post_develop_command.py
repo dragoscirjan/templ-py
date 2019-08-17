@@ -7,14 +7,13 @@ from pytempl.di import DI
 class PostDevelopCommand(develop):
     """Post-installation for development mode."""
 
-    _di = None
-    _logger = None
+    di = None
 
     def __init__(self, dist):
         super().__init__(dist)
-        self._di = DI()
+        self.di = DI()
         Loggable.setup_logger(self.di.logger())
 
     def run(self):
-        self.di.logger().warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
+        self.di.logger().opt(ansi=True).warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
         develop.run(self)

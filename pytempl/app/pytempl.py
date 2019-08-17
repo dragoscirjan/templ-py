@@ -1,11 +1,9 @@
 from cement import App, init_defaults
 
 from pytempl.controllers.base import Base
+# from cement.core.exc import CaughtSignal
 from pytempl.core import Loggable
 from pytempl.di import DI
-
-# from cement.core.exc import CaughtSignal
-
 
 # configuration defaults
 CONFIG = init_defaults('pytempl')
