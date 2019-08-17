@@ -1,20 +1,39 @@
-from dependency_injector import containers, providers
 # import logging
 import loguru
+from dependency_injector import containers, providers
 
-from pytempl.controllers.resolvers import *
-from pytempl.controllers.resolvers.inquire import *
-from pytempl.code import *
+from pytempl.code import (
+    Autopep8,
+    Bandit,
+    Black,
+    Editorconfig,
+    Flake8,
+    Isort,
+    Jsonlint,
+    Mccabe,
+    Mypy,
+    Pycodestyle,
+    Pydocstyle,
+    Pylama,
+    Pylint,
+    Pytest,
+    Radon,
+    Unittest,
+    Unittestcov,
+    Yamllint
+)
+from pytempl.controllers.resolvers import Init, JSONLint, PreCommit
+from pytempl.controllers.resolvers.inquire import InquireHooks, InquirePreCommit
 from pytempl.git import Git
-from pytempl.git.hooks import *
+from pytempl.git.hooks import HooksConfig, PreCommitHook
 from pytempl.pip import Pip
 
-class DI(containers.DeclarativeContainer):
 
+class DI(containers.DeclarativeContainer):
     config = providers.Configuration('config')
 
     # logger = providers.Singleton(logging.Logger, name='pytempl')
-    logger = providers.Singleton(loguru._Logger, None, 0, False, False, False, False, None, {})
+    logger = providers.Singleton(loguru._Logger, None, 0, False, False, True, False, None, {})
 
     pip = providers.Singleton(Pip, logger=logger)
 

@@ -88,7 +88,6 @@ class PreCommit(BaseResolver):
         Process commands
         :return:
         """
-        logger = self._logger.opt(ansi=True)
         hook_config = self._hooks_config.to_dict().get(self._hook_type, {})
         errors = 0
         for command, file in self._commands:
@@ -107,13 +106,13 @@ class PreCommit(BaseResolver):
                 #     status += '<red>{}</red>'.format(failed.rjust(max_len - len(status), '.'))
                 # else:
                 #     status += "\n" + '<red>{}</red>'.format(failed.rjust(max_len, '.'))
-                # logger.warning(status)
+                # self._logger.warning(status)
                 if len(status[-1] + failed) + 3 < max_len:
                     status[-1] += '<red><bold>{}</bold></red>'.format(failed.rjust(max_len - len(status[-1]), '.'))
                 else:
                     status.append('<red><bold>{}</bold></red>'.format(failed.rjust(max_len + 3, '.')))
-                logger.warning("\n".join(status))
-                logger.info('<fg 90>{}\n{}</fg 90>'.format(stdout, stderr))
+                self._logger.warning("\n".join(status))
+                self._logger.info('<fg 90>{}\n{}</fg 90>'.format(stdout, stderr))
                 print(process.returncode)
 
                 if not hook_config.get('run-all', None):
@@ -123,12 +122,12 @@ class PreCommit(BaseResolver):
                 #     status += '<green>{}</green>'.format(passed.rjust(max_len - len(status), '.'))
                 # else:
                 #     status += "\n" + '<green>{}</green>'.format(passed.rjust(max_len, '.'))
-                # logger.info(status)
+                # self._logger.info(status)
                 if len(status[-1] + passed) + 3 < max_len:
                     status[-1] += '<green>{}</green>'.format(passed.rjust(max_len - len(status[-1]), '.'))
                 else:
                     status.append('<green>{}</green>'.format(passed.rjust(max_len + 3, '.')))
-                logger.info("\n".join(status))
+                self._logger.info("\n".join(status))
 
             if file and process.returncode == 0:
                 self._git.add(file=file)

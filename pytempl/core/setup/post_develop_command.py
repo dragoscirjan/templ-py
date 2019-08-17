@@ -15,5 +15,5 @@ class PostDevelopCommand(develop):
         Loggable.setup_logger(self.di.logger())
 
     def run(self):
-        self.di.logger().opt(ansi=True).warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
+        self.di.logger().warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
         develop.run(self)

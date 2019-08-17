@@ -23,5 +23,5 @@ class PostInstallCommand(install):
             binary_path = os.path.join(os.path.dirname(sys.executable), 'pytempl')
             run_shell_command(command='{} init'.format(binary_path), print_output=True)
         else:
-            self.di.logger().opt(ansi=True).warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
+            self.di.logger().warning('Don\'t forget to run: `<green>pytempl init (--new)</green>` for using `pytempl`.')
         install.run(self)
