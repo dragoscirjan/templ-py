@@ -26,8 +26,9 @@ clean:
 	# rm .git/hooks/pre-commit || true
 
 virtualenv:
+	rm -rf env
 	$(GLOBAL_PIP_INSTALL) virtualenv
-	virtualenv $(VIRTUALENV_ARGS) --prompt '|> pytempl <| ' env
+	$(GLOBAL_PYTHON) -m virtualenv $(VIRTUALENV_ARGS) --prompt '|> pytempl <| ' env
 	$(LOCAL_PIP) install -r requirements-dev.txt
 	$(LOCAL_PYTHON) setup.py develop
 	@echo
