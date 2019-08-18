@@ -48,6 +48,10 @@ class HooksConfig(Loggable):
     _config = {}
 
     def exists(self) -> bool:
+        """
+        Test whether config exists
+        :return: bool
+        """
         for file in self.CONFIG_FILES:
             if file_exists(file):
                 return True
