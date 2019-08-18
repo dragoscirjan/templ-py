@@ -27,6 +27,7 @@ class PreCommitHook(BaseHook):
         tools = reduce(lambda a, b: a + b, tools, [])
         # filter used tools from list
         code_tools = list(filter(lambda item: item.TOKEN in tools, self._code_tools_list))
+        code_tools.sort(key=lambda item: item.ORDER)
 
         for tool in code_tools:
             tool.run()
