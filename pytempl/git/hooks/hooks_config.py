@@ -57,7 +57,11 @@ class HooksConfig(Loggable):
                 return True
         return False
 
-    def config_file(self):
+    def config_file(self) -> str:
+        """
+        Determine config file name
+        :return: str
+        """
         for file in self.CONFIG_FILES:
             if file_exists(file):
                 return file
