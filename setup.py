@@ -12,7 +12,7 @@ f.close()
 setup(
     name='pytempl',
     version=VERSION,
-    description='Tool aggregator for python code analisys',
+    description='PyTempl :: Tool aggregator for python code analysis',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     author='Dragos Cirjan',

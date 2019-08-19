@@ -15,11 +15,10 @@ class Base(Controller):
         label = 'base'
 
         # text displayed at the top of --help output
-        description = 'Tool aggregator for python code analisys'
+        description = 'PyTempl :: Tool aggregator for python code analisys'
 
         # text displayed at the bottom of --help output
-        # TODO: Must change content
-        epilog = 'Usage: pytempl command1 --foo bar'
+        epilog = 'Usage: pytempl init <--new>'
 
         # controller level arguments. ex: 'pytempl --version'
         arguments = [
