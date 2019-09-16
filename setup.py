@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-from pytempl.core.setup import PostDevelopCommand, PostInstallCommand
+#from pytempl.core.setup import PostDevelopCommand, PostInstallCommand
 from pytempl.core.version import get_version
 
 VERSION = get_version()
