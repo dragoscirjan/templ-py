@@ -9,6 +9,10 @@ f = open('README.md', 'r')
 LONG_DESCRIPTION = f.read()
 f.close()
 
+r = open('requirements.txt')
+REQUIREMENTS = list(filter(lambda req: req, r.read().split("\n")))
+r.close()
+
 setup(
     name='pytempl',
     version=VERSION,
@@ -26,6 +30,7 @@ setup(
         [console_scripts]
         pytempl = pytempl.main:main
     """,
+    install_requires=REQUIREMENTS,
     #cmdclass={
     #    'develop': PostDevelopCommand,
     #    'install': PostInstallCommand
