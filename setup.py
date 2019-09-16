@@ -26,8 +26,8 @@ setup(
         [console_scripts]
         pytempl = pytempl.main:main
     """,
-    cmdclass={
-        'develop': PostDevelopCommand,
-        'install': PostInstallCommand
-    },
+    #cmdclass={
+    #    'develop': PostDevelopCommand,
+    #    'install': PostInstallCommand
+    #},
 )
