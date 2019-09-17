@@ -1,6 +1,6 @@
 import simplejson
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.git.hooks import HooksConfig
 from pytempl.os import str2bool
 from pytempl.pip import Pip

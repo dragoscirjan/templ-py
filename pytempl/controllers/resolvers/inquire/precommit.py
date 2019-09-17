@@ -1,5 +1,5 @@
 from pytempl.code import BaseCodeTool, Editorconfig
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.git.hooks import HooksConfig
 from .base import BaseInquire
 

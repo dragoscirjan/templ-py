@@ -1,6 +1,6 @@
 from setuptools.command.develop import develop
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.di import DI
 
 

@@ -1,6 +1,6 @@
 import simplejson
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 
 
 class BaseResolver(Loggable):

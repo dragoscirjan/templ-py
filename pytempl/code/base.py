@@ -1,16 +1,19 @@
+import re
+
+import requests
 from jinja2 import Template
 
-import re
-import requests
-import sys
-
-from pytempl.core import Loggable
-from pytempl.os import file_exists, file_backup, file_write
+from pytempl.core.loggable import Loggable
+from pytempl.os import file_backup, file_exists, file_write
 from pytempl.pip import Pip
+
+# import sys
+
+
 
 
 class BaseCodeTool(Loggable):
-    TOKEN = 'base'
+    TOKEN = 'base' # nosec
 
     CATEGORY_AUDIT = 'audit'
     CATEGORY_ANALYZER = 'analyzer'
@@ -76,7 +79,7 @@ class BaseCodeTool(Loggable):
             if req.status_code < 200 or req.status_code >= 400:
                 raise Exception(req.text)
             file_write(req.text, file)
-        except Exception as e:  #pylint: disable=W0703
+        except Exception as e:  #pylint: disable=broad-except
             self._logger.error('Could not download file {}'.format(url))
             self._logger.error(str(e))
             # sys.exit(req.status_code)
@@ -89,7 +92,7 @@ class BaseCodeTool(Loggable):
                 raise Exception(req.text)
             template = Template(req.text)
             file_write(template.render(**{}), file)
-        except Exception as e:  #pylint: disable=W0703
+        except Exception as e:  #pylint: disable=broad-except
             self._logger.error('Could not download file {}'.format(url))
             self._logger.error(str(e))
             # sys.exit(req.status_code)

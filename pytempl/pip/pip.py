@@ -1,6 +1,6 @@
 import simplejson
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.os import file_exists, file_read, file_write, run_shell_command
 
 
@@ -14,8 +14,9 @@ class Pip(Loggable):
         'prod': []
     }
 
-    def install(self, packages: list = []):
-        # self.read_dependencies()
+    def install(self, packages: list):
+        self.read_dependencies()
+
         dev = self._packages.get('dev', [])
         if not dev:
             dev = ['-r requirements-dev.txt']
@@ -33,8 +34,7 @@ class Pip(Loggable):
         if packages:
             run_shell_command('pip install {}'.format(' '.join(packages)), print_output=True, raise_output=True)
 
-        # self.write_dependencies()
-        pass
+        self.write_dependencies()
 
     def read_dependencies(self):
         if file_exists('requirements-dev.txt'):

@@ -3,7 +3,7 @@ import sys
 
 from setuptools.command.install import install
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.di import DI
 from pytempl.os import run_shell_command
 

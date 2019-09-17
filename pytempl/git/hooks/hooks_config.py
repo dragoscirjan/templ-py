@@ -3,7 +3,7 @@ import re
 
 import yaml
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.os import file_backup, file_exists, file_read, file_write
 
 

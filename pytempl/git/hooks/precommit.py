@@ -1,7 +1,7 @@
 from functools import reduce
 
 from pytempl.code import BaseCodeTool, Editorconfig
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from .base import BaseHook
 from .hooks_config import HooksConfig
 

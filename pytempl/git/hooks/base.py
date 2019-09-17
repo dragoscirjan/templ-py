@@ -1,7 +1,8 @@
 import abc
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.os import file_backup, file_exists, file_write, run_shell_command
+
 
 class BaseHook(Loggable):
 

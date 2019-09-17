@@ -1,7 +1,7 @@
 import re
 import sys
 
-from pytempl.core import Loggable
+from pytempl.core.loggable import Loggable
 from pytempl.git import Git
 from pytempl.git.hooks import HooksConfig
 from pytempl.os.shell import run_shell_command
