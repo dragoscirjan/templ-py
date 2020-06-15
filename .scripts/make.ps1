@@ -4,7 +4,7 @@ param(
   [System.String]$Py = 'pip',
   [System.String]$Pip = 'python',
 
-  [System.String]$Project = 'py',
+  [System.String]$Project = 'python_template',
 
   [System.String]$Mode = 'mod', # can be app|mod
   [System.String]$Path = '', # used for mkdir
@@ -59,7 +59,10 @@ param(
 # }
 
 function PyInit() {
-  Rename-Item -Path .\app -NewName $Project
+  Rename-Item -Path .\python_template -NewName $Project
+  # TODO:
+  # sed -e 's/python_template/$(PROJECT)/g' -i Makefile.mod.include
+	# sed -e 's/python_template/$(PROJECT)/g' -i setup.py
 }
 
 # function GoMkDir() {

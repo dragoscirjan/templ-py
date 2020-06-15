@@ -2,7 +2,7 @@ include Makefile.include
 
 ## Add your make instructions here
 
-PROJECT=templ
+PROJECT=python_template
 
 PY = python
 PIP = pip
