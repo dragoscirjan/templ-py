@@ -11,7 +11,7 @@ init: init-$(SHELL_IS) ## Initialize Project MODE=mod<|app>
 
 
 init-bash:
-	mv py $(PROJECT)
+	mv app $(PROJECT)
 
 init-powershell:
 	$(POWERSHELL) -File ./scripts/make.ps1 -Project $(PROJECT)
