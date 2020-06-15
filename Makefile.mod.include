@@ -1,0 +1,69 @@
+include Makefile.include
+
+## Add your make instructions here
+
+PROJECT=templ
+
+PY = $(shell which python)
+PIP = $(shell which pip)
+PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
+PIP_INSTALL=$(PIP) install $(PIP_FLAGS)
+
+# include Makefile.version.include
+
+ifeq ($(OSFLAG),WIN32)
+LOCAL_PY=env/Scripts/python
+LOCAL_PIP=env/Scripts/pip
+else
+LOCAL_PY_=env/bin/python
+LOCAL_PIP=env/bin/pip
+endif
+
+# dist: clean ## Create package
+# 	rm -rf dist/*
+# 	$(GLOBAL_PYTHON) setup.py sdist
+# 	$(GLOBAL_PYTHON) setup.py bdist_wheel
+
+
+# dist-upload: ## Upload package
+# 	twine upload dist/*
+
+CLEAN_FULL=
+clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
+
+clean-bash:
+
+clean-powershell:
+
+
+docs: ## Generate documentation for the Project
+
+
+test: test-$(SHELL_IS) ## Run Tests
+	@echo "test"
+
+
+test-bash:
+	@echo "test-bash"
+
+
+test-powershell:
+	@echo "test-powershell"
+
+
+TEST_PATH=./...
+test-single:
+	$(GO_TEST) $(TEST_PATH)
+
+
+VIRTUALENV_ARGS =
+venv: ## Create a Virtual Environment
+	rm -rf env
+	$(PIP_INSTALL) virtualenv
+	$(PY) -m virtualenv $(VIRTUALENV_ARGS) --prompt '|> $(PROJECT) <| ' env
+	$(LOCAL_PIP) install -r requirements-dev.txt
+	$(LOCAL_PY) setup.py develop
+	@echo
+	@echo "VirtualENV Setup Complete. Now run: source env/bin/activate"
+	@echo
+
