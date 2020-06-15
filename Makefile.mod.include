@@ -18,6 +18,12 @@ else
 LOCAL_PY_=env/bin/python
 LOCAL_PIP=env/bin/pip
 endif
+LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
+
+
+configure: venv ## Configure your project for development (like venv but with git hooks)
+	$(LOCAL_PIP_INSTALL) pre-commit
+
 
 dist: clean ## Build Package
 	rm -rf dist/*
