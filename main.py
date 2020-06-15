@@ -1,5 +1,5 @@
 
-from app import hello
+from python_template import hello
 
 
 def __main__():

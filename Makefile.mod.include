@@ -41,11 +41,12 @@ clean-bash:
 	rm -rf dist
 
 clean-powershell:
-	$(POWERSHELL) -File ./.scripts/main.py -Action rmdir -Path ./dist
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./dist
 
 docs: ## Generate documentation for the Project
+	pdoc --html docs
 
-
+# TODO: still need to add tests (add both pytest and unittest)
 test: test-$(SHELL_IS) ## Run Tests
 	@echo "test"
 
@@ -64,13 +65,28 @@ test-single:
 
 
 VIRTUALENV_ARGS =
-venv: ## Create a Virtual Environment
-	rm -rf env
-	$(PIP_INSTALL) virtualenv
+venv: venv-clean virtualenv ## Create a Virtual Environment
 	$(PY) -m virtualenv $(VIRTUALENV_ARGS) --prompt '|> $(PROJECT) <| ' env
 	$(LOCAL_PIP) install -r requirements-dev.txt
 	$(LOCAL_PY) setup.py develop
-	@echo
-	@echo "VirtualENV Setup Complete. Now run: source env/bin/activate"
-	@echo
+	@echo =====================================================================
+	@echo = VirtualENV Setup Complete. Now run: source env/bin/activate       =
+	@echo =====================================================================
 
+
+venv-clean: venv-clean-$(SHELL_IS)
+
+venv-clean-bash:
+	rm -rf ./env
+
+venv-clean-powershell:
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./env
+
+
+virtualenv: virtualenv-$(SHELL_IS)
+
+virtualenv-bash:
+	$(PIP_INSTALL) virtualenv
+
+virtualenv-powershell: req_root
+	$(PIP_INSTALL) virtualenv

@@ -59,7 +59,9 @@ param(
 # }
 
 function PyInit() {
-  Rename-Item -Path .\python_template -NewName $Project
+  if ($Project -ne 'python_template') {
+    Rename-Item -Path .\python_template -NewName $Project
+  }
   # TODO:
   # sed -e 's/python_template/$(PROJECT)/g' -i Makefile.mod.include
 	# sed -e 's/python_template/$(PROJECT)/g' -i setup.py

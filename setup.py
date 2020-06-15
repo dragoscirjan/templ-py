@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-from app import get_static_version
+from python_template import get_static_version
 
 VERSION = get_static_version()
 
