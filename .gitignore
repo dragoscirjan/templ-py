@@ -109,3 +109,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# makefiles
+Makefile.py-version.include

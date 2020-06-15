@@ -1,1 +1,0 @@
-from .editorconfig import Editorconfig
