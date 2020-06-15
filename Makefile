@@ -14,4 +14,4 @@ init-bash:
 	mv app $(PROJECT)
 
 init-powershell:
-	$(POWERSHELL) -File ./.scripts/make.ps1 -Project $(PROJECT)
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action init -Project $(PROJECT)
