@@ -19,14 +19,14 @@ LOCAL_PY_=env/bin/python
 LOCAL_PIP=env/bin/pip
 endif
 
-# dist: clean ## Create package
-# 	rm -rf dist/*
-# 	$(GLOBAL_PYTHON) setup.py sdist
-# 	$(GLOBAL_PYTHON) setup.py bdist_wheel
+dist: clean ## Build Package
+	rm -rf dist/*
+	$(GLOBAL_PYTHON) setup.py sdist
+	$(GLOBAL_PYTHON) setup.py bdist_wheel
 
 
-# dist-upload: ## Upload package
-# 	twine upload dist/*
+dist-upload: dist ## Upload package
+	twine upload dist/*
 
 CLEAN_FULL=
 clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
