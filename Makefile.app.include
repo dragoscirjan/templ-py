@@ -1,4 +1,4 @@
-include Makefile.generic.include
+include Makefile.mod.include
 
 
 install: ## Install Application
@@ -13,14 +13,6 @@ run: run-$(SHELL_IS) ## Run Application (from source code) (usabled only in app 
 run-bash:
 
 run-powershell:
-
-
-run-binary: build run-binary-$(SHELL_IS) ## Run Application (from binary) (usabled only in app mode)
-	@echo 'Run Binary Instructions'
-
-run-binary-bash:
-
-run-binary-powershell:
 
 
 uninstall: ## Uninstall Application
