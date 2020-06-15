@@ -4,8 +4,8 @@ include Makefile.include
 
 PROJECT=templ
 
-PY = $(shell which python)
-PIP = $(shell which pip)
+PY = python
+PIP = pip
 PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
 PIP_INSTALL=$(PIP) install $(PIP_FLAGS)
 
