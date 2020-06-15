@@ -5,14 +5,9 @@ install: ## Install Application
 	@echo 'Install Instructions'
 
 
-RUN_ARGS  =
+RUN_ARGS =
 run: run-$(SHELL_IS) ## Run Application (from source code) (usabled only in app mode)
-	@echo 'Run Instructions'
-
-
-run-bash:
-
-run-powershell:
+	$(PY) main.py $(RUN_ARGS)
 
 
 uninstall: ## Uninstall Application

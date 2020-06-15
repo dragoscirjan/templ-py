@@ -1,1 +1,1 @@
-import * from './hello'
+from app.hello import *
