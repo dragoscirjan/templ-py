@@ -6,7 +6,7 @@ install: ## Install Application
 
 
 RUN_ARGS =
-run: run-$(SHELL_IS) ## Run Application (from source code) (usabled only in app mode)
+run: ## Run Application (from source code) (usabled only in app mode)
 	$(PY) main.py $(RUN_ARGS)
 
 
