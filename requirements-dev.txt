@@ -1,19 +1,19 @@
 -r requirements.txt
 
-pytest
-pytest-cov
-coverage
-twine>=1.11.0
-setuptools>=38.6.0
-wheel>=0.31.0
+# pytest
+# pytest-cov
+# coverage
+# twine>=1.11.0
+# setuptools>=38.6.0
+# wheel>=0.31.0
 
-isort
-pylint
+# isort
+# pylint
 
-pycodestyle
-pydocstyle
-pytest-xdist
-radon
-yamllint
-bandit
-autopep8
+# pycodestyle
+# pydocstyle
+# pytest-xdist
+# radon
+# yamllint
+# bandit
+# autopep8
