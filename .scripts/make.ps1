@@ -72,14 +72,14 @@ function PyInit() {
 #   New-Item -Type Directory -Path $Path -Force;
 # }
 
-# function GoRmDir() {
-#   param(
-#     [Parameter(Mandatory = $True)][System.String]$Path
-#   )
-#   if (Test-Path $Path -PathType Container) {
-#     Remove-Item -Path $Path -Recurse -Force;
-#   }
-# }
+function PyRmDir() {
+  param(
+    [Parameter(Mandatory = $True)][System.String]$Path
+  )
+  if (Test-Path $Path -PathType Container) {
+    Remove-Item -Path $Path -Recurse -Force;
+  }
+}
 
 # function GoTest() {
 #   param(
@@ -102,7 +102,7 @@ switch ($Action.ToLower()) {
   # 'configure' { GoConfigure; break; }
   'init' { PyInit; break; }
   # 'mkdir' { GoMkDir -Path $Path; break; }
-  # 'rmdir' { GoRmDir -Path $Path; break; }
+  'rmdir' { PyRmDir -Path $Path; break; }
   # 'test' { GoTest -Command "$Command"; break; }
   default { Write-Host -ForegroundColor Red "No good action chosen"; exit 1; }
 }

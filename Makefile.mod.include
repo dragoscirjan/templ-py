@@ -27,8 +27,8 @@ configure: venv ## Configure your project for development (like venv but with gi
 
 dist: clean ## Build Package
 	rm -rf dist/*
-	$(GLOBAL_PYTHON) setup.py sdist
-	$(GLOBAL_PYTHON) setup.py bdist_wheel
+	$(PY) setup.py sdist
+	$(PY) setup.py bdist_wheel
 
 
 dist-upload: dist ## Upload package
@@ -38,9 +38,10 @@ CLEAN_FULL=
 clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
 
 clean-bash:
+	rm -rf dist
 
 clean-powershell:
-
+	$(POWERSHELL) -File ./.scripts/main.py -Action rmdir -Path ./dist
 
 docs: ## Generate documentation for the Project
 
