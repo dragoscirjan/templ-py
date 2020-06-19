@@ -8,18 +8,26 @@ repos:
       - id: autopep8
   # docstring style formatter
   - repo: git://github.com/FalconSocial/pre-commit-mirrors-pep257
-    rev: ''
+    rev: 'v0.3.3'
     hooks:
       - id: pep257
   # docstring style formatter
-  # - repo: git://gitlab.com/pycqa/flake8
-  #   rev: ''
-  #   hooks:
-  #     - id: flake8
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: ''
+    hooks:
+      - id: flake8
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v3.1.0
     hooks:
       - id: requirements-txt-fixer
+      # - id: flake8
+      #   name: flake8
+      #   description: '`flake8` is a command-line utility for enforcing style consistency across Python projects.'
+      #   entry: flake8
+      #   language: python
+      #   types: [python]
+      #   require_serial: true
+
       # - id: trailing-whitespace
       # - id: end-of-file-fixer
       # - id: check-yaml
