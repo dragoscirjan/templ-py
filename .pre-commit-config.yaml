@@ -86,6 +86,7 @@ repos:
       - id: check-yaml
       - id: check-json
 
+  # https://stackoverflow.com/questions/59499061/how-to-run-custom-shell-script-file-before-pre-commit-hook
   - repo: local
     hooks:
     - id: tests
