@@ -3,10 +3,12 @@
 # for python 2, use: pdoc
 pdoc3
 
-# pytest
-# pytest-cov
-# coverage
-# twine>=1.11.0
+pytest
+pytest-cov
+coverage
+
+twine
+
 # setuptools>=38.6.0
 # wheel>=0.31.0
 
