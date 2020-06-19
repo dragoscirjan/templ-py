@@ -7,7 +7,7 @@ PROJECT=python_template
 PY = python
 PIP = pip
 
-ifeq (,$(wildcard ./Makefile.py-version.include))
+ifneq (,$(wildcard ./Makefile.py-version.include))
 include Makefile.py-version.include
 endif
 
