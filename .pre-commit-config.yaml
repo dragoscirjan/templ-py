@@ -20,7 +20,7 @@ repos:
 
   # type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: ''  # Use the sha / tag you want to point at
+    rev: 'v0.780'  # Use the sha / tag you want to point at
     hooks:
       - id: mypy
 
@@ -33,7 +33,7 @@ repos:
   # code analysis
   # implementation for https://pypi.org/project/radon/
   - repo: https://github.com/yunojuno/pre-commit-xenon
-    rev: ''
+    rev: 'v0.1'
     hooks:
       - id: xenon
         args: ["--max-average=A", "--max-modules=C", "--max-absolute=C"]
