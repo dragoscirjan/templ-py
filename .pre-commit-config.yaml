@@ -1,6 +1,10 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
+  #
+  # Format
+  #
+
   # automatically formats Python code to conform to the PEP 8 style guide
   - repo: https://github.com/pre-commit/mirrors-autopep8
     rev: 'v1.5.3'
@@ -11,12 +15,10 @@ repos:
     rev: 'v0.3.3'
     hooks:
       - id: pep257
-  # formatter style formatter
-  # if you activate this one, maybe comment the two above
-  # - repo: https://gitlab.com/pycqa/flake8
-  #   rev: '3.8.3'
-  #   hooks:
-  #     - id: flake8
+
+  #
+  # Lint
+  #
 
   # type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
@@ -24,19 +26,38 @@ repos:
     hooks:
       - id: mypy
 
+  - repo: https://github.com/PyCQA/pylint
+    rev: ''  # Use the sha / tag you want to point at
+    hooks:
+      - id: pylint
+
+  #
+  # Audit
+  #
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.8.3'
+    hooks:
+      - id: flake8
+
   # dead code detection
   - repo: https://github.com/asottile/dead
     rev: v1.3.0
     hooks:
       - id: dead
 
-  # code analysis
   # implementation for https://pypi.org/project/radon/
   - repo: https://github.com/yunojuno/pre-commit-xenon
     rev: 'v0.1'
     hooks:
       - id: xenon
         args: ["--max-average=A", "--max-modules=C", "--max-absolute=C"]
+
+  # jinja
+  - repo: https://github.com/motet-a/jinjalint
+    rev: ''  # select a tag / sha to point at
+    hooks:
+      - id: jinjalint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.1.0
