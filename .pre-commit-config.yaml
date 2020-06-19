@@ -91,9 +91,9 @@ repos:
     hooks:
     - id: tests
       name: run tests
-      entry: bash -c 'pwd > ~/test'
+      entry: .scripts/pre-commit-test.sh
       # entry: pytest tests
-      language: system
+      language: script
       types: [python]
       pass_filenames: false
       always_run: true
