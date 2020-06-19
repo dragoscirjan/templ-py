@@ -16,6 +16,18 @@ repos:
     hooks:
       - id: pep257
 
+  - repo: https://github.com/miki725/importanize
+    rev: '0.7'
+    hooks:
+      - id: importanize
+        name: importanize
+        description: Organize python imports
+        entry: importanize
+        language: python
+        language_version: python3
+        types: [python]
+        args: [-v, --no-auto-pipe]
+
   #
   # Lint
   #
@@ -27,9 +39,14 @@ repos:
       - id: mypy
 
   - repo: https://github.com/PyCQA/pylint
-    rev: ''  # Use the sha / tag you want to point at
+    rev: 'pylint-2.5.0'  # Use the sha / tag you want to point at
     hooks:
       - id: pylint
+        name: pylint
+        entry: pylint
+        language: python
+        types: [python]
+        require_serial: true
 
   #
   # Audit
