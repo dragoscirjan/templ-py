@@ -6,12 +6,13 @@ PROJECT=python_template
 
 PY = python
 PIP = pip
-PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
-PIP_INSTALL=$(PIP) install $(PIP_FLAGS)
 
 ifeq (,$(wildcard ./Makefile.py-version.include))
 include Makefile.py-version.include
 endif
+
+PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
+PIP_INSTALL=$(PIP) install $(PIP_FLAGS)
 
 ifeq ($(OSFLAG),WIN32)
 LOCAL_ENV=.\env\Scripts
