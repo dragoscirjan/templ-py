@@ -11,7 +11,9 @@ init: init-$(SHELL_IS) ## Initialize Project MODE=mod<|app>
 
 
 init-bash:
+ifneq ($(PROJECT),python_template)
 	mv python_template $(PROJECT)
+endif
 	sed -e 's/python_template/$(PROJECT)/g' -i Makefile.mod.include
 	sed -e 's/python_template/$(PROJECT)/g' -i setup.py
 
