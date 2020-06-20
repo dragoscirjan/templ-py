@@ -72,7 +72,7 @@ test-pytest:
 test-unittest:
 	$(LOCAL_ENV)/coverage run -m unittest discover -s tests -p $(TEST_PATH) -v
 	$(LOCAL_ENV)/coverage html -d $(COV_HTML)
-	$(LOCAL_ENV)/coverage xml -d $(COV_HTML)/$(COV_HTML).xml
+	$(LOCAL_ENV)/coverage xml -o $(COV_HTML)/$(COV_HTML).xml
 
 test-bash:
 
