@@ -30,7 +30,7 @@ scripts:
   - if [[ "$MODE" = "app" ]]; then ./env/bin/hello; fi
   - ./env/bin/pre-commit
 after_script:
-  - if [[ $TRAVIS_PYTHON_VERSION == '1.14.x' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
     sonar-scanner; fi
 notifications:
   email:
