@@ -39,6 +39,8 @@ env:
   - MODE=app
   - MODE=mod
 before_script:
+  - make --version
+  - python --version
   - rm -rf .git
   - git init
   - if [[ "$MODE" = "" ]]; then make init PROJECT=hello;
