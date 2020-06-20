@@ -20,12 +20,14 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'; fi
   - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install make; fi
 before_script:
+  - rm -rf .git
+  - git init
   - make init MODE=$MODE PROJECT=hello
   - make configure
+  - git add .; git commit -am "+" --no-verify
+scripts:
   - make test
   - if [[ "$MODE" = "app" ]]; then ./env/bin/hello; fi
-scripts:
-  - git add .; git commit -am "+" --no-verify
   - ./env/bin/pre-commit
 # after_script:
   # - if [[ $TRAVIS_GO_VERSION == '1.14.x' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
