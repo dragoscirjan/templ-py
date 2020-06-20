@@ -1,0 +1,14 @@
+include Makefile.mod.include
+
+
+install: ## Install Application
+	@echo 'Install Instructions'
+
+
+RUN_ARGS =
+run: ## Run Application (from source code) (usabled only in app mode)
+	$(PY) main.py $(RUN_ARGS)
+
+
+uninstall: ## Uninstall Application
+	@echo 'Uninstall Instructions'

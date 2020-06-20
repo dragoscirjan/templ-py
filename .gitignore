@@ -1,5 +1,7 @@
 # IDE
 .idea
+.vscode
+*.code-workspace
 
 # Backups
 *.bak-*
@@ -109,3 +111,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# templ
+Makefile.py-version.include

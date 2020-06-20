@@ -1,12 +1,4 @@
-cement==3.0.4
-jinja2
+colorlog
+# loguru
 pyyaml
-
-
-cryptography # requests[security]
-dependency-injector
-loguru
-PyInquirer
-pyOpenSSL # requests[security]
-requests
 simplejson

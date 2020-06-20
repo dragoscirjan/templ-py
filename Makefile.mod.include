@@ -1,0 +1,110 @@
+include Makefile.include
+
+## Add your make instructions here
+
+PROJECT=python_template
+
+PY = python
+PIP = pip
+
+ifneq (,$(wildcard ./Makefile.py-version.include))
+include Makefile.py-version.include
+endif
+
+PIP_FLAGS=--trusted-host pypi.org --trusted-host pypi.python.org
+PIP_INSTALL=$(PIP) install $(PIP_FLAGS)
+
+ifeq ($(OSFLAG),WIN32)
+LOCAL_ENV=.\env\Scripts
+else
+LOCAL_ENV=./env/bin
+endif
+LOCAL_PY=$(LOCAL_ENV)/python
+LOCAL_PIP=$(LOCAL_ENV)/pip
+LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
+
+
+configure: venv ## Configure your project for development (like venv but with git hooks)
+	$(LOCAL_PIP_INSTALL) pre-commit
+
+
+dist: clean ## Build Package
+	rm -rf dist/*
+	$(PY) setup.py sdist
+	$(PY) setup.py bdist_wheel
+
+
+dist-upload: dist ## Upload package
+	twine upload dist/*
+
+CLEAN_FULL=
+clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
+
+clean-bash:
+	rm -rf .coverage .pytest_cache coverage-report dist env
+
+clean-powershell:
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./.coverage
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./.pytest_cache
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./coverage-report
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./dist
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./env
+
+docs: ## Generate documentation for the Project
+	pdoc --html docs
+
+
+COV_HTML=coverage-report
+TEST_PATH=*_test.py
+TEST_LIB=unittest
+# TEST_LIB=pytest
+test: test-$(SHELL_IS)  test-$(TEST_LIB) ## Run Tests
+
+test-pytest:
+ifeq ($(TEST_PATH),*_test.py)
+TEST_PATH_X=./tests
+else
+TEST_PATH_X=./tests/$(TEST_PATH)
+endif
+test-pytest:
+	$(LOCAL_PY) -m pytest -v --cov=coverage --cov-report=term --cov-report=html:$(COV_HTML) $(TEST_PATH_X)
+
+test-unittest:
+	$(LOCAL_ENV)/coverage run -m unittest discover -s tests -p $(TEST_PATH) -v
+	$(LOCAL_ENV)/coverage html -d $(COV_HTML)
+
+test-bash:
+
+test-powershell:
+
+
+VIRTUALENV_ARGS =
+venv: venv-clean virtualenv ## Create a Virtual Environment
+	$(PY) -m virtualenv $(VIRTUALENV_ARGS) --prompt '|> $(PROJECT) <| ' env
+	$(LOCAL_PIP) install -r requirements-dev.txt
+	$(LOCAL_PY) setup.py develop
+	@echo =====================================================================
+	@echo = VirtualENV Setup Complete. Now run: source env/bin/activate       =
+	@echo =====================================================================
+
+
+venv-clean: venv-clean-$(SHELL_IS)
+
+venv-clean-bash:
+	rm -rf ./env
+
+venv-clean-powershell:
+	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./env
+
+
+virtualenv: virtualenv-$(SHELL_IS)
+
+virtualenv-bash:
+	$(PIP_INSTALL) virtualenv
+
+virtualenv-powershell:
+	@$(POWERSHELL) -Command "Write-Host -ForegroundColor Red 'If you have a global python installation, please run the following command with elevated rights:'"
+	@$(POWERSHELL) -Command "Write-Host -ForegroundColor Yellow '$(PIP_INSTALL) virtualenv'"
+	@$(POWERSHELL) -Command "Write-Host -ForegroundColor Red 'as our attempt to install `virtualenv` will fail.'"
+	@$(POWERSHELL) -Command "Write-Host ' '"
+	$(PIP_INSTALL) virtualenv

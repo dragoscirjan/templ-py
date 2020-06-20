@@ -1,0 +1,99 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  #
+  # Format
+  #
+
+  # automatically formats Python code to conform to the PEP 8 style guide
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v1.5.3'
+    hooks:
+      - id: autopep8
+  # docstring style formatter
+  - repo: git://github.com/FalconSocial/pre-commit-mirrors-pep257
+    rev: 'v0.3.3'
+    hooks:
+      - id: pep257
+
+  - repo: https://github.com/miki725/importanize
+    rev: '0.7'
+    hooks:
+      - id: importanize
+        name: importanize
+        description: Organize python imports
+        entry: importanize
+        language: python
+        language_version: python3
+        types: [python]
+        args: [-v, --no-auto-pipe]
+
+  #
+  # Lint
+  #
+
+  # type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: ''  # Use the sha / tag you want to point at
+    hooks:
+      - id: mypy
+
+  - repo: https://github.com/PyCQA/pylint
+    rev: 'pylint-2.5.0'  # Use the sha / tag you want to point at
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: python
+        types: [python]
+        require_serial: true
+
+  #
+  # Audit
+  #
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.8.3'
+    hooks:
+      - id: flake8
+
+  # dead code detection
+  - repo: https://github.com/asottile/dead
+    rev: v1.3.0
+    hooks:
+      - id: dead
+
+  # implementation for https://pypi.org/project/radon/
+  - repo: https://github.com/yunojuno/pre-commit-xenon
+    rev: 'v0.1'
+    hooks:
+      - id: xenon
+        args: ["--max-average=A", "--max-modules=C", "--max-absolute=C"]
+
+  # jinja
+  - repo: https://github.com/motet-a/jinjalint
+    rev: ''  # select a tag / sha to point at
+    hooks:
+      - id: jinjalint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.1.0
+    hooks:
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: name-tests-test
+      - id: check-yaml
+      - id: check-json
+
+  # https://stackoverflow.com/questions/59499061/how-to-run-custom-shell-script-file-before-pre-commit-hook
+  - repo: local
+    hooks:
+    - id: tests
+      name: run tests
+      entry: .scripts/pre-commit-test.sh
+      # entry: pytest tests
+      language: script
+      types: [python]
+      pass_filenames: false
+      always_run: true

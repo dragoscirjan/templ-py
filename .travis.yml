@@ -1,0 +1,45 @@
+language: python
+os:
+  - linux
+  # - osx
+  # - windows
+go:
+  # - "2.7"
+  # - "3.4"
+  # - "3.5"
+  # - "3.6"
+  - "3.7"
+  # - "3.8"
+  # - "3.8-dev"
+  # - "nightly"
+env:
+  - MODE=app
+  - MODE=mod
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then choco install -y make; fi
+  - if [[ "$TRAVIS_OS_NAME" = "windows" ]]; then powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'; fi
+  - if [[ "$TRAVIS_OS_NAME" = "osx" ]]; then brew install make; fi
+before_script:
+  - rm -rf .git
+  - git init
+  - make init MODE=$MODE PROJECT=hello
+  - make configure
+  - git add .; git commit -am "+" --no-verify
+scripts:
+  - make test
+  - if [[ "$MODE" = "app" ]]; then ./env/bin/hello; fi
+  - ./env/bin/pre-commit
+after_script:
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
+    sonar-scanner; fi
+notifications:
+  email:
+    recipients:
+      - dragos.cirjan@gmail.com
+    on_success: never
+    on_failure: always
+addons:
+  sonarcloud:
+    organization: "templ-project"
+    token:
+      secure: "S7YWj9EuSUXz/qlctqN1X5l/rcjVYWVNSrhji0MbHwDFuYzdIB+ZpUMogDelnq7LoXtGwvuvZQJTt0/0lLOYMvJm0DMh6Qt5NrG2w6CgHDzAW8cbm9qiCowzrmVI5FDMc7FB5sKn7pbhVRnCqQC46x7kDQiIWcU1aNlZUiSSaNWYVAP8jItDXPgj9lO35B+7kkMtPhOgv+ycTMZTa917GRCS7XxEhynXGFAPBmwXf5jJJiIqBEv30hLIGKe+Bwadwtp1I6Y0/tqPXD09ZHn2Gsl8AyV8xjM74Zt1NmvM1hFrNWoJhhVJa2F7l2qkMbNilvdsL9ETP4p/T+uuMz6tDvlAU0L81ZwKzNnzVob0f3IxfgPwj0p/MjtgURY0VbwqMSxvif2EkcVrUvv7rN0WmfgWNSaGt8gCpR1bP5WRfyvzdmHjDa+Gq1nmaEPkJmN4eTpthS42kgXQnuLIagzzEpuCzTg6bVr/g8u4YLrjkI6QaCtBQsftpy6UPrCtClGafk9E/MK/381TfMGCPP/hjVzhkL6CDYdjM8EpsPRlUeRslhCD9BOy3951Cmbc5mAy5YIzUYmMDdMMOOCSzprgGQRp5pVcQ+1iGVqzNHYBcdyLVn/hhHxRZ8XSgwaT3h/+OX2FHxpg0Zb0t4hVQMuJKK3V0kcAzwPyFou6JKOptrw="
