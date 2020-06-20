@@ -25,7 +25,7 @@ before_script:
   - make test
   - if [[ "$MODE" = "app" ]]; then ./env/bin/hello; fi
 scripts:
-  - git commit -am "+" --no-verify
+  - git add .; git commit -am "+" --no-verify
   - ./env/bin/pre-commit
 # after_script:
   # - if [[ $TRAVIS_GO_VERSION == '1.14.x' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
