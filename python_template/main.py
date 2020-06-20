@@ -2,8 +2,9 @@
 from python_template import hello
 
 
-def __main__():
+def main():
   print(hello('World'))
 
 
-__main__()
+if __name__ == '__main__':
+    main()
