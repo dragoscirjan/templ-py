@@ -25,9 +25,10 @@ setup(
     packages=find_packages(exclude=['ez_setup', 'tests*']),
     package_data={'main': ['python_template/*']},
     include_package_data=True,
+    # comment this if you're not creating an application
     entry_points="""
         [console_scripts]
-        python_template = python_template.main:main
+        python_template = main:main
     """,
     install_requires=REQUIREMENTS
 )

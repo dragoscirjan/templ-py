@@ -17,7 +17,6 @@ jobs:
       language: shell       # 'language: python' is an error on Travis CI macOS
       before_install:
         - brew install make
-        - export MODE=mod
     - name: "Python 3.8.0 on Windows"
       os: windows
       language: shell       # 'language: python' is an error on Travis CI Windows
@@ -26,7 +25,6 @@ jobs:
         - python -m pip install --upgrade pip
         - choco install make
         - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
-        - set MODE=mod
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 python:
   # - "2.7"
@@ -43,7 +41,9 @@ env:
 before_script:
   - rm -rf .git
   - git init
-  - make init MODE=$MODE PROJECT=hello
+  - if [[ "$MODE" = "" ]]; then make init PROJECT=hello;
+    else make init MODE=$MODE PROJECT=hello;
+    fi
   - make configure
   - git add .; git commit -am "+" --no-verify
 scripts:
