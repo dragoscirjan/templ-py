@@ -63,7 +63,8 @@ function PyInit() {
     Rename-Item -Path .\python_template -NewName $Project
   }
   Get-Childitem -Path . | Select-String -Pattern "python_template" | Select Path | ForEach-Object {
-    (Get-Content $_.Path).replace('python_template', $Project) | Set-Content $_.Path
+    $content = [System.IO.File]::ReadAllText($_.Path).Replace('python_template', $Project)
+    [System.IO.File]::WriteAllText($_.Path, $content)
   }
 }
 
