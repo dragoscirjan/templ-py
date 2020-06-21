@@ -11,22 +11,22 @@ jobs:
     #   python: 3.8
     # - name: "Python 3.9-dev on Xenial Linux"
     #   python: 3.9-dev
-    - name: "Python 3.7.4 on macOS"
+    - name: "Python 3.7"
       os: osx
       osx_image: xcode11.2
       language: shell       # 'language: python' is an error on Travis CI macOS
       before_install:
         - brew install make
         - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
-    - name: "Python 3.8.0 on Windows"
-      os: windows
-      language: shell       # 'language: python' is an error on Travis CI Windows
-      before_install:
-        - choco install python --version 3.8.0
-        - python -m pip install --upgrade pip
-        - choco install make
-        - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
-      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
+    # - name: "Python 3.8"
+    #   os: windows
+    #   language: shell       # 'language: python' is an error on Travis CI Windows
+    #   before_install:
+    #     - choco install python --version 3.8.0
+    #     - python -m pip install --upgrade pip
+    #     - choco install make
+    #     - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
+    #   env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 python:
   # - "2.7"
   # - "3.4"
@@ -42,8 +42,7 @@ env:
 before_script:
   - make --version
   - python --version
-  - rm -rf .git
-  - git init
+  - rm -rf .git; git init
   - if [[ "$MODE" = "" ]]; then make init PROJECT=hello;
     else make init MODE=$MODE PROJECT=hello;
     fi
