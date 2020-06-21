@@ -1,7 +1,8 @@
 #! /bin/bash
 set -xe
 
-SCRIPT=$(readlink -f $0)
+uname -a | grep darwin && SCRIPT=$(readlink -n $0)
+uname -a | grep darwin || SCRIPT=$(readlink -f $0)
 SCRIPTPATH=`dirname $SCRIPT`
 
 cd $SCRIPTPATH/..
