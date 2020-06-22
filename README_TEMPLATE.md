@@ -1,13 +1,13 @@
-# Python Project
+# GoLang Project
 
-<img alt="GoLang logo" src="https://github.com/templ-project/go/blob/master/python_logo.png?raw=true" width="20%" align="right" />
+<img alt="GoLang logo" src="https://github.com/templ-project/go/blob/master/Go-Logo_Blue.png?raw=true" width="20%" align="right" />
 
-> **python** is a template project, designed by [Templ Project](http://templ-project.github.io).
+> **go** is a template project, designed by [Templ Project](http://templ-project.github.io).
 >
-> **python** includes instructions for initializing a new [Go Lang](https://golang.org) project, and configuring it for
+> **go** includes instructions for initializing a new [Go Lang](https://golang.org) project, and configuring it for
 > development, unit testing as well as code linting and analysis.
 >
-> **python** implements:
+> **go** implements:
 >
 > - [gocyclo](https://github.com/fzipp/gocyclo), [go-critic](https://github.com/go-critic/go-critic) for code analisys
 > - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [gofmt](https://golang.org/cmd/gofmt) for code formatting
@@ -59,7 +59,7 @@ which is also included in
 -->
 <!-- TOC -->
 
-- [Python Project](#python-project)
+- [GoLang Project](#golang-project)
   - [Getting Started](#getting-started)
     - [Prereqiusites / Dependencies](#prereqiusites--dependencies)
       - [For Windows](#for-windows)
