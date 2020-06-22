@@ -15,10 +15,10 @@
 
 
 ![PyPI - Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-blue)
-[![TravisCI](https://travis-ci.org/templ-project/go.svg?branch=master)](https://travis-ci.org/templ-project/go)
-[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/go/issues)
+[![TravisCI](https://travis-ci.org/templ-project/python.svg?branch=master)](https://travis-ci.org/templ-project/python)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/python/issues)
 
-<!-- [![CircleCI](https://circleci.com/gh/templ-project/go.svg?style=shield)](https://circleci.com/gh/templ-project/go) -->
+<!-- [![CircleCI](https://circleci.com/gh/templ-project/python.svg?style=shield)](https://circleci.com/gh/templ-project/python) -->
 
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=alert_status)](https://sonarcloud.io/dashboard?id=templ-project_python)
 [![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=templ-project_python)
