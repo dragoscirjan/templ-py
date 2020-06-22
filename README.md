@@ -112,7 +112,7 @@ When runing `make venv`, the version used by the `Makefile` will be the one defi
 #### Requirements
 
 - Please install [Python](https://python.org). Project support **python 3.6 and above**.
-- Please instal a GoLang IDE
+- Please instal a Python IDE
   - [Visual Studio Code](https://code.visualstudio.com/) with [ITMCDev Python Extension Pack](https://marketplace.visualstudio.com/items?itemName=itmcdev.python-extension-pack)
   - [JetBrains PyCharm](https://www.jetbrains.com/pycharm/)
   - [Vim](https://www.vim.org/) (see here a [tutorial](https://www.fullstackpython.com/vim.html) for making Vim a Python IDE)
