@@ -14,7 +14,7 @@
 > - [pylint](https://github.com/PyCQA/pylint), [mypy](https://github.com/pre-commit/mirrors-mypy) for linting
 
 
-![PyPI - Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-brightgreen)
+![PyPI - Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-blue)
 [![TravisCI](https://travis-ci.org/templ-project/go.svg?branch=master)](https://travis-ci.org/templ-project/go)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/go/issues)
 
