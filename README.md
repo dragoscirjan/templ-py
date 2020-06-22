@@ -1,6 +1,6 @@
 # Python Project
 
-<img alt="GoLang logo" src="https://github.com/templ-project/go/blob/master/python_logo.png?raw=true" width="20%" align="right" />
+<img alt="Python logo" src="https://github.com/templ-project/go/blob/master/python_logo.png?raw=true" width="20%" align="right" />
 
 > **python** is a template project, designed by [Templ Project](http://templ-project.github.io).
 >
