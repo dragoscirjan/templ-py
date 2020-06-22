@@ -14,16 +14,16 @@
 > - [pylint](https://github.com/PyCQA/pylint), [mypy](https://github.com/pre-commit/mirrors-mypy) for linting
 
 
-[![Npm Version](https://img.shields.io/github/go-mod/go-version/templ-project/go)](https://img.shields.io/github/go-mod/go-version/templ-project/go)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/3)
 [![TravisCI](https://travis-ci.org/templ-project/go.svg?branch=master)](https://travis-ci.org/templ-project/go)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/go/issues)
 
 <!-- [![CircleCI](https://circleci.com/gh/templ-project/go.svg?style=shield)](https://circleci.com/gh/templ-project/go) -->
 
-[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=alert_status)](https://sonarcloud.io/dashboard?id=templ-project_go)
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=templ-project_go)
-[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=templ-project_go)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=templ-project_go)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=alert_status)](https://sonarcloud.io/dashboard?id=templ-project_python)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=templ-project_python)
+[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=templ-project_python)
+[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=templ-project_python)
 
 <!--
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://patreon.com/dragoscirjan)
