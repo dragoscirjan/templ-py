@@ -16,8 +16,8 @@ ifneq ($(PROJECT),python_template)
 endif
 	make init-$(OSFLAG)
 
-	cp README_TEMPLATE.md README.md
 	rm README.md
+	cp README_TEMPLATE.md README.md
 
 init-LINUX:
 	grep python_template . -Rin | awk -F ':' '{ print git $$1 }' | while read f; do sed -e 's/python_template/$(PROJECT)/g' -i $$f; done
