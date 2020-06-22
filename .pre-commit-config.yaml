@@ -11,7 +11,7 @@ repos:
     hooks:
       - id: autopep8
   # docstring style formatter
-  - repo: git://github.com/FalconSocial/pre-commit-mirrors-pep257
+  - repo: https://github.com/FalconSocial/pre-commit-mirrors-pep257
     rev: 'v0.3.3'
     hooks:
       - id: pep257

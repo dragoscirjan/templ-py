@@ -4,25 +4,15 @@
 
 > **python** is a template project, designed by [Templ Project](http://templ-project.github.io).
 >
-> **python** includes instructions for initializing a new [Go Lang](https://golang.org) project, and configuring it for
+> **python** includes instructions for initializing a new [Pyhon](https://python.org) project, and configuring it for
 > development, unit testing as well as code linting and analysis.
 >
 > **python** implements:
 >
-> - [gocyclo](https://github.com/fzipp/gocyclo), [go-critic](https://github.com/go-critic/go-critic) for code analisys
-> - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [gofmt](https://golang.org/cmd/gofmt) for code formatting
-> - [golangci-lint](https://github.com/golangci/golangci-lint), [golint](https://github.com/golang/lint) for linting
->
-> **To use the template**, delete the content above, fill in the following sections of this readme, and run the following (then delete the init\*: instruction sets from the `Makefile`):
+> - [flake8](https://gitlab.com/pycqa/flake8), [dead](https://github.com/asottile/dead), [radon](https://github.com/yunojuno/pre-commit-xenon) for code analisys
+> - [autopep8](https://github.com/hhatto/autopep8), , [pep257](https://github.com/FalconSocial/pre-commit-mirrors-pep257) for code formatting
+> - [pylint](https://github.com/PyCQA/pylint), [mypy](https://github.com/pre-commit/mirrors-mypy) for linting
 
-```powershell
-make init PROJECT_PREFIX=github.com/your-organisation PROJECT=project-name
-```
-
-<hr>
-<!-- > TODO: -->
-
-Set of shield/badges explaining where to find more information about the project (i.e. Where to look for unit test reports, where to see code coverage and code scans, etc.). You can find a lot of them on https://shields.io/)
 
 [![Npm Version](https://img.shields.io/github/go-mod/go-version/templ-project/go)](https://img.shields.io/github/go-mod/go-version/templ-project/go)
 [![TravisCI](https://travis-ci.org/templ-project/go.svg?branch=master)](https://travis-ci.org/templ-project/go)
@@ -49,14 +39,6 @@ Set of shield/badges explaining where to find more information about the project
 [![Buy an item on our wishlist for us](https://img.shields.io/badge/wishlist-donate-yellow.svg)](https://dragoscirjan.me/wishlist)
 -->
 
-One Paragraph of project description goes here
-
-<!--
-Insert Table of Contents Here
-This can be done using [AlanWalk.markdown-toc](https://marketplace.visualstudio.com/items?itemName=AlanWalk.markdown-toc) plugin,
-which is also included in
-[itmcdev.generic-extension-pack](https://marketplace.visualstudio.com/items?itemName=itmcdev.generic-extension-pack) extension pack.
--->
 <!-- TOC -->
 
 - [Python Project](#python-project)
@@ -64,21 +46,16 @@ which is also included in
     - [Prereqiusites / Dependencies](#prereqiusites--dependencies)
       - [For Windows](#for-windows)
       - [For Linux](#for-linux)
-      - [Known Issues / Troubleshooting](#known-issues--troubleshooting)
     - [Installation](#installation)
-      - [Say what the step will be](#say-what-the-step-will-be)
-      - [And repeat](#and-repeat)
     - [Development](#development)
       - [Requirements](#requirements)
         - [For Windows](#for-windows-1)
         - [For Linux/Unix/OSX](#for-linuxunixosx)
     - [Testing](#testing)
       - [Single Tests](#single-tests)
-    - [Deployment](#deployment)
   - [Authors](#authors)
   - [Issues / Support](#issues--support)
   - [License](#license)
-  - [Changelog](#changelog)
 
 <!-- /TOC -->
 
@@ -101,37 +78,39 @@ apt-get install build-essential mono
 npm install -y node-gyp
 ```
 
-#### Known Issues / Troubleshooting
-
-- When developing, [golangci-lint](https://github.com/golangci/golangci-lint) will not be available on Windows.
-
 ### Installation
 
-A step by step series of examples that tell you how to get a development env running
-
-#### Say what the step will be
+- Clone the package, remove `.git` folder, and re-initialize git to your own project
 
 ```
-Give the example
+git clone 
+cd project_name
+rm -rf .git
+git init
+git remote add origin https://github.com/your-user/your-project
 ```
 
-#### And repeat
+- Use `make init` to initialize your project
+
+```bash
+make init PROJECT=your_project
+```
+
+- If you're targeting to write an application and not a module, use `make init MOD=app`
 
 ```
-until finished
+make init MODE=app PROJECT=your_project
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ### Development
 
 #### Requirements
 
-- Please install [GoLang](https://golang.org/dl/). We support version 1.13.x and 1.14.x
+- Please install [Python](https://python.org). Project support **python 3.6 and above**.
 - Please instal a GoLang IDE
-  - [Visual Studio Code](https://code.visualstudio.com/) with [ITMCDev Go Extension Pack](https://marketplace.visualstudio.com/items?itemName=itmcdev.go-extension-pack)
-  - [Jetbrains GoLand](https://www.jetbrains.com/go/)
-  - [Vim](https://www.vim.org/) with [vim-go extension](https://github.com/fatih/vim-go)
+  - [Visual Studio Code](https://code.visualstudio.com/) with [ITMCDev Python Extension Pack](https://marketplace.visualstudio.com/items?itemName=itmcdev.python-extension-pack)
+  - [JetBrains PyCharm](https://www.jetbrains.com/pycharm/)
+  - [Vim](https://www.vim.org/) (see here a [tutorial](https://www.fullstackpython.com/vim.html) for making Vim a Python IDE)
   - Any other IDE you trust.
 
 ##### For Windows
@@ -156,37 +135,35 @@ sudo apt-get install git make -y
 
 Run unit tests using `make test`.
 
+Testing is currently set to use unittest.
+
+- or you could use `make test TEST_LIB=pytest`
+- or you could alter `Makefile.mod.include` to use pytest by default. Just change the commented line as showed:
+
+```makefile
+# TEST_LIB=unittest
+TEST_LIB=pytest
+```
+
 #### Single Tests
 
 Run single unit tests file, by calling `make test-single TEST_PATH=./path/to/file/...`
 
 ```bash
-make test-single TEST_PATH=./src/greet/...
+make test-single TEST_PATH=./your-project/test/hello.py
 ```
-
-### Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-- [Dragos Cirjan](mailto:dragos.cirjan@gmail.com) - Initial work - [Go Template](/templ-project/go)
+- [Dragos Cirjan](mailto:dragos.cirjan@gmail.com) - Initial work - [Python Template](/templ-project/python)
 
 See also the list of contributors who participated in this project.
 
 ## Issues / Support
 
-Add a set of links to the [issues](/templ-project/go/issues) page/website, so people can know where to add issues/bugs or ask for support.
+Add a set of links to the [issues](/templ-project/python/issues) page/website, so people can know where to add issues/bugs or ask for support.
 
 ## License
 
 (If the package is public, add licence)
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Changelog
-
-Small changelog history. The rest should be added to [CHANGELOG.md](CHANGELOG.md).
-
-See here a template for changelogs: https://keepachangelog.com/en/1.0.0/
-
-Also see this tool for automatically generating them: https://www.npmjs.com/package/changelog
