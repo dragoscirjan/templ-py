@@ -152,7 +152,7 @@ TEST_LIB=pytest
 
 #### Single Tests
 
-Run single unit tests file, by calling `make test-single TEST_PATH=./path/to/file/...`
+Run single unit tests file, by calling `make test-single TEST_PATH=./path/to/file.py`
 
 ```bash
 make test-single TEST_PATH=./your-project/test/hello.py
