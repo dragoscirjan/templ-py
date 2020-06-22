@@ -43,13 +43,11 @@
 
 - [Python Project](#python-project)
   - [Getting Started](#getting-started)
-    - [Prereqiusites / Dependencies](#prereqiusites--dependencies)
-      - [For Windows](#for-windows)
-      - [For Linux](#for-linux)
     - [Installation](#installation)
+      - [Python version](#python-version)
     - [Development](#development)
       - [Requirements](#requirements)
-        - [For Windows](#for-windows-1)
+        - [For Windows](#for-windows)
         - [For Linux/Unix/OSX](#for-linuxunixosx)
     - [Testing](#testing)
       - [Single Tests](#single-tests)
@@ -60,23 +58,6 @@
 <!-- /TOC -->
 
 ## Getting Started
-
-### Prereqiusites / Dependencies
-
-#### For Windows
-
-```powershell
-# Give Examples
-```
-
-#### For Linux
-
-```bash
-# Give Examples
-
-apt-get install build-essential mono
-npm install -y node-gyp
-```
 
 ### Installation
 
@@ -101,6 +82,30 @@ make init PROJECT=your_project
 ```
 make init MODE=app PROJECT=your_project
 ```
+
+- Run `make configure` to configure project or
+
+- Run `make venv` to create a virtual environment (`make venv` is included in `make configure`).
+
+#### Python version
+
+Most Linux versions, come with python 2.7 as default. The rest of python versions that are installed, can be found having a name similar to `python3.x`, i.e `python3.5`.
+
+To allow using a specific python version, create a file called `Makefile.py-version.include` which should include the following:
+
+```makefile
+PY = python3.8
+PIP = pip3.8
+```
+
+or 
+
+```makefile
+PY = /path/to/my/version/of/python
+PIP = /path/to/my/version/of/pip
+```
+
+When runing `make venv`, the version used by the `Makefile` will be the one defined in this file. 
 
 ### Development
 
