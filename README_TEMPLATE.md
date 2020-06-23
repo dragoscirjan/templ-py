@@ -1,39 +1,17 @@
 # GoLang Project
 
-<img alt="GoLang logo" src="https://github.com/templ-project/go/blob/master/Go-Logo_Blue.png?raw=true" width="20%" align="right" />
-
-> **go** is a template project, designed by [Templ Project](http://templ-project.github.io).
->
-> **go** includes instructions for initializing a new [Go Lang](https://golang.org) project, and configuring it for
-> development, unit testing as well as code linting and analysis.
->
-> **go** implements:
->
-> - [gocyclo](https://github.com/fzipp/gocyclo), [go-critic](https://github.com/go-critic/go-critic) for code analisys
-> - [goimports](https://godoc.org/golang.org/x/tools/cmd/goimports), [gofmt](https://golang.org/cmd/gofmt) for code formatting
-> - [golangci-lint](https://github.com/golangci/golangci-lint), [golint](https://github.com/golang/lint) for linting
->
-> **To use the template**, delete the content above, fill in the following sections of this readme, and run the following (then delete the init\*: instruction sets from the `Makefile`):
-
-```powershell
-make init PROJECT_PREFIX=github.com/your-organisation PROJECT=project-name
-```
-
-<hr>
-<!-- > TODO: -->
-
 Set of shield/badges explaining where to find more information about the project (i.e. Where to look for unit test reports, where to see code coverage and code scans, etc.). You can find a lot of them on https://shields.io/)
 
-[![Npm Version](https://img.shields.io/github/go-mod/go-version/templ-project/go)](https://img.shields.io/github/go-mod/go-version/templ-project/go)
-[![TravisCI](https://travis-ci.org/templ-project/go.svg?branch=master)](https://travis-ci.org/templ-project/go)
-[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/go/issues)
+![Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-blue)
+[![TravisCI](https://travis-ci.org/templ-project/python.svg?branch=master)](https://travis-ci.org/templ-project/python)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/python/issues)
 
-<!-- [![CircleCI](https://circleci.com/gh/templ-project/go.svg?style=shield)](https://circleci.com/gh/templ-project/go) -->
+<!-- [![CircleCI](https://circleci.com/gh/templ-project/python.svg?style=shield)](https://circleci.com/gh/templ-project/python) -->
 
-[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=alert_status)](https://sonarcloud.io/dashboard?id=templ-project_go)
-[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=templ-project_go)
-[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=templ-project_go)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=templ-project_go&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=templ-project_go)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=alert_status)](https://sonarcloud.io/dashboard?id=templ-project_python)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=coverage)](https://sonarcloud.io/component_measures/metric/coverage/list?id=templ-project_python)
+[![SonarCloud Bugs](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=templ-project_python)
+[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=templ-project_python&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=templ-project_python)
 
 <!--
 [![Donate to this project using Patreon](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://patreon.com/dragoscirjan)

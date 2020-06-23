@@ -13,8 +13,7 @@
 > - [autopep8](https://github.com/hhatto/autopep8), , [pep257](https://github.com/FalconSocial/pre-commit-mirrors-pep257) for code formatting
 > - [pylint](https://github.com/PyCQA/pylint), [mypy](https://github.com/pre-commit/mirrors-mypy) for linting
 
-
-![PyPI - Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-blue)
+![Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8%7C%2B-blue)
 [![TravisCI](https://travis-ci.org/templ-project/python.svg?branch=master)](https://travis-ci.org/templ-project/python)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/templ-project/python/issues)
 
