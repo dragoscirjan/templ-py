@@ -27,13 +27,13 @@ jobs:
         - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
         - ls /c/Python38
         - ls /c/Python38/Scripts
-        - (echo "PY = /c/Python38/python.exe"; echo "PIP = pip3") > Makefile.py-version.include
+        - (echo "PY = /c/Python38/python.exe"; echo "PIP = /c/Python38/Scripts/pip.exe") > Makefile.py-version.include
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
-# python:
+python:
   # - "2.7"
   # - "3.4"
   # - "3.5"    # will not support versions lower than Python 3.6
-  # - "3.6"
+  - "3.6"
   # - "3.7"
   # - "3.8"
   # - "3.9-dev"  # 3.9 development branch
