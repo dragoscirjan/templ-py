@@ -1,5 +1,5 @@
 
-from python_template.version import get_static_version
+from py_greet.version import get_static_version
 
 ###
 # Model for using Pytest

@@ -1,5 +1,5 @@
 
-from python_template import hello
+from py_greet import hello
 
 
 def main():

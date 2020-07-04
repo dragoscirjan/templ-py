@@ -1,5 +1,5 @@
 
-from python_template.hello import hello
+from py_greet.hello import hello
 
 ###
 # Model for using Pytest
