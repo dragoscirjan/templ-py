@@ -41,6 +41,7 @@ env:
 before_script:
   # - make --version
   # - python --version
+  - echo $MODE
   - rm -rf .git; git init
   - if [[ "$MODE" = "" ]]; then make init PROJECT=py_greet;
     else make init MODE=$MODE PROJECT=py_greet;
