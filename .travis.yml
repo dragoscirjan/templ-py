@@ -42,12 +42,12 @@ before_script:
   # - make --version
   # - python --version
   - echo $MODE
-  - rm -rf .git; git init
   - if [[ "$MODE" = "" ]]; then make init PROJECT=py_greet;
     else make init MODE=$MODE PROJECT=py_greet;
     fi
-  - make configure
+  - rm -rf .git; git init
   - git add .; git commit -am "+" --no-verify
+  - make configure
 scripts:
   - make test
   - if [[ "$MODE" = "app" ]]; then ./env/bin/py_greet; fi
