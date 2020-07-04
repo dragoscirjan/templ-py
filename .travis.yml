@@ -17,6 +17,8 @@ jobs:
       language: shell       # 'language: python' is an error on Travis CI macOS
       before_install:
         - brew install make
+        - which python3
+        - which pip3
         - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
     # - name: "Python 3.8"
     #   os: windows
@@ -32,9 +34,9 @@ python:
   # - "3.4"
   # - "3.5"    # will not support versions lower than Python 3.6
   - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.9-dev"  # 3.9 development branch
+  # - "3.7"
+  # - "3.8"
+  # - "3.9-dev"  # 3.9 development branch
 env:
   - MODE=app
   - MODE=mod
