@@ -40,7 +40,7 @@ clean-powershell:
 	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./env
 
 docs: ## Generate documentation for the Project
-	pdoc --html docs
+	$(LOCAL_ENV)/pdoc --html -o docs py_greet
 
 
 RELEASE_OPTIONS = -Patch -Dry
