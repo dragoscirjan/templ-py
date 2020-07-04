@@ -25,9 +25,6 @@ jobs:
         - python -m pip install --upgrade pip
         - choco install make
         - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
-        - ls /c/Python38
-        - ls /c/Python38/Scripts
-        - (echo "PY = /c/Python38/python.exe"; echo "PIP = /c/Python38/Scripts/pip.exe") > Makefile.py-version.include
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 python:
   # - "2.7"
@@ -41,19 +38,19 @@ env:
   - MODE=app
   - MODE=mod
 before_script:
-  - make --version
-  - python --version
+  # - make --version
+  # - python --version
   - rm -rf .git; git init
-  - if [[ "$MODE" = "" ]]; then make init PROJECT=hello;
-    else make init MODE=$MODE PROJECT=hello;
+  - if [[ "$MODE" = "" ]]; then make init PROJECT=py_greet;
+    else make init MODE=$MODE PROJECT=py_greet;
     fi
   - make configure
   - git add .; git commit -am "+" --no-verify
 scripts:
   - make test
-  - if [[ "$MODE" = "app" ]]; then ./env/bin/hello; fi
+  - if [[ "$MODE" = "app" ]]; then ./env/bin/py_greet; fi
   - ./env/bin/pre-commit
-after_script:
+# after_script:
   - printenv
   - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
     sonar-scanner; fi
