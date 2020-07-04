@@ -1,41 +1,32 @@
 language: python
 jobs:
   include:
-    # - name: "Python 3.5.0 on Xenial Linux"
-    #   python: 3.5
-    # - name: "Python 3.6.0 on Xenial Linux"
-    #   python: 3.6
-    # - name: "Python 3.7.0 on Xenial Linux"
-    #   python: 3.7
-    # - name: "Python 3.8.0 on Xenial Linux"
-    #   python: 3.8
-    # - name: "Python 3.9-dev on Xenial Linux"
-    #   python: 3.9-dev
-    - name: "Python 3.7 MODE=mod"
-      os: osx
-      osx_image: xcode11.2
-      language: shell       # 'language: python' is an error on Travis CI macOS
-      before_install:
-        - brew install make coreutils
-        - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
-        - export MODE=mod
-    - name: "Python 3.7 MODE=app"
-      os: osx
-      osx_image: xcode11.2
-      language: shell       # 'language: python' is an error on Travis CI macOS
-      before_install:
-        - brew install make coreutils
-        - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
-        - export MODE=app
-    # - name: "Python 3.8"
-    #   os: windows
-    #   language: shell       # 'language: python' is an error on Travis CI Windows
+    # - name: "Python 3.7 MODE=mod"
+    #   os: osx
+    #   osx_image: xcode11.2
+    #   language: shell       # 'language: python' is an error on Travis CI macOS
     #   before_install:
-    #     - choco install python --version 3.8.0
-    #     - python -m pip install --upgrade pip
-    #     - choco install make
-    #     - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
-    #   env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
+    #     - brew install make coreutils
+    #     - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
+    #     - export MODE=mod
+    # - name: "Python 3.7 MODE=app"
+    #   os: osx
+    #   osx_image: xcode11.2
+    #   language: shell       # 'language: python' is an error on Travis CI macOS
+    #   before_install:
+    #     - brew install make coreutils
+    #     - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
+    #     - export MODE=app
+    - name: "Python 3.8"
+      os: windows
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python --version 3.8.0
+        - python -m pip install --upgrade pip
+        - choco install make
+        - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
+        - ls /c/Python38
+      env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 python:
   # - "2.7"
   # - "3.4"
