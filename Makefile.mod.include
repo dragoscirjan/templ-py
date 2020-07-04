@@ -26,16 +26,6 @@ LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
 configure: venv ## Configure your project for development (like venv but with git hooks)
 	$(LOCAL_PIP_INSTALL) pre-commit
 
-
-dist: clean ## Build Package
-	rm -rf dist/*
-	$(PY) setup.py sdist
-	$(PY) setup.py bdist_wheel
-
-
-dist-upload: dist ## Upload package
-	twine upload dist/*
-
 CLEAN_FULL=
 clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
 
@@ -51,6 +41,23 @@ clean-powershell:
 
 docs: ## Generate documentation for the Project
 	pdoc --html docs
+
+
+RELEASE_OPTIONS = -Patch -Dry
+RELEASE_PUBLISH =
+release: release-$(SHELL_IS) ## Publish code & mark for release
+	rm -rf dist/*
+	$(PY) setup.py sdist
+	$(PY) setup.py bdist_wheel
+ifneq ($(RELEASE_PUBLISH),)
+	twine upload dist/*
+endif
+
+release-bash:
+	bash ./.scripts/release-tag.sh $(RELEASE_OPTIONS)
+
+release-powershell:
+	$(POWERSHELL) -File ./.scripts/release-tag.ps1 $(RELEASE_OPTIONS)
 
 
 COV_HTML=coverage-report
