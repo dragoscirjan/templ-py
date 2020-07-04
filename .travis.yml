@@ -24,6 +24,7 @@ jobs:
         - choco install python --version 3.8.0
         - python -m pip install --upgrade pip
         - choco install make
+        - export MODE=app
         - powershell -Command 'Set-ExecutionPolicy -ExecutionPolicy RemoteSigned'
       env: PATH=/c/Python38:/c/Python38/Scripts:$PATH
 python:
