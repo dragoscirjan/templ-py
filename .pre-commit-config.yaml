@@ -26,7 +26,7 @@ repos:
         language: python
         language_version: python3
         types: [python]
-        args: [-v, --no-auto-pipe]
+        args: [-v]
 
   #
   # Lint
@@ -34,7 +34,7 @@ repos:
 
   # type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: ''  # Use the sha / tag you want to point at
+    rev: 'v0.782'  # Use the sha / tag you want to point at
     hooks:
       - id: mypy
 
@@ -70,11 +70,11 @@ repos:
       - id: xenon
         args: ["--max-average=A", "--max-modules=C", "--max-absolute=C"]
 
-  # jinja
-  - repo: https://github.com/motet-a/jinjalint
-    rev: ''  # select a tag / sha to point at
-    hooks:
-      - id: jinjalint
+  # # jinja
+  # - repo: https://github.com/motet-a/jinjalint
+  #   rev: ''  # select a tag / sha to point at
+  #   hooks:
+  #     - id: jinjalint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.1.0

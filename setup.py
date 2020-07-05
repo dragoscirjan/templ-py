@@ -1,6 +1,9 @@
+"""setup"""
+
 from setuptools import find_packages, setup
 
 from py_greet import get_static_version
+
 
 VERSION = get_static_version()
 
