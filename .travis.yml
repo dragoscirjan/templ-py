@@ -46,8 +46,7 @@ before_script:
     else make init MODE=$MODE PROJECT=py_greet;
     fi
   - rm -rf .git; git init
-  - git add .;
-  # - git commit -am "+" --no-verify
+  - git add .; git commit -am "+" --no-verify
   - make configure
 scripts:
   - make test
