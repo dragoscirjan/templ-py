@@ -21,7 +21,7 @@ jobs:
       os: windows
       language: shell       # 'language: python' is an error on Travis CI Windows
       before_install:
-        - choco install python --version 3.8.0
+        - choco install python --version 3.8.2
         - python -m pip install --upgrade pip
         - choco install make
         - export MODE=app
@@ -31,7 +31,7 @@ jobs:
       os: windows
       language: shell       # 'language: python' is an error on Travis CI Windows
       before_install:
-        - choco install python --version 3.8.0
+        - choco install python --version 3.8.2
         - python -m pip install --upgrade pip
         - choco install make
         - export MODE=app
@@ -57,7 +57,7 @@ before_script:
     fi
   - make configure
 scripts:
-  - make test
+  - `
   - if [[ "$MODE" == "app" ]];
     then if [[ $TRAVIS_OS_NAME == 'windows' ]];
     then ./env/Scripts/py_greet.exe;
@@ -70,8 +70,10 @@ scripts:
     fi
 # after_script:
   - printenv
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' && $TRAVIS_OS_NAME == 'linux' && $MODE == 'mod' ]]; then make docs;
-    sonar-scanner; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' && $TRAVIS_OS_NAME == 'linux' && $MODE == 'mod' ]];
+    then make docs;
+    sonar-scanner;
+    fi
 notifications:
   email:
     recipients:
