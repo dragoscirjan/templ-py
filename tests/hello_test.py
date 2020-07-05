@@ -16,7 +16,6 @@
 ###
 
 import unittest
-
 from py_greet.hello import hello
 
 

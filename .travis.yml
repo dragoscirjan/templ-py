@@ -58,11 +58,19 @@ before_script:
   - make configure
 scripts:
   - make test
-  - if [[ "$MODE" = "app" ]]; then ./env/bin/py_greet; fi
-  - ./env/bin/pre-commit run --all-files
+  - if [[ "$MODE" = "app" ]];
+    then if [[ $TRAVIS_OS_NAME == 'windows' ]];
+    then ./env/Scripts/py_greet.exe;
+    else ./env/bin/py_greet;;
+    fi;
+    fi
+  - if [[ $TRAVIS_OS_NAME == 'windows' ]];
+    then ./env/Scripts/pre-commit run --all-files;
+    else ./env/bin/pre-commit run --all-files;
+    fi
 # after_script:
   - printenv
-  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
+  - if [[ $TRAVIS_PYTHON_VERSION == '3.7' && $TRAVIS_OS_NAME == 'linux' && $MODE == 'mod' ]]; then make docs;
     sonar-scanner; fi
 notifications:
   email:

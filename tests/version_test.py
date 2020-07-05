@@ -15,7 +15,6 @@
 ###
 
 import unittest
-
 from py_greet.version import get_static_version
 
 
