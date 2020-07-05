@@ -76,9 +76,9 @@ test-pytest:
 	$(LOCAL_PY) -m pytest -v --cov=coverage --cov-report=html:$(COV_HTML) --cov-report=xml:$(COV_HTML)/$(COV_HTML).xml $(TEST_PATH_X)
 
 test-unittest:
-	$(LOCAL_ENV)\coverage run -m unittest discover -s tests -p $(TEST_PATH) -v
-	$(LOCAL_ENV)\coverage html -d $(COV_HTML)
-	$(LOCAL_ENV)\coverage xml -o $(COV_HTML)/$(COV_HTML).xml
+	$(LOCAL_ENV)/coverage run -m unittest discover -s tests -p $(TEST_PATH) -v
+	$(LOCAL_ENV)/coverage html -d $(COV_HTML)
+	$(LOCAL_ENV)/coverage xml -o $(COV_HTML)/$(COV_HTML).xml
 
 test-bash:
 
