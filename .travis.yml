@@ -58,10 +58,10 @@ before_script:
   - make configure
 scripts:
   - make test
-  - if [[ "$MODE" = "app" ]];
+  - if [[ "$MODE" == "app" ]];
     then if [[ $TRAVIS_OS_NAME == 'windows' ]];
     then ./env/Scripts/py_greet.exe;
-    else ./env/bin/py_greet;;
+    else ./env/bin/py_greet;
     fi;
     fi
   - if [[ $TRAVIS_OS_NAME == 'windows' ]];
