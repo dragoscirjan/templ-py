@@ -15,9 +15,6 @@ ifneq ($(PROJECT),py_greet)
 endif
 	make init-$(OSFLAG)
 
-	rm README.md
-	cp README_TEMPLATE.md README.md
-
 init-LINUX:
 	grep py_greet . -Rin | awk -F ':' '{ print git $$1 }' | while read f; do sed -e 's/py_greet/$(PROJECT)/g' -i $$f; done
 
