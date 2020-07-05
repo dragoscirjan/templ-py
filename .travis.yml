@@ -55,14 +55,11 @@ before_script:
   - if [[ "$MODE" = "" ]]; then make init PROJECT=py_greet;
     else make init MODE=$MODE PROJECT=py_greet;
     fi
-  - rm -rf .git; git init
-  - git add .
-  # - git commit -am "+" --no-verify
   - make configure
 scripts:
   - make test
   - if [[ "$MODE" = "app" ]]; then ./env/bin/py_greet; fi
-  - ./env/bin/pre-commit
+  - ./env/bin/pre-commit run --all-files
 # after_script:
   - printenv
   - if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $MODE == 'mod' ]]; then make docs;
