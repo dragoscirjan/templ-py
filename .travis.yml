@@ -1,22 +1,22 @@
 language: python
-jobs:
-  include:
-    - name: "Python 3.7 MODE=mod"
-      os: osx
-      osx_image: xcode11.2
-      language: shell       # 'language: python' is an error on Travis CI macOS
-      before_install:
-        - brew install make coreutils
-        - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
-        - export MODE=mod
-    - name: "Python 3.7 MODE=app"
-      os: osx
-      osx_image: xcode11.2
-      language: shell       # 'language: python' is an error on Travis CI macOS
-      before_install:
-        - brew install make coreutils
-        - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
-        - export MODE=app
+# jobs:
+#   include:
+    # - name: "Python 3.7 MODE=mod"
+    #   os: osx
+    #   osx_image: xcode11.2
+    #   language: shell       # 'language: python' is an error on Travis CI macOS
+    #   before_install:
+    #     - brew install make coreutils
+    #     - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
+    #     - export MODE=mod
+    # - name: "Python 3.7 MODE=app"
+    #   os: osx
+    #   osx_image: xcode11.2
+    #   language: shell       # 'language: python' is an error on Travis CI macOS
+    #   before_install:
+    #     - brew install make coreutils
+    #     - (echo "PY = python3"; echo "PIP = pip3") > Makefile.py-version.include
+    #     - export MODE=app
     # - name: "Python 3.8 MODE=mod"
     #   os: windows
     #   language: shell       # 'language: python' is an error on Travis CI Windows
@@ -42,9 +42,9 @@ python:
   # - "3.4"
   # - "3.5"    # will not support versions lower than Python 3.6
   - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.9-dev"  # 3.9 development branch
+  # - "3.7"
+  # - "3.8"
+  # - "3.9-dev"  # 3.9 development branch
 env:
   - MODE=app
   - MODE=mod
@@ -56,7 +56,8 @@ before_script:
     else make init MODE=$MODE PROJECT=py_greet;
     fi
   - rm -rf .git; git init
-  - git add .; git commit -am "+" --no-verify
+  - git add .
+  # - git commit -am "+" --no-verify
   - make configure
 scripts:
   - make test
