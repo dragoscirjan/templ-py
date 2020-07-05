@@ -65,7 +65,7 @@ scripts:
     fi;
     fi
   - if [[ $TRAVIS_OS_NAME == 'windows' ]];
-    then ./env/Scripts/pre-commit run --all-files;
+    then ./env/Scripts/pre-commit.exe run --all-files;
     else ./env/bin/pre-commit run --all-files || ./env/bin/pre-commit run --all-files;
     fi
 # after_script:
