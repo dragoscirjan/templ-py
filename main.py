@@ -1,10 +1,12 @@
+"""CLI main runner"""
 
-from python_template import hello
+from py_greet import hello
 
 
 def main():
+  """main runner"""
   print(hello('World'))
 
 
 if __name__ == '__main__':
-    main()
+  main()

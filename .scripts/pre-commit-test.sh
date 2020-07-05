@@ -2,7 +2,7 @@
 set -xe
 
 if [ "$(uname -s)" == "Darwin" ]; then
-  SCRIPT=$(readlink -n $0)
+  SCRIPT=$(greadlink -f $0)
 else
   SCRIPT=$(readlink -f $0)
 fi

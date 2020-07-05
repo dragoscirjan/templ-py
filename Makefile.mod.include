@@ -2,8 +2,7 @@ include Makefile.include
 
 ## Add your make instructions here
 
-PROJECT=python_template
-
+PROJECT=py_greet
 PY = python
 PIP = pip
 
@@ -27,16 +26,6 @@ LOCAL_PIP_INSTALL=$(LOCAL_PIP) install $(PIP_FLAGS)
 configure: venv ## Configure your project for development (like venv but with git hooks)
 	$(LOCAL_PIP_INSTALL) pre-commit
 
-
-dist: clean ## Build Package
-	rm -rf dist/*
-	$(PY) setup.py sdist
-	$(PY) setup.py bdist_wheel
-
-
-dist-upload: dist ## Upload package
-	twine upload dist/*
-
 CLEAN_FULL=
 clean: clean-$(SHELL_IS) ## Clean all dist/temp folders
 
@@ -51,14 +40,31 @@ clean-powershell:
 	$(POWERSHELL) -File ./.scripts/make.ps1 -Action rmdir -Path ./env
 
 docs: ## Generate documentation for the Project
-	pdoc --html docs
+	$(LOCAL_ENV)/pdoc --html -o docs py_greet
+
+
+RELEASE_OPTIONS = -Patch -Dry
+RELEASE_PUBLISH =
+release: release-$(SHELL_IS) ## Publish code & mark for release
+	rm -rf dist/*
+	$(PY) setup.py sdist
+	$(PY) setup.py bdist_wheel
+ifneq ($(RELEASE_PUBLISH),)
+	twine upload dist/*
+endif
+
+release-bash:
+	bash ./.scripts/release-tag.sh $(RELEASE_OPTIONS)
+
+release-powershell:
+	$(POWERSHELL) -File ./.scripts/release-tag.ps1 $(RELEASE_OPTIONS)
 
 
 COV_HTML=coverage-report
 TEST_PATH=*_test.py
 TEST_LIB=unittest
 # TEST_LIB=pytest
-test: test-$(SHELL_IS)  test-$(TEST_LIB) ## Run Tests
+test: test-$(SHELL_IS) test-$(TEST_LIB) ## Run Tests
 
 test-pytest:
 ifeq ($(TEST_PATH),*_test.py)
@@ -69,10 +75,19 @@ endif
 test-pytest:
 	$(LOCAL_PY) -m pytest -v --cov=coverage --cov-report=html:$(COV_HTML) --cov-report=xml:$(COV_HTML)/$(COV_HTML).xml $(TEST_PATH_X)
 
-test-unittest:
+test-unittest: test-unittest-$(SHELL_IS)
+
+test-unittest-bash:
+	$(LOCAL_ENV)/coverage --version
 	$(LOCAL_ENV)/coverage run -m unittest discover -s tests -p $(TEST_PATH) -v
 	$(LOCAL_ENV)/coverage html -d $(COV_HTML)
 	$(LOCAL_ENV)/coverage xml -o $(COV_HTML)/$(COV_HTML).xml
+
+test-unittest-powershell:
+	$(LOCAL_ENV)/coverage.exe --version
+	$(LOCAL_ENV)/coverage.exe run -m unittest discover -s tests -p $(TEST_PATH) -v
+	$(LOCAL_ENV)/coverage.exe html -d $(COV_HTML)
+	$(LOCAL_ENV)/coverage.exe xml -o $(COV_HTML)/$(COV_HTML).xml
 
 test-bash:
 
